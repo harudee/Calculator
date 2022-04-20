@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TableRow android:gravity="center">
+
+        <EditText
+            android:id="@+id/pt_result"
+            android:layout_span="4"
+            android:hint="숫자를 입력하세요" />
+
+    </TableRow>
+
+    <TableRow android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_clear"
+            android:text="C"/>
+
+        <ImageButton
+            android:id="@+id/btn_recode"
+            app:srcCompat="@drawable/ic_recode" />
+
+        <ImageButton
+            android:id="@+id/btn_undo"
+            app:srcCompat="@drawable/ic_undo" />
+
+        <ImageButton
+            android:id="@+id/btn_backSpace"
+            app:srcCompat="@drawable/ic_backspace" />
+
+    </TableRow>
+
+    <TableRow android:gravity="center">
+
+        <Button
+            android:id="@+id/num_7"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/num_8"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/num_9"
+            android:text="9" />
+
+        <Button
+            android:id="@+id/btn_division"
+            android:text="/" />
+
+
+    </TableRow>
+
+    <TableRow android:gravity="center">
+
+        <Button
+            android:id="@+id/num_4"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/num_5"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/num_6"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/btn_multiple"
+            android:text="*" />
+
+    </TableRow>
+
+    <TableRow android:gravity="center">
+
+        <Button
+            android:id="@+id/num_1"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/num_2"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/num_3"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/btn_minus"
+            android:text="-" />
+
+    </TableRow>
+
+    <TableRow android:gravity="center">
+
+        <Button
+            android:id="@+id/num_00"
+            android:text="00" />
+
+        <Button
+            android:id="@+id/num_0"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/btn_enter"
+            android:text="=" />
+
+        <Button
+            android:id="@+id/btn_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+" />
+
+    </TableRow>
+
+
+</TableLayout>
