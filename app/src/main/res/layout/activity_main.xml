@@ -7,12 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TableRow
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/pt_currResult"
+            android:textSize="20dp"
+            android:layout_span="4"
+            android:hint="현재 계산상태" />
+
+    </TableRow>
+
     <TableRow android:gravity="center">
 
         <EditText
             android:id="@+id/pt_result"
             android:layout_span="4"
-            android:hint="숫자를 입력하세요" />
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:cursorVisible="true"
+            android:background="@android:color/transparent"
+            android:textSize="30dp"
+            android:hint="숫자 입력창" />
 
     </TableRow>
 
@@ -100,8 +115,8 @@
     <TableRow android:gravity="center">
 
         <Button
-            android:id="@+id/num_00"
-            android:text="00" />
+            android:id="@+id/btn_dot"
+            android:text="." />
 
         <Button
             android:id="@+id/num_0"
