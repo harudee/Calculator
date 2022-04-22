@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity222";
@@ -21,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isEntered = false;
     private int cursorPosition;
+    private String s = null; //현재 입력값
+
+    private int dotCount = 1;
 
 
     @Override
@@ -31,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         init();
         ptResult.requestFocus();
 
-        initLr();
+        initListener();
         initData();
     }
 
@@ -65,74 +70,160 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initLr() {
+    private void initListener() {
 
+        //숫자입력
         for (int i = 0; i < 10; i++) {
+            int I = i;
             btn[i].setOnClickListener(view -> {
+
                 Button btn = (Button) view;
+                cursorPosition = ptResult.getSelectionStart();
+                String sentence = ptResult.getText().toString();
 
-                ptResult.append(btn.getText().toString());
+                char lastChar = 'f';
+//                if(s != null) { //입력 됐는지 아닌지 확인
+//                    lastChar = sentence.charAt(sentence.length()-1);
+//                }
 
-                isEntered = false;
+                if(lastChar == 'f'){
+                    if(I == 0){ //최초 입력
+                        if(s == null || dotCount == 1){
+                            ptResult.append("0");
+                            ptResult.append(".");
+                            dotCount = 0;
 
-//                ptResult.setTextIsSelectable(true);//커서는 살리고
-//                ptResult.setShowSoftInputOnFocus(false);//키보드는 숨기기
-                ptResult.setSelection(ptResult.length());//커서를 제일뒤로
+                            s += "0.";
+                            
+                        } else {
 
-                String result = ptResult.getText().toString();
+                            StringBuffer sb = new StringBuffer(sentence);
+                            sb.insert(cursorPosition, btn.getText().toString());
 
-//                Log.d(TAG, "initLr: result3 " + result);
+                            ptResult.setText(sb.toString());
+                            ptResult.setSelection(cursorPosition+1);
 
-                if (result != null) {
-                    double a = Double.valueOf(Eval.cal(result));
-                    int b = (int) a;
+                            String result3 = ptResult.getText().toString();
 
-                    if (a == b) {
-                        ptCurrResult.setText(Integer.toString(b));
-                    } else ptCurrResult.setText(Eval.cal(result));
-                }
+
+                            double a = Double.valueOf(Eval.cal(result3));
+                            int b = (int) a;
+
+                            if (a == b) {
+                                ptCurrResult.setText(Integer.toString(b));
+                            } else ptCurrResult.setText(Eval.cal(result3));
+
+                            s += btn.getText().toString();
+
+                            Log.d(TAG, "initLr: 여기! s "+s);
+
+                        }
+
+                    } else{ //
+                        Log.d(TAG, "initLr: else 실행");
+
+                        StringBuffer sb = new StringBuffer(sentence);
+                        sb.insert(cursorPosition, btn.getText().toString());
+
+                        ptResult.setText(sb.toString());
+                        ptResult.setSelection(cursorPosition+1);
+
+                        String result3 = ptResult.getText().toString();
+
+
+                        double a = Double.valueOf(Eval.cal(result3));
+                        int b = (int) a;
+
+                        if (a == b) {
+                            ptCurrResult.setText(Integer.toString(b));
+                        } else ptCurrResult.setText(Eval.cal(result3));
+
+                        s += btn.getText().toString();
+
+                    }
+
+                } 
 
             });
         }
 
-        for (int i = 10; i < 15; i++) {//사칙연산
+        //사칙연산
+        for (int i = 10; i < 15; i++) {
+
             btn[i].setOnClickListener(view -> {
 
                 Button btn = (Button) view;
-
+                String str = btn.getText().toString();//입력
+                String sentence = ptResult.getText().toString();
                 cursorPosition = ptResult.getSelectionStart();
+                ptCurrResult.setText("");
 
-                String a = btn.getText().toString();
+                if (cursorPosition == 0) return;
 
-                Log.d(TAG, "initLr: a "+a);
+                char a = sentence.charAt(sentence.length() - 1); //입력된 마지막 글자
+                if (a == '0' || a == '1' || a == '2' || a == '3' || a == '4' || a == '5' || a == '6' || a == '7' || a == '8' || a == '9') {
 
-                String b = ptResult.getText().toString(); //전체글자에서
-                StringBuffer sb = new StringBuffer(b);
-                sb.insert(cursorPosition, a);
+                    StringBuffer sb = new StringBuffer(sentence);
+                    sb.insert(cursorPosition, btn.getText().toString());
 
-                Log.d(TAG, "initLr: sb " + sb);
-
-                if (!isEntered) {
-                    //처음 그리기
                     ptResult.setText(sb.toString());
                     ptResult.setSelection(cursorPosition+1);
-                    ptCurrResult.setText("");
 
-                    isEntered = true;
+                }
 
-                } else{
+                char b = str.charAt(str.length()-1);
+                if( a == b) return;
 
-                    sb.replace(cursorPosition-1, cursorPosition, ""); // 지우고 그리기
+                if (a == '+' || a == '-' || a == '*' || a == '/') {
+                    Log.d(TAG, "initLr: 바꿔줘...");
+
+                    StringBuffer sb = new StringBuffer(sentence);
+                    sb.replace(cursorPosition-1, cursorPosition, str);
+
+                    Log.d(TAG, "initLr: sb "+sb);
+
                     ptResult.setText(sb.toString());
                     ptResult.setSelection(cursorPosition);
 
+
                 }
+
 
             });
 
         }
 
-        btn[15].setOnClickListener(view -> { //enter
+        //전체 지우기
+        btn[16].setOnClickListener(view -> {
+            s = null;
+            ptResult.setText("");
+            ptCurrResult.setText("");
+
+        });
+
+
+        //한 개 지우기
+        btnBackSpace.setOnClickListener(view -> {
+
+            if (ptResult.length() == 0) return;
+
+            isEntered = false;
+
+            String a = ptResult.getText().toString();
+
+            cursorPosition = ptResult.getSelectionStart();
+            StringBuffer sb = new StringBuffer(a);
+            sb.replace(cursorPosition - 1, cursorPosition, "");
+
+            ptResult.setText(sb.toString());
+            ptResult.setSelection(cursorPosition - 1);
+
+            ptCurrResult.setText("");
+
+        });
+
+        //enter
+        btn[15].setOnClickListener(view -> {
 
             if (ptResult.getText().length() == 0) return;
 
@@ -156,41 +247,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-
-        });
-
-
-        btn[16].setOnClickListener(view -> {
-            //clear
-            ptResult.setText("");
-            ptCurrResult.setText("");
-        });
+            //계산기록 저장하기
 
 
-        btnBackSpace.setOnClickListener(view -> {
-
-            if (ptResult.length() == 0) return;
-
-            isEntered = false;
-
-            String a = ptResult.getText().toString();
-
-            cursorPosition = ptResult.getSelectionStart();
-            StringBuffer sb = new StringBuffer(a);
-            sb.replace(cursorPosition - 1, cursorPosition, "");
-
-            ptResult.setText(sb.toString());
-            ptResult.setSelection(cursorPosition - 1);
-
-            ptCurrResult.setText("");
 
 
         });
 
-    }
+    }//initListener
 
     private void initData() {
 
     }
+
+
+
 
 }
