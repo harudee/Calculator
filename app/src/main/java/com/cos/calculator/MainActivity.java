@@ -2,6 +2,8 @@ package com.cos.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,7 +12,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.mozilla.javascript.ast.WhileLoop;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private Button btn[] = new Button[17];
     private ImageButton btnRecode, btnUndo, btnBackSpace;
 
+
     private boolean isEntered = false;
     private int cursorPosition;
     private String s = null; //현재 입력값
-
     private int dotCount = 1;
 
 
@@ -86,22 +102,22 @@ public class MainActivity extends AppCompatActivity {
 //                    lastChar = sentence.charAt(sentence.length()-1);
 //                }
 
-                if(lastChar == 'f'){
-                    if(I == 0){ //최초 입력
-                        if(s == null || dotCount == 1){
+                if (lastChar == 'f') {
+                    if (I == 0) { //최초 입력
+                        if (s == null || dotCount == 1) {
                             ptResult.append("0");
                             ptResult.append(".");
                             dotCount = 0;
 
                             s += "0.";
-                            
+
                         } else {
 
                             StringBuffer sb = new StringBuffer(sentence);
                             sb.insert(cursorPosition, btn.getText().toString());
 
                             ptResult.setText(sb.toString());
-                            ptResult.setSelection(cursorPosition+1);
+                            ptResult.setSelection(cursorPosition + 1);
 
                             String result3 = ptResult.getText().toString();
 
@@ -115,18 +131,15 @@ public class MainActivity extends AppCompatActivity {
 
                             s += btn.getText().toString();
 
-                            Log.d(TAG, "initLr: 여기! s "+s);
-
                         }
 
-                    } else{ //
-                        Log.d(TAG, "initLr: else 실행");
+                    } else {
 
                         StringBuffer sb = new StringBuffer(sentence);
                         sb.insert(cursorPosition, btn.getText().toString());
 
                         ptResult.setText(sb.toString());
-                        ptResult.setSelection(cursorPosition+1);
+                        ptResult.setSelection(cursorPosition + 1);
 
                         String result3 = ptResult.getText().toString();
 
@@ -142,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                } 
+                }
 
             });
         }
@@ -167,20 +180,19 @@ public class MainActivity extends AppCompatActivity {
                     sb.insert(cursorPosition, btn.getText().toString());
 
                     ptResult.setText(sb.toString());
-                    ptResult.setSelection(cursorPosition+1);
+                    ptResult.setSelection(cursorPosition + 1);
 
                 }
 
-                char b = str.charAt(str.length()-1);
-                if( a == b) return;
+                char b = str.charAt(str.length() - 1);
+                if (a == b) return;
 
                 if (a == '+' || a == '-' || a == '*' || a == '/') {
                     Log.d(TAG, "initLr: 바꿔줘...");
 
                     StringBuffer sb = new StringBuffer(sentence);
-                    sb.replace(cursorPosition-1, cursorPosition, str);
+                    sb.replace(cursorPosition - 1, cursorPosition, str);
 
-                    Log.d(TAG, "initLr: sb "+sb);
 
                     ptResult.setText(sb.toString());
                     ptResult.setSelection(cursorPosition);
@@ -237,20 +249,28 @@ public class MainActivity extends AppCompatActivity {
             String result2 = Eval.cal(result);
             String str = btn.getText().toString(); //=
 
-            if (result2 != null) {
-                double a = Double.valueOf(Eval.cal(result2));
-                int b = (int) a;
+            if (result2 == null) return;
 
-                ptResult.setText(Integer.toString(b));
-                ptCurrResult.setText(result + str);
-                ptResult.setSelection(ptResult.length());
+            double a = Double.valueOf(Eval.cal(result2));
+            int b = (int) a;
 
-            }
+            //계산 기록 저장
+            String recode1 = Integer.toString(b);
+            String recode2 = result+str;
+            if(recode1 == recode2) return;
 
-            //계산기록 저장하기
+            ptResult.setText(Integer.toString(b));
+            ptCurrResult.setText(result + str);
+            ptResult.setSelection(ptResult.length());
 
 
+            saveRecode(recode2 +recode1+"\n");
 
+        });
+
+        //계산기록 확인
+        btnRecode.setOnClickListener(view -> {
+            readRecode();
 
         });
 
@@ -260,7 +280,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void saveRecode(String msg) {
+        try {
+            BufferedOutputStream bos =
+                    new BufferedOutputStream(new FileOutputStream(new File(getFilesDir()+"/recode.txt"), true));
+            bos.write(msg.getBytes());
+            bos.close();
+            Log.d(TAG, "saveRecode: 저장완료");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String readRecode() {
+        Log.d(TAG, "readRecode: 실행됨");
+
+        String str = null;
+        try {
+            BufferedInputStream bis =
+                    new BufferedInputStream(new FileInputStream(new File(getFilesDir() + "/recode.txt")));
+
+            byte[] buff = new byte[9999]; //버퍼 배열
+
+            int nRLen = bis.read(buff); //파일 크기
+
+            str = new String(buff, 0, nRLen); //byte -> string
+
+            Log.d(TAG, "str : "+str);
+
+            bis.close();
+
+        } catch (IOException e) {
+            Log.d(TAG, "readRecode: 오류 발생 "+e);
+            e.printStackTrace();
+        }
+
+        return str;
+
+    }
 
 
-
-}
+}//mainActivity
