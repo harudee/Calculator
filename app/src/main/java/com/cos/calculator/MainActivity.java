@@ -1,36 +1,27 @@
 package com.cos.calculator;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.mozilla.javascript.ast.WhileLoop;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity222";
+    private MainActivity mContext = this;
 
     private EditText ptResult;
     private TextView ptCurrResult;
@@ -270,9 +261,17 @@ public class MainActivity extends AppCompatActivity {
 
         //계산기록 확인
         btnRecode.setOnClickListener(view -> {
-            readRecode();
+            //readRecode();
+            //popupActivity 화면 띄우기
+            Intent intent = new Intent(
+                    mContext,
+                    PopupActivity.class
+            );
+            startActivity(intent);
+
 
         });
+
 
     }//initListener
 
@@ -294,32 +293,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String readRecode() {
-        Log.d(TAG, "readRecode: 실행됨");
-
-        String str = null;
-        try {
-            BufferedInputStream bis =
-                    new BufferedInputStream(new FileInputStream(new File(getFilesDir() + "/recode.txt")));
-
-            byte[] buff = new byte[9999]; //버퍼 배열
-
-            int nRLen = bis.read(buff); //파일 크기
-
-            str = new String(buff, 0, nRLen); //byte -> string
-
-            Log.d(TAG, "str : "+str);
-
-            bis.close();
-
-        } catch (IOException e) {
-            Log.d(TAG, "readRecode: 오류 발생 "+e);
-            e.printStackTrace();
-        }
-
-        return str;
-
-    }
+//    private String readRecode() {
+//        Log.d(TAG, "readRecode: 실행됨");
+//
+//        String str = null;
+//        try {
+//            BufferedInputStream bis =
+//                    new BufferedInputStream(new FileInputStream(new File(getFilesDir() + "/recode.txt")));
+//
+//            byte[] buff = new byte[9999]; //버퍼 배열
+//
+//            int nRLen = bis.read(buff); //파일 크기
+//
+//            str = new String(buff, 0, nRLen); //byte -> string
+//
+//            Log.d(TAG, "str : "+str);
+//
+//            bis.close();
+//
+//        } catch (IOException e) {
+//            Log.d(TAG, "readRecode: 오류 발생 "+e);
+//            e.printStackTrace();
+//        }
+//
+//        return str;
+//
+//    }
 
 
 }//mainActivity
