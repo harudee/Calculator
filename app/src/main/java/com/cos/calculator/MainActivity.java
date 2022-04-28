@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         ptResult.requestFocus();
+
 
         initListener();
         initData();
@@ -145,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                         s += btn.getText().toString();
 
                     }
-
                 }
 
             });
@@ -196,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        //전체 지우기
+        //clear : 전체 지우기
         btn[16].setOnClickListener(view -> {
             s = null;
             ptResult.setText("");
@@ -269,6 +271,34 @@ public class MainActivity extends AppCompatActivity {
             );
             startActivity(intent);
 
+
+        });
+
+        ptResult.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //변경이전 상태를 보여줌
+                Log.d(TAG, "변경 전 : "+charSequence);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //변경될 때 자동으로 실행
+                Log.d(TAG, "변경 중: "+charSequence);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //변경완료된 뒤 자동실행
+                Log.d(TAG, "변경 후: "+editable);
+
+            }
+        });
+
+        //실행취소
+        btnUndo.setOnClickListener(v->{
+            Log.d(TAG, "initListener: 실행취소");
 
         });
 
