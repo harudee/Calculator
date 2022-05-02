@@ -5,34 +5,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/btn_background"
+    android:padding="30dp"
     tools:context=".PopupActivity">
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_recode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="여기"
-            android:textSize="30dp" />
+        <LinearLayout
+            android:id="@+id/ll_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
     </ScrollView>
 
+    <TextView
+        android:id="@+id/tv_recode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="history"
+        android:textSize="22dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="돌아가기"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_radius_green"
+        android:text="닫기"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/btn_radius_green"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

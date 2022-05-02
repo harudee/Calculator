@@ -1,22 +1,17 @@
 package com.cos.calculator;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -33,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isEntered = false;
     private int cursorPosition;
-    private String s = null; //현재 입력값
+    private String s = ""; //현재 입력값
     private int dotCount = 1;
 
 
@@ -44,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         ptResult.requestFocus();
-
-
         initListener();
         initData();
     }
@@ -86,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             int I = i;
             btn[i].setOnClickListener(view -> {
+
+                s+="";
 
                 Button btn = (Button) view;
                 cursorPosition = ptResult.getSelectionStart();
@@ -175,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
                     ptResult.setText(sb.toString());
                     ptResult.setSelection(cursorPosition + 1);
 
+                    s+=btn.getText().toString();
+
                 }
 
                 char b = str.charAt(str.length() - 1);
@@ -190,9 +187,9 @@ public class MainActivity extends AppCompatActivity {
                     ptResult.setText(sb.toString());
                     ptResult.setSelection(cursorPosition);
 
+                    s+=btn.getText().toString();
 
                 }
-
 
             });
 
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         //clear : 전체 지우기
         btn[16].setOnClickListener(view -> {
-            s = null;
+            s = "";
             ptResult.setText("");
             ptCurrResult.setText("");
 
@@ -230,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
         //enter
         btn[15].setOnClickListener(view -> {
 
+            s+="";
+
             if (ptResult.getText().length() == 0) return;
 
             isEntered = false;
@@ -247,17 +246,24 @@ public class MainActivity extends AppCompatActivity {
             double a = Double.valueOf(Eval.cal(result2));
             int b = (int) a;
 
+
             //계산 기록 저장
             String recode1 = Integer.toString(b);
             String recode2 = result+str;
-            if(recode1 == recode2) return;
 
-            ptResult.setText(Integer.toString(b));
-            ptCurrResult.setText(result + str);
+            if(recode1 == recode2) return;
+            ptResult.setText(recode1);
+            ptCurrResult.setText(recode2);
             ptResult.setSelection(ptResult.length());
 
-
             saveRecode(recode2 +recode1+"\n");
+
+            Log.d(TAG, "recode1: "+ recode1); //결과
+            Log.d(TAG, "recode2: "+ recode2);
+            Log.d(TAG, "reseult: "+ result); //= 직전
+            Log.d(TAG, "reseult2: "+ result2);
+
+            s = result;
 
         });
 
@@ -271,41 +277,48 @@ public class MainActivity extends AppCompatActivity {
             );
             startActivity(intent);
 
-
-        });
-
-        ptResult.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //변경이전 상태를 보여줌
-                Log.d(TAG, "변경 전 : "+charSequence);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //변경될 때 자동으로 실행
-                Log.d(TAG, "변경 중: "+charSequence);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                //변경완료된 뒤 자동실행
-                Log.d(TAG, "변경 후: "+editable);
-
-            }
         });
 
         //실행취소
         btnUndo.setOnClickListener(v->{
-            Log.d(TAG, "initListener: 실행취소");
+            Log.d(TAG, "initListener: 실행취소 "+s);
+            ptResult.setText(s);
+            ptCurrResult.setText("");
+            ptResult.setSelection(ptResult.length());
 
         });
 
+//        ptResult.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                //변경이전 상태를 보여줌
+//                Log.d(TAG, "변경 전 : "+charSequence);
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                //변경될 때 자동으로 실행
+//                Log.d(TAG, "변경 중: "+charSequence);
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                //변경완료된 뒤 자동실행
+//                Log.d(TAG, "변경 후: "+editable);
+//
+//            }
+//        });
 
     }//initListener
 
     private void initData() {
+
+//        AppDataBase db = Room.databaseBuilder(getApplicationContext(),
+//                AppDataBase.class, "history_table").build();
+//
+//        HistoryDAO historyDAO = db.historyDAO();
+//        List<History> histories = historyDAO.getAll();
 
     }
 
@@ -323,32 +336,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    private String readRecode() {
-//        Log.d(TAG, "readRecode: 실행됨");
-//
-//        String str = null;
-//        try {
-//            BufferedInputStream bis =
-//                    new BufferedInputStream(new FileInputStream(new File(getFilesDir() + "/recode.txt")));
-//
-//            byte[] buff = new byte[9999]; //버퍼 배열
-//
-//            int nRLen = bis.read(buff); //파일 크기
-//
-//            str = new String(buff, 0, nRLen); //byte -> string
-//
-//            Log.d(TAG, "str : "+str);
-//
-//            bis.close();
-//
-//        } catch (IOException e) {
-//            Log.d(TAG, "readRecode: 오류 발생 "+e);
-//            e.printStackTrace();
-//        }
-//
-//        return str;
-//
-//    }
+
 
 
 }//mainActivity

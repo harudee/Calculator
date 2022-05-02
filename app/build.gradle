@@ -29,13 +29,17 @@ android {
 }
 
 dependencies {
-
-    //material.io
-    implementation 'com.google.android.material:material:1.4.0'
+    //내부 저장소 room
+    def room_version = "2.2.6"//최신버전은 2.4.2임
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 
     //롬복 추가
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    //material.io
+    implementation 'com.google.android.material:material:1.4.0'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'

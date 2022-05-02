@@ -2,15 +2,19 @@ package com.cos.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.LayoutInflater;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -22,25 +26,33 @@ public class PopupActivity extends AppCompatActivity {
     private static final String TAG = "PopupActivity";
     private PopupActivity mContext;
 
-    private TextView tvRecode;
+    private TextView tvRecode, tvExpression, tvAnswer;
+    private LinearLayout llHistory;
     private Button btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//popup의 title 제거
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_popup);
 
         init();
         initLr();
         initData();
 
+
     }
 
     private void init(){
-        tvRecode = findViewById(R.id.tv_recode);
+
         btnBack = findViewById(R.id.btn_back);
+        tvRecode = findViewById(R.id.tv_recode);
+
+        tvExpression = findViewById(R.id.tv_expression);//계산식
+        tvAnswer = findViewById(R.id.tv_answer);//결과
+        llHistory = findViewById(R.id.ll_history);//뿌릴 곳
 
     }
 
@@ -74,16 +86,18 @@ public class PopupActivity extends AppCompatActivity {
 
         tvRecode.setText(str);
 
+
     }
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
-//        //외부 클릭시 안 닫히게 설정
+//        //외부 클릭시 팝업창이 안 닫히게 설정
 //        if(event.getAction() == MotionEvent.ACTION_OUTSIDE){
 //            return false;
 //        }
 //
 //        return false;
 //    }
+
 
 }
