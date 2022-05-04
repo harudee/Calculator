@@ -1,9 +1,12 @@
 package com.cos.calculator;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,20 +31,31 @@ public class PopupActivity extends AppCompatActivity {
 
     private TextView tvRecode, tvExpression, tvAnswer;
     private LinearLayout llHistory;
-    private Button btnBack;
+    private Button btnBack, btnShow;
+
+    private AlertDialog.Builder builder;
+    private AlertDialog mRecodeDialog;
+    private String[] mRecode = {"2+3=5", "4-3=2"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_popup);
 
         init();
         initLr();
         initData();
 
+//        builder = new AlertDialog.Builder(mContext);
+//        builder.setTitle("계산기록");
+//        builder.setMessage("여기");
+//
+//        mRecodeDialog = builder.create();
 
     }
 
@@ -50,9 +64,9 @@ public class PopupActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btn_back);
         tvRecode = findViewById(R.id.tv_recode);
 
-        tvExpression = findViewById(R.id.tv_expression);//계산식
-        tvAnswer = findViewById(R.id.tv_answer);//결과
-        llHistory = findViewById(R.id.ll_history);//뿌릴 곳
+//        tvExpression = findViewById(R.id.tv_expression);//계산식
+//        tvAnswer = findViewById(R.id.tv_answer);//결과
+//        llHistory = findViewById(R.id.ll_history);//뿌릴 곳
 
     }
 
@@ -87,17 +101,8 @@ public class PopupActivity extends AppCompatActivity {
         tvRecode.setText(str);
 
 
-    }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        //외부 클릭시 팝업창이 안 닫히게 설정
-//        if(event.getAction() == MotionEvent.ACTION_OUTSIDE){
-//            return false;
-//        }
-//
-//        return false;
-//    }
+    }
 
 
 }

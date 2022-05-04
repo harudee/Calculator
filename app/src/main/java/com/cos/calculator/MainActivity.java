@@ -1,7 +1,9 @@
 package com.cos.calculator;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity222";
     private MainActivity mContext = this;
 
+
     private EditText ptResult;
     private TextView ptCurrResult;
     private Button btn[] = new Button[17];
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private int cursorPosition;
     private String s = ""; //현재 입력값
     private int dotCount = 1;
+    private String lastCal = "";
+
+
 
 
     @Override
@@ -44,22 +50,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        btn[0] = findViewById(R.id.num_0);
-        btn[1] = findViewById(R.id.num_1);
-        btn[2] = findViewById(R.id.num_2);
-        btn[3] = findViewById(R.id.num_3);
-        btn[4] = findViewById(R.id.num_4);
-        btn[5] = findViewById(R.id.num_5);
-        btn[6] = findViewById(R.id.num_6);
-        btn[7] = findViewById(R.id.num_7);
-        btn[8] = findViewById(R.id.num_8);
-        btn[9] = findViewById(R.id.num_9);
 
-        btn[10] = findViewById(R.id.btn_multiple);
-        btn[11] = findViewById(R.id.btn_division);
-        btn[12] = findViewById(R.id.btn_plus);
-        btn[13] = findViewById(R.id.btn_minus);
-        btn[14] = findViewById(R.id.btn_dot);
+        btn[0] = findViewById(R.id.btn_dot);
+        btn[1] = findViewById(R.id.num_0);
+        btn[2] = findViewById(R.id.num_1);
+        btn[3] = findViewById(R.id.num_2);
+        btn[4] = findViewById(R.id.num_3);
+        btn[5] = findViewById(R.id.num_4);
+        btn[6] = findViewById(R.id.num_5);
+        btn[7] = findViewById(R.id.num_6);
+        btn[8] = findViewById(R.id.num_7);
+        btn[9] = findViewById(R.id.num_8);
+        btn[10] = findViewById(R.id.num_9);
+
+        btn[11] = findViewById(R.id.btn_multiple);
+        btn[12] = findViewById(R.id.btn_division);
+        btn[13] = findViewById(R.id.btn_plus);
+        btn[14] = findViewById(R.id.btn_minus);
 
         btn[15] = findViewById(R.id.btn_enter);
         btn[16] = findViewById(R.id.btn_clear);
@@ -76,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private void initListener() {
 
         //숫자입력
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 11; i++) {
             int I = i;
             btn[i].setOnClickListener(view -> {
 
@@ -86,14 +93,16 @@ public class MainActivity extends AppCompatActivity {
                 cursorPosition = ptResult.getSelectionStart();
                 String sentence = ptResult.getText().toString();
 
-                char lastChar = 'f';
-//                if(s != null) { //입력 됐는지 아닌지 확인
+                //char lastChar = 'f';
+//                if(s != null) {
 //                    lastChar = sentence.charAt(sentence.length()-1);
 //                }
+                //if (lastChar == 'f') {
 
-                if (lastChar == 'f') {
+
                     if (I == 0) { //최초 입력
                         if (s == null || dotCount == 1) {
+
                             ptResult.append("0");
                             ptResult.append(".");
                             dotCount = 0;
@@ -101,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
                             s += "0.";
 
                         } else {
+
+                            dotCount = 0;
 
                             StringBuffer sb = new StringBuffer(sentence);
                             sb.insert(cursorPosition, btn.getText().toString());
@@ -124,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
 
+                        dotCount = 0;
+
                         StringBuffer sb = new StringBuffer(sentence);
                         sb.insert(cursorPosition, btn.getText().toString());
 
@@ -131,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
                         ptResult.setSelection(cursorPosition + 1);
 
                         String result3 = ptResult.getText().toString();
-
 
                         double a = Double.valueOf(Eval.cal(result3));
                         int b = (int) a;
@@ -143,13 +155,13 @@ public class MainActivity extends AppCompatActivity {
                         s += btn.getText().toString();
 
                     }
-                }
+               // }
 
             });
         }
 
         //사칙연산
-        for (int i = 10; i < 15; i++) {
+        for (int i = 12; i < 16; i++) {
 
             btn[i].setOnClickListener(view -> {
 
@@ -198,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         //clear : 전체 지우기
         btn[16].setOnClickListener(view -> {
             s = "";
+            dotCount = 1;
             ptResult.setText("");
             ptCurrResult.setText("");
 
@@ -227,43 +240,47 @@ public class MainActivity extends AppCompatActivity {
         //enter
         btn[15].setOnClickListener(view -> {
 
-            s+="";
+            //s="";
 
             if (ptResult.getText().length() == 0) return;
-
             isEntered = false;
 
             Button btn = (Button) view;
-
-            ptResult.setSelection(ptResult.length());
+            //ptResult.setSelection(ptResult.length());
 
             String result = ptResult.getText().toString();
             String result2 = Eval.cal(result);
-            String str = btn.getText().toString(); //=
+
+            String str = btn.getText().toString(); // =
 
             if (result2 == null) return;
 
-            double a = Double.valueOf(Eval.cal(result2));
+            double a = Double.valueOf(result2);
             int b = (int) a;
 
-
-            //계산 기록 저장
-            String recode1 = Integer.toString(b);
-            String recode2 = result+str;
-
-            if(recode1 == recode2) return;
-            ptResult.setText(recode1);
-            ptCurrResult.setText(recode2);
+            if (a == b) {
+                ptResult.setText(Integer.toString(b));
+                ptCurrResult.setText(Integer.toString(b));
+            } else {
+                ptCurrResult.setText(result2);
+                ptResult.setText(result2);
+            }
             ptResult.setSelection(ptResult.length());
 
-            saveRecode(recode2 +recode1+"\n");
+            //계산 기록 저장
+            String recode1 = Double.toString(a);//5
+            String recode2 = result+str; //2+3=
 
-            Log.d(TAG, "recode1: "+ recode1); //결과
-            Log.d(TAG, "recode2: "+ recode2);
-            Log.d(TAG, "reseult: "+ result); //= 직전
-            Log.d(TAG, "reseult2: "+ result2);
+            if(recode1.equals(recode2)) return;
+            saveRecode(recode2 +recode1+"\n"); //2+3=5
 
-            s = result;
+//            Log.d(TAG, "recode1: "+ recode1); //결과
+//            Log.d(TAG, "recode2: "+ recode2);
+//            Log.d(TAG, "reseult: "+ result); //= 직전
+//            Log.d(TAG, "reseult2: "+ result2);
+
+            //s = result;
+            lastCal = result;
 
         });
 
@@ -279,11 +296,15 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+
         //실행취소
         btnUndo.setOnClickListener(v->{
             Log.d(TAG, "initListener: 실행취소 "+s);
-            ptResult.setText(s);
+
+            ptResult.setText(lastCal);
             ptCurrResult.setText("");
+
             ptResult.setSelection(ptResult.length());
 
         });
