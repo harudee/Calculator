@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,18 +26,15 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText ptResult;
     private TextView ptCurrResult;
-    private Button btn[] = new Button[17];
+    //private Button btn[] = new Button[17];
+    private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
+    private Button btnPercent, btnEnter, btnClear, btnLeft, btnRight;
     private ImageButton btnRecode, btnUndo, btnBackSpace;
 
-
-    private boolean isEntered = false;
     private int cursorPosition;
-    private String s = ""; //현재 입력값
+    private String currEntered = ""; //현재 입력값
     private int dotCount = 1;
     private String lastCal = "";
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,39 +49,223 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        btn[0] = findViewById(R.id.btn_dot);
-        btn[1] = findViewById(R.id.num_0);
-        btn[2] = findViewById(R.id.num_1);
-        btn[3] = findViewById(R.id.num_2);
-        btn[4] = findViewById(R.id.num_3);
-        btn[5] = findViewById(R.id.num_4);
-        btn[6] = findViewById(R.id.num_5);
-        btn[7] = findViewById(R.id.num_6);
-        btn[8] = findViewById(R.id.num_7);
-        btn[9] = findViewById(R.id.num_8);
-        btn[10] = findViewById(R.id.num_9);
+        btnDot = findViewById(R.id.btn_dot);
+        btn0 = findViewById(R.id.num_0);
+        btn1 = findViewById(R.id.num_1);
+        btn2 = findViewById(R.id.num_2);
+        btn3 = findViewById(R.id.num_3);
+        btn4 = findViewById(R.id.num_4);
+        btn5 = findViewById(R.id.num_5);
+        btn6 = findViewById(R.id.num_6);
+        btn7 = findViewById(R.id.num_7);
+        btn8 = findViewById(R.id.num_8);
+        btn9 = findViewById(R.id.num_9);
 
-        btn[11] = findViewById(R.id.btn_multiple);
-        btn[12] = findViewById(R.id.btn_division);
-        btn[13] = findViewById(R.id.btn_plus);
-        btn[14] = findViewById(R.id.btn_minus);
+        btnMultiple = findViewById(R.id.btn_multiple);
+        btnDivision = findViewById(R.id.btn_division);
+        btnPlus = findViewById(R.id.btn_plus);
+        btnMinus = findViewById(R.id.btn_minus);
 
-        btn[15] = findViewById(R.id.btn_enter);
-        btn[16] = findViewById(R.id.btn_clear);
+        btnLeft = findViewById(R.id.btn_parenthesis_left);
+        btnRight = findViewById(R.id.btn_parenthesis_right);
+
+        btnEnter = findViewById(R.id.btn_enter);
+        btnClear = findViewById(R.id.btn_clear);
 
         btnBackSpace = findViewById(R.id.btn_backSpace);
         btnRecode = findViewById(R.id.btn_recode); //계산기록
-        btnUndo = findViewById(R.id.btn_undo); //실행취소-> enter 이전 단계로
+        btnUndo = findViewById(R.id.btn_undo); //실행취소 ㄹㅇ Ctrl+z
 
         ptResult = findViewById(R.id.pt_result);//결과창
         ptCurrResult = findViewById(R.id.pt_currResult);//현재 계산상태
 
+        btnPercent= findViewById(R.id.btn_percent);
+
     }
+
+    private View.OnClickListener myOnClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.num_0:
+                    ptResult.append("0");
+                    break;
+                case R.id.num_1:
+                    ptResult.append("1");
+                    break;
+                case R.id.num_2:
+                    ptResult.append("2");
+                    break;
+                case R.id.num_3:
+                    ptResult.append("3");
+                    break;
+                case R.id.num_4:
+                    ptResult.append("4");
+                    break;
+                case R.id.num_5:
+                    ptResult.append("5");
+                    break;
+                case R.id.num_6:
+                    ptResult.append("6");
+                    break;
+                case R.id.num_7:
+                    ptResult.append("7");
+                    break;
+                case R.id.num_8:
+                    ptResult.append("8");
+                    break;
+                case R.id.num_9:
+                    ptResult.append("9");
+                    break;
+                case R.id.btn_dot:
+                    ptResult.append(".");
+                    break;
+                case R.id.btn_plus:
+                    ptResult.append("+");
+                    break;
+                case R.id.btn_minus:
+                    ptResult.append("-");
+                    break;
+                case R.id.btn_multiple:
+                    ptResult.append("*");
+                    break;
+                case R.id.btn_division:
+                    ptResult.append("/");
+                    break;
+                case R.id.btn_parenthesis_left:
+                    ptResult.append("(");
+                    break;
+                case R.id.btn_parenthesis_right:
+                    ptResult.append(")");
+                    break;
+                case R.id.btn_clear:
+                    ptResult.setText("");
+                    ptCurrResult.setText("");
+                    break;
+                case R.id.btn_percent:
+                    ptResult.append("%");
+                default:
+                    break;
+            }
+
+        }
+    };
 
     private void initListener() {
 
+        //숫자
+        btn0.setOnClickListener(myOnClickListener);
+        btn1.setOnClickListener(myOnClickListener);
+        btn2.setOnClickListener(myOnClickListener);
+        btn3.setOnClickListener(myOnClickListener);
+        btn4.setOnClickListener(myOnClickListener);
+        btn5.setOnClickListener(myOnClickListener);
+        btn6.setOnClickListener(myOnClickListener);
+        btn7.setOnClickListener(myOnClickListener);
+        btn8.setOnClickListener(myOnClickListener);
+        btn9.setOnClickListener(myOnClickListener);
+        btnDot.setOnClickListener(myOnClickListener);
+
+        //사칙연산
+        btnPlus.setOnClickListener(myOnClickListener);
+        btnMinus.setOnClickListener(myOnClickListener);
+        btnMultiple.setOnClickListener(myOnClickListener);
+        btnDivision.setOnClickListener(myOnClickListener);
+
+        btnClear.setOnClickListener(myOnClickListener);
+        btnLeft.setOnClickListener(myOnClickListener);
+        btnRight.setOnClickListener(myOnClickListener);
+        btnPercent.setOnClickListener(myOnClickListener);
+
+        //한 개 지우기
+        btnBackSpace.setOnClickListener(view -> {
+
+            if (ptResult.length() == 0) return;
+
+            String a = ptResult.getText().toString();
+
+            cursorPosition = ptResult.getSelectionStart();
+            StringBuffer sb = new StringBuffer(a);
+            sb.replace(cursorPosition - 1, cursorPosition, "");
+
+            ptResult.setText(sb.toString());
+            ptResult.setSelection(cursorPosition - 1);
+
+            ptCurrResult.setText("");
+
+        });
+
+        //enter
+        btnEnter.setOnClickListener(view -> {
+
+            if (ptResult.getText().length() == 0) return;
+
+
+            Button btn = (Button) view;
+            //ptResult.setSelection(ptResult.length());
+
+            String result = ptResult.getText().toString();
+            String result2 = MyEval.calculation(result);
+
+            String str = btn.getText().toString(); // =
+
+            if (result2 == null) return;
+
+            double a = Double.valueOf(result2);
+            int b = (int) a;
+
+            if (a == b) {
+                ptResult.setText(Integer.toString(b));
+                ptCurrResult.setText(Integer.toString(b));
+            } else {
+                ptCurrResult.setText(result2);
+                ptResult.setText(result2);
+            }
+            ptResult.setSelection(ptResult.length());
+
+            //계산 기록 저장
+            String recode1 = Double.toString(a);//5
+            String recode2 = result + str; //2+3=
+
+            if (recode1.equals(recode2)) return;
+            saveRecode(recode2 + recode1 + "\n"); //2+3=5
+
+//            Log.d(TAG, "recode1: "+ recode1); //결과
+//            Log.d(TAG, "recode2: "+ recode2);
+//            Log.d(TAG, "reseult: "+ result); //= 직전
+//            Log.d(TAG, "reseult2: "+ result2);
+
+            lastCal = result;
+
+        });
+
+        //계산기록 확인
+        btnRecode.setOnClickListener(view -> {
+            //readRecode();
+            //popupActivity 화면 띄우기
+            Intent intent = new Intent(
+                    mContext,
+                    PopupActivity.class
+            );
+            startActivity(intent);
+
+        });
+
+        //실행취소
+        btnUndo.setOnClickListener(v -> {
+            //Log.d(TAG, "initListener: 실행취소 "+s);
+
+            ptResult.setText(lastCal);
+            ptCurrResult.setText("");
+
+            ptResult.setSelection(ptResult.length());
+
+        });
+
+
         //숫자입력
-        for (int i = 0; i < 11; i++) {
+        /*for (int i = 0; i < 11; i++) {
             int I = i;
             btn[i].setOnClickListener(view -> {
 
@@ -214,100 +396,7 @@ public class MainActivity extends AppCompatActivity {
             ptResult.setText("");
             ptCurrResult.setText("");
 
-        });
-
-
-        //한 개 지우기
-        btnBackSpace.setOnClickListener(view -> {
-
-            if (ptResult.length() == 0) return;
-
-            isEntered = false;
-
-            String a = ptResult.getText().toString();
-
-            cursorPosition = ptResult.getSelectionStart();
-            StringBuffer sb = new StringBuffer(a);
-            sb.replace(cursorPosition - 1, cursorPosition, "");
-
-            ptResult.setText(sb.toString());
-            ptResult.setSelection(cursorPosition - 1);
-
-            ptCurrResult.setText("");
-
-        });
-
-        //enter
-        btn[15].setOnClickListener(view -> {
-
-            //s="";
-
-            if (ptResult.getText().length() == 0) return;
-            isEntered = false;
-
-            Button btn = (Button) view;
-            //ptResult.setSelection(ptResult.length());
-
-            String result = ptResult.getText().toString();
-            String result2 = Eval.cal(result);
-
-            String str = btn.getText().toString(); // =
-
-            if (result2 == null) return;
-
-            double a = Double.valueOf(result2);
-            int b = (int) a;
-
-            if (a == b) {
-                ptResult.setText(Integer.toString(b));
-                ptCurrResult.setText(Integer.toString(b));
-            } else {
-                ptCurrResult.setText(result2);
-                ptResult.setText(result2);
-            }
-            ptResult.setSelection(ptResult.length());
-
-            //계산 기록 저장
-            String recode1 = Double.toString(a);//5
-            String recode2 = result+str; //2+3=
-
-            if(recode1.equals(recode2)) return;
-            saveRecode(recode2 +recode1+"\n"); //2+3=5
-
-//            Log.d(TAG, "recode1: "+ recode1); //결과
-//            Log.d(TAG, "recode2: "+ recode2);
-//            Log.d(TAG, "reseult: "+ result); //= 직전
-//            Log.d(TAG, "reseult2: "+ result2);
-
-            //s = result;
-            lastCal = result;
-
-        });
-
-        //계산기록 확인
-        btnRecode.setOnClickListener(view -> {
-            //readRecode();
-            //popupActivity 화면 띄우기
-            Intent intent = new Intent(
-                    mContext,
-                    PopupActivity.class
-            );
-            startActivity(intent);
-
-        });
-
-
-
-        //실행취소
-        btnUndo.setOnClickListener(v->{
-            Log.d(TAG, "initListener: 실행취소 "+s);
-
-            ptResult.setText(lastCal);
-            ptCurrResult.setText("");
-
-            ptResult.setSelection(ptResult.length());
-
-        });
+        });*/
 
 //        ptResult.addTextChangedListener(new TextWatcher() {
 //            @Override
@@ -333,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
 
     }//initListener
 
+
     private void initData() {
 
 //        AppDataBase db = Room.databaseBuilder(getApplicationContext(),
@@ -346,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
     private void saveRecode(String msg) {
         try {
             BufferedOutputStream bos =
-                    new BufferedOutputStream(new FileOutputStream(new File(getFilesDir()+"/recode.txt"), true));
+                    new BufferedOutputStream(new FileOutputStream(new File(getFilesDir() + "/recode.txt"), true));
             bos.write(msg.getBytes());
             bos.close();
             Log.d(TAG, "saveRecode: 저장완료");
@@ -357,7 +447,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void onBtnClicked() {
 
+
+    }
 
 
 }//mainActivity

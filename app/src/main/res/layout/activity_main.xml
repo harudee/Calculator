@@ -39,14 +39,12 @@
         android:id="@+id/tableLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:shrinkColumns="*"
         android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topLayout"
         app:layout_constraintVertical_weight="1.5">
-
 
         <TableRow
             android:gravity="center"
@@ -58,20 +56,60 @@
                 android:textSize="28sp"
                 android:textColor="@android:color/holo_red_light"
                 android:layout_width="wrap_content"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:background="@drawable/btn_radius"/>
 
+            <ImageButton
+                android:id="@+id/btn_recode"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_radius"
+                app:srcCompat="@drawable/ic_recode" />
 
             <ImageButton
                 android:id="@+id/btn_undo"
-                app:srcCompat="@drawable/ic_undo"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_radius"
+                app:srcCompat="@drawable/ic_undo"/>
+
+            <ImageButton
+                android:id="@+id/btn_backSpace"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_radius"
+                app:srcCompat="@drawable/ic_backspace" />
+
+
+        </TableRow>
+
+        <TableRow
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_percent"
+                android:text="%"
+                android:textSize="28sp"
+                android:textColor="@color/btn_background_green"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:background="@drawable/btn_radius"/>
 
-            <ImageButton
-                android:id="@+id/btn_backSpace"
-                app:srcCompat="@drawable/ic_backspace"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_parenthesis_left"
+                android:text="("
+                android:textSize="28sp"
+                android:textColor="@color/btn_background_green"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:background="@drawable/btn_radius"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_parenthesis_right"
+                android:text=")"
+                android:textSize="28sp"
+                android:textColor="@color/btn_background_green"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:background="@drawable/btn_radius"/>
@@ -211,11 +249,11 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:id="@+id/btn_recode"
+                android:id="@+id/btn_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:background="@drawable/btn_radius"
-                app:srcCompat="@drawable/ic_recode" />
+                app:srcCompat="@drawable/ic_menu" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/num_0"
@@ -238,7 +276,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:text="="
-                android:textSize="20dp"
+                android:textSize="35dp"
                 android:textColor="@color/white"
                 android:background="@drawable/btn_radius_green"/>
 
