@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         btnRight.setOnClickListener(myOnClickListener);
         btnPercent.setOnClickListener(myOnClickListener);
 
+
         //한 개 지우기
         btnBackSpace.setOnClickListener(view -> {
 
@@ -262,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
             ptResult.setSelection(ptResult.length());
 
         });
-
 
         //숫자입력
         /*for (int i = 0; i < 11; i++) {
@@ -387,16 +387,7 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
-        }
-
-        //clear : 전체 지우기
-        btn[16].setOnClickListener(view -> {
-            s = "";
-            dotCount = 1;
-            ptResult.setText("");
-            ptCurrResult.setText("");
-
-        });*/
+        }*/
 
 //        ptResult.addTextChangedListener(new TextWatcher() {
 //            @Override
@@ -444,11 +435,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    private void onBtnClicked() {
-
 
     }
 
