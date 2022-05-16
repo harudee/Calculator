@@ -25,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private EditText ptResult;
-    private TextView ptCurrResult;
+    private TextView ptCurrResult, printHexValue, printDecValue, printOctValue, printBinValue;
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
-    private Button btnPercent, btnEnter, btnClear, btnLeft, btnRight;
+    private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
     private ImageButton btnRecode, btnUndo, btnBackSpace;
 
     private int cursorPosition;
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         ptResult.requestFocus();
         initListener();
         initData();
+
+        setBinValue();
     }
 
     private void init() {
@@ -79,7 +81,13 @@ public class MainActivity extends AppCompatActivity {
         ptResult = findViewById(R.id.pt_result);//결과창
         ptCurrResult = findViewById(R.id.pt_currResult);//현재 계산상태
 
-        btnPercent= findViewById(R.id.btn_percent);
+        btnModular= findViewById(R.id.btn_modular);
+
+        printHexValue = findViewById(R.id.print_hex_value);
+        printDecValue = findViewById(R.id.print_dec_value);
+        printOctValue = findViewById(R.id.print_oct_value);
+        printBinValue = findViewById(R.id.print_bin_value);
+
 
     }
 
@@ -87,64 +95,76 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
+
             switch (view.getId()) {
                 case R.id.num_0:
-                    ptResult.append("0");
+                    ptResult.setText("0");
+                    ptCurrResult.append("0");
                     break;
                 case R.id.num_1:
-                    ptResult.append("1");
+                    ptResult.setText("1");
+                    ptCurrResult.append("1");
                     break;
                 case R.id.num_2:
-                    ptResult.append("2");
+                    ptResult.setText("2");
+                    ptCurrResult.append("2");
                     break;
                 case R.id.num_3:
-                    ptResult.append("3");
+                    ptResult.setText("3");
+                    ptCurrResult.append("3");
                     break;
                 case R.id.num_4:
-                    ptResult.append("4");
+                    ptResult.setText("4");
+                    ptCurrResult.append("4");
                     break;
                 case R.id.num_5:
-                    ptResult.append("5");
+                    ptResult.setText("5");
+                    ptCurrResult.append("5");
                     break;
                 case R.id.num_6:
-                    ptResult.append("6");
+                    ptResult.setText("6");
+                    ptCurrResult.append("6");
                     break;
                 case R.id.num_7:
-                    ptResult.append("7");
+                    ptResult.setText("7");
+                    ptCurrResult.append("7");
                     break;
                 case R.id.num_8:
-                    ptResult.append("8");
+                    ptResult.setText("8");
+                    ptCurrResult.append("8");
                     break;
                 case R.id.num_9:
-                    ptResult.append("9");
+                    ptResult.setText("9");
+                    ptCurrResult.append("9");
                     break;
                 case R.id.btn_dot:
                     ptResult.append(".");
+                    ptCurrResult.append(".");
                     break;
                 case R.id.btn_plus:
-                    ptResult.append("+");
+                    ptCurrResult.append("+");
                     break;
                 case R.id.btn_minus:
-                    ptResult.append("-");
+                    ptCurrResult.append("-");
                     break;
                 case R.id.btn_multiple:
-                    ptResult.append("*");
+                    ptCurrResult.append("*");
                     break;
                 case R.id.btn_division:
-                    ptResult.append("/");
+                    ptCurrResult.append("/");
                     break;
                 case R.id.btn_parenthesis_left:
-                    ptResult.append("(");
+                    ptCurrResult.append("(");
                     break;
                 case R.id.btn_parenthesis_right:
-                    ptResult.append(")");
+                    ptCurrResult.append(")");
                     break;
                 case R.id.btn_clear:
                     ptResult.setText("");
                     ptCurrResult.setText("");
                     break;
-                case R.id.btn_percent:
-                    ptResult.append("%");
+                case R.id.btn_modular:
+                    ptCurrResult.append("%");
                 default:
                     break;
             }
@@ -176,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         btnClear.setOnClickListener(myOnClickListener);
         btnLeft.setOnClickListener(myOnClickListener);
         btnRight.setOnClickListener(myOnClickListener);
-        btnPercent.setOnClickListener(myOnClickListener);
+        btnModular.setOnClickListener(myOnClickListener);
 
 
         //한 개 지우기
@@ -197,19 +217,21 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
         //enter
         btnEnter.setOnClickListener(view -> {
 
+            //ptCurrResult.append("=");
+
             if (ptResult.getText().length() == 0) return;
 
-
-            Button btn = (Button) view;
+            //Button btn = (Button) view;
             //ptResult.setSelection(ptResult.length());
 
-            String result = ptResult.getText().toString();
+            String result = ptCurrResult.getText().toString();
             String result2 = MyEval.calculation(result);
 
-            String str = btn.getText().toString(); // =
+            String str = btnEnter.getText().toString();
 
             if (result2 == null) return;
 
@@ -218,9 +240,11 @@ public class MainActivity extends AppCompatActivity {
 
             if (a == b) {
                 ptResult.setText(Integer.toString(b));
-                ptCurrResult.setText(Integer.toString(b));
+                ptCurrResult.append("=");
+                //ptCurrResult.setText(Integer.toString(b));
             } else {
-                ptCurrResult.setText(result2);
+                //ptCurrResult.setText(result2);
+                ptCurrResult.append("=");
                 ptResult.setText(result2);
             }
             ptResult.setSelection(ptResult.length());
@@ -436,6 +460,32 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private void setHexValue(){ //16진수
+
+
+    }
+
+    private void setDecValue(){//10진수
+
+    }
+
+    private void setOctValue(){//8진수
+
+    }
+
+    private void setBinValue(){//2진수
+        int val = 15; /*Integer.parseInt(ptResult.getText().toString());*/
+        //String binaryString = integer
+
+
+        /*hile(val>0){
+            str = (val%2) + str;
+            val /= 2;
+        }*/
+
+        Log.d(TAG, "setBinValue: 2진수 "+ binaryString); //10만 나옴 0010이 나와야하지않나....
     }
 
 

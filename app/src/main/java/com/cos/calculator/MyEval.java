@@ -24,6 +24,7 @@ public class MyEval {
                 arrayMul.add(Integer.parseInt(mul));
             }
 
+
             for(int i=0; i<arrayMul.size(); i++){
                 for(int j = i+1; j<arrayMul.size(); j++){
                     ansMultiple = arrayMul.get(i) * arrayMul.get(j);
