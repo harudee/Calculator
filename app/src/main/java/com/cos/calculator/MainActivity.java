@@ -463,6 +463,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void operatorButtonClicked(String operator){
 
+        String enteredNumber = tvResult.getText().toString();
+
+        if(enteredNumber.isEmpty()) return;
 
         if(isOperator){
             String enteredSentence = tvExpression.getText().toString();
@@ -476,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         }*/ else{
-            String enteredNumber = tvResult.getText().toString();
+            
             tvExpression.append(enteredNumber + operator);
         }
 
