@@ -11,49 +11,110 @@
         android:id="@+id/topLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="25dp"
+        android:paddingRight="25dp"
         android:gravity="bottom"
-        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintBottom_toTopOf="@+id/tl_middle_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="1">
-
+        app:layout_constraintVertical_weight="0.5">
 
         <TextView
-            android:id="@+id/pt_currResult"
-            android:hint="현재 계산상태"
+            android:id="@+id/tv_expression"
+            android:hint="현재 계산식"
             android:gravity="end"
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/pt_result"
+            android:id="@+id/tv_result"
             android:background="@android:color/transparent"
             android:cursorVisible="true"
             android:gravity="end"
-            android:hint="숫자 입력창"
+            android:hint="결과"
             android:textCursorDrawable="@drawable/text_cursor"
             android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/print_hex_value"
-            android:hint="HEX"
-            android:textSize="20sp" />
+    </TableLayout>
 
-        <TextView
-            android:id="@+id/print_dec_value"
-            android:hint="DEC"
-            android:textSize="20sp" />
+    <TableLayout
+        android:id="@+id/tl_middle_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:paddingStart="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintVertical_weight="0.5">
 
-        <TextView
-            android:id="@+id/print_oct_value"
-            android:hint="OCT"
-            android:textSize="20sp" />
+        <TableRow>
 
-        <TextView
-            android:id="@+id/print_bin_value"
-            android:hint="BIN"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/btn_hex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HEX  "
+                android:clickable="true"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/print_hex_value"
+                android:hint="16진수"
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/btn_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DEC  "
+                android:clickable="true"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/print_dec_value"
+                android:hint="10진수"
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/btn_oct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OCT  "
+                android:clickable="true"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/print_oct_value"
+                android:hint="8진수"
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/btn_bin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BIN  "
+                android:clickable="true"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/print_bin_value"
+                android:hint="2진수"
+                android:textSize="20sp" />
+
+        </TableRow>
 
     </TableLayout>
 
@@ -61,11 +122,11 @@
         android:id="@+id/tableLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="30dp"
+        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLayout"
+        app:layout_constraintTop_toBottomOf="@+id/tl_middle_layout"
         app:layout_constraintVertical_weight="1.5">
 
         <TableRow

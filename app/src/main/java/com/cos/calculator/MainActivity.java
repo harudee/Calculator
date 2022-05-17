@@ -1,17 +1,18 @@
 package com.cos.calculator;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.util.StringUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -24,17 +25,19 @@ public class MainActivity extends AppCompatActivity {
     private MainActivity mContext = this;
 
 
-    private EditText ptResult;
-    private TextView ptCurrResult, printHexValue, printDecValue, printOctValue, printBinValue;
+    private EditText tvResult;
+    private TextView tvExpression, printHexValue, printDecValue, printOctValue, printBinValue;
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
     private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
     private ImageButton btnRecode, btnUndo, btnBackSpace;
 
-    private int cursorPosition;
-    private String currEntered = ""; //현재 입력값
-    private int dotCount = 1;
-    private String lastCal = "";
+    //private int cursorPosition;
+    //private String lastCal = "";
+
+    private boolean isOperator = false; //연산자
+    private boolean hasOperator = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +45,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
-        ptResult.requestFocus();
+        //tvResult.requestFocus();
         initListener();
         initData();
 
-        setBinValue();
+        //setBinValue();
+        //setNumbers();
+//        tvResult.setText("0"); //초기값 설정
+//        tvResult.setSelection(tvResult.length());
     }
 
     private void init() {
@@ -78,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
         btnRecode = findViewById(R.id.btn_recode); //계산기록
         btnUndo = findViewById(R.id.btn_undo); //실행취소 ㄹㅇ Ctrl+z
 
-        ptResult = findViewById(R.id.pt_result);//결과창
-        ptCurrResult = findViewById(R.id.pt_currResult);//현재 계산상태
+        tvResult = findViewById(R.id.tv_result);//결과창
+        tvExpression = findViewById(R.id.tv_expression);//현재 계산상태
 
-        btnModular= findViewById(R.id.btn_modular);
+        btnModular = findViewById(R.id.btn_modular);
 
         printHexValue = findViewById(R.id.print_hex_value);
         printDecValue = findViewById(R.id.print_dec_value);
@@ -98,73 +104,58 @@ public class MainActivity extends AppCompatActivity {
 
             switch (view.getId()) {
                 case R.id.num_0:
-                    ptResult.setText("0");
-                    ptCurrResult.append("0");
+                    numberButtonClicked("0");
                     break;
                 case R.id.num_1:
-                    ptResult.setText("1");
-                    ptCurrResult.append("1");
+                    numberButtonClicked("1");
                     break;
                 case R.id.num_2:
-                    ptResult.setText("2");
-                    ptCurrResult.append("2");
+                    numberButtonClicked("2");
                     break;
                 case R.id.num_3:
-                    ptResult.setText("3");
-                    ptCurrResult.append("3");
+                    numberButtonClicked("3");
                     break;
                 case R.id.num_4:
-                    ptResult.setText("4");
-                    ptCurrResult.append("4");
+                    numberButtonClicked("4");
                     break;
                 case R.id.num_5:
-                    ptResult.setText("5");
-                    ptCurrResult.append("5");
+                    numberButtonClicked("5");
                     break;
                 case R.id.num_6:
-                    ptResult.setText("6");
-                    ptCurrResult.append("6");
+                    numberButtonClicked("6");
                     break;
                 case R.id.num_7:
-                    ptResult.setText("7");
-                    ptCurrResult.append("7");
+                    numberButtonClicked("7");
                     break;
                 case R.id.num_8:
-                    ptResult.setText("8");
-                    ptCurrResult.append("8");
+                    numberButtonClicked("8");
                     break;
                 case R.id.num_9:
-                    ptResult.setText("9");
-                    ptCurrResult.append("9");
-                    break;
-                case R.id.btn_dot:
-                    ptResult.append(".");
-                    ptCurrResult.append(".");
+                    numberButtonClicked("9");
                     break;
                 case R.id.btn_plus:
-                    ptCurrResult.append("+");
+                    operatorButtonClicked("+");
                     break;
                 case R.id.btn_minus:
-                    ptCurrResult.append("-");
+                    operatorButtonClicked("-");
                     break;
                 case R.id.btn_multiple:
-                    ptCurrResult.append("*");
+                    operatorButtonClicked("*");
                     break;
                 case R.id.btn_division:
-                    ptCurrResult.append("/");
-                    break;
-                case R.id.btn_parenthesis_left:
-                    ptCurrResult.append("(");
-                    break;
-                case R.id.btn_parenthesis_right:
-                    ptCurrResult.append(")");
-                    break;
-                case R.id.btn_clear:
-                    ptResult.setText("");
-                    ptCurrResult.setText("");
+                    operatorButtonClicked("/");
                     break;
                 case R.id.btn_modular:
-                    ptCurrResult.append("%");
+                    operatorButtonClicked("%");
+                    break;
+
+                /*case R.id.btn_dot:
+                    break;
+                case R.id.btn_parenthesis_left:
+                    break;
+                case R.id.btn_parenthesis_right:
+                    break;*/
+
                 default:
                     break;
             }
@@ -174,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initListener() {
 
-        //숫자
+        //number
         btn0.setOnClickListener(myOnClickListener);
         btn1.setOnClickListener(myOnClickListener);
         btn2.setOnClickListener(myOnClickListener);
@@ -187,33 +178,39 @@ public class MainActivity extends AppCompatActivity {
         btn9.setOnClickListener(myOnClickListener);
         btnDot.setOnClickListener(myOnClickListener);
 
-        //사칙연산
+        //operator
         btnPlus.setOnClickListener(myOnClickListener);
         btnMinus.setOnClickListener(myOnClickListener);
         btnMultiple.setOnClickListener(myOnClickListener);
         btnDivision.setOnClickListener(myOnClickListener);
-
-        btnClear.setOnClickListener(myOnClickListener);
-        btnLeft.setOnClickListener(myOnClickListener);
-        btnRight.setOnClickListener(myOnClickListener);
         btnModular.setOnClickListener(myOnClickListener);
+
+        /*btnLeft.setOnClickListener(myOnClickListener);
+        btnRight.setOnClickListener(myOnClickListener);
+        btnClear.setOnClickListener(myOnClickListener);*/
 
 
         //한 개 지우기
         btnBackSpace.setOnClickListener(view -> {
 
-            if (ptResult.length() == 0) return;
+            String enteredSentence = tvExpression.getText().toString();
+            String changedSentence = removeLastChar(enteredSentence);
 
-            String a = ptResult.getText().toString();
+            tvExpression.setText(changedSentence);
 
-            cursorPosition = ptResult.getSelectionStart();
+            isOperator = false;
+
+            /*if (tvResult.getText().length() == 0) return;
+
+            String a = tvResult.getText().toString();
+
             StringBuffer sb = new StringBuffer(a);
             sb.replace(cursorPosition - 1, cursorPosition, "");
 
-            ptResult.setText(sb.toString());
-            ptResult.setSelection(cursorPosition - 1);
+            tvResult.setText(sb.toString());
+            tvResult.setSelection(cursorPosition - 1);
 
-            ptCurrResult.setText("");
+            tvExpression.setText("");*/
 
         });
 
@@ -221,14 +218,15 @@ public class MainActivity extends AppCompatActivity {
         //enter
         btnEnter.setOnClickListener(view -> {
 
-            //ptCurrResult.append("=");
 
-            if (ptResult.getText().length() == 0) return;
+            /*//ptCurrResult.append("=");
+
+            if (tvResult.getText().length() == 0) return;
 
             //Button btn = (Button) view;
             //ptResult.setSelection(ptResult.length());
 
-            String result = ptCurrResult.getText().toString();
+            String result = tvExpression.getText().toString();
             String result2 = MyEval.calculation(result);
 
             String str = btnEnter.getText().toString();
@@ -239,15 +237,15 @@ public class MainActivity extends AppCompatActivity {
             int b = (int) a;
 
             if (a == b) {
-                ptResult.setText(Integer.toString(b));
-                ptCurrResult.append("=");
+                tvResult.setText(Integer.toString(b));
+                tvExpression.append("=");
                 //ptCurrResult.setText(Integer.toString(b));
             } else {
                 //ptCurrResult.setText(result2);
-                ptCurrResult.append("=");
-                ptResult.setText(result2);
+                tvExpression.append("=");
+                tvResult.setText(result2);
             }
-            ptResult.setSelection(ptResult.length());
+            tvResult.setSelection(tvResult.length());
 
             //계산 기록 저장
             String recode1 = Double.toString(a);//5
@@ -261,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
 //            Log.d(TAG, "reseult: "+ result); //= 직전
 //            Log.d(TAG, "reseult2: "+ result2);
 
-            lastCal = result;
+            lastCal = result;*/
 
         });
 
@@ -278,15 +276,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //실행취소
-        btnUndo.setOnClickListener(v -> {
+        /*btnUndo.setOnClickListener(v -> {
             //Log.d(TAG, "initListener: 실행취소 "+s);
 
-            ptResult.setText(lastCal);
-            ptCurrResult.setText("");
+            tvResult.setText(lastCal);
+            tvExpression.setText("");
 
-            ptResult.setSelection(ptResult.length());
+            tvResult.setSelection(tvResult.length());
 
-        });
+        });*/
 
         //숫자입력
         /*for (int i = 0; i < 11; i++) {
@@ -413,29 +411,79 @@ public class MainActivity extends AppCompatActivity {
 
         }*/
 
-//        ptResult.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                //변경이전 상태를 보여줌
-//                Log.d(TAG, "변경 전 : "+charSequence);
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                //변경될 때 자동으로 실행
-//                Log.d(TAG, "변경 중: "+charSequence);
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                //변경완료된 뒤 자동실행
-//                Log.d(TAG, "변경 후: "+editable);
-//
-//            }
-//        });
+        tvResult.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //변경이전 상태를 보여줌
+                //Log.d(TAG, "변경 전 : "+charSequence);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //변경될 때 자동으로 실행
+                //Log.d(TAG, "변경 중: "+charSequence);
+                //setNumbers();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //변경완료된 뒤 자동실행
+                //Log.d(TAG, "변경 후: "+editable);
+                //setNumbers();
+
+            }
+        });
 
     }//initListener
+
+    private String removeLastChar(String sentence){
+
+        if(sentence.isEmpty())
+            return null;
+
+        return sentence.substring(0, sentence.length()-1);
+
+    }
+
+    private void numberButtonClicked(String number){
+
+        if(isOperator){
+            //tvExpression.setText(" ");
+            tvResult.setText(number);
+
+        } else{
+            tvResult.append(number);
+        }
+
+        isOperator = false;
+        tvResult.setSelection(tvResult.length());
+
+    }
+
+    private void operatorButtonClicked(String operator){
+
+
+        if(isOperator){
+            String enteredSentence = tvExpression.getText().toString();
+            String removedSentence = removeLastChar(enteredSentence);
+            String changedSentence = removedSentence + operator;
+
+            tvExpression.setText(changedSentence);
+
+        } /*else if(hasOperator){
+            tvResult.setText("이미이미");
+            return;
+
+        }*/ else{
+            String enteredNumber = tvResult.getText().toString();
+            tvExpression.append(enteredNumber + operator);
+        }
+
+        isOperator = true;
+        hasOperator = true;
+
+    }
 
 
     private void initData() {
@@ -462,30 +510,50 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setHexValue(){ //16진수
+    private void setNumbers() {
+        String decNumber = tvResult.getText().toString();
+        int changeNumber = Integer.parseInt(decNumber);
+
+        String binNumber = String.format("%0" + 4 + "d", Integer.parseInt(Integer.toBinaryString(changeNumber)));
+        String octNumber = Integer.toOctalString(changeNumber);
+        String hexNumber = Integer.toHexString(changeNumber);
+
+        Log.d(TAG, "binNumber " + binNumber);
+        Log.d(TAG, "octNumber " + octNumber);
+        Log.d(TAG, "hexNumber " + hexNumber);
+
+        printBinValue.setText(binNumber);
+        printHexValue.setText(hexNumber);
+        printOctValue.setText(octNumber);
+        printDecValue.setText(decNumber);
+
+    }
+
+    private void setHexValue() { //16진수
 
 
     }
 
-    private void setDecValue(){//10진수
+    private void setDecValue() {//10진수
 
     }
 
-    private void setOctValue(){//8진수
+    private void setOctValue() {//8진수
 
     }
 
-    private void setBinValue(){//2진수
-        int val = 15; /*Integer.parseInt(ptResult.getText().toString());*/
-        //String binaryString = integer
 
+    private void setBinValue() {//2진수
+        int val = 85;
+        String str = "";
+        //String str2 = String.format("");
 
-        /*hile(val>0){
+        /*while(val>0){
             str = (val%2) + str;
             val /= 2;
         }*/
 
-        Log.d(TAG, "setBinValue: 2진수 "+ binaryString); //10만 나옴 0010이 나와야하지않나....
+        Log.d(TAG, "setBinValue: 2진수 " + str); //10만 나옴 0010이 나오게 해보자~~
     }
 
 
