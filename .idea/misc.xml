@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/devtools/KWwork/Calculator/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
+        <entry key="..\:/devtools/KWwork/Calculator/app/src/main/res/layout/activity_popup.xml" value="0.21145833333333333" />
+        <entry key="..\:/devtools/KWwork/Calculator/app/src/main/res/layout/history_recode.xml" value="0.25364583333333335" />
+      </map>
+    </option>
+  </component>
   <component name="EntryPointsManager">
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="androidx.room.Query" />
     </list>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

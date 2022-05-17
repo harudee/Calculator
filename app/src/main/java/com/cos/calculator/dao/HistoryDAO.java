@@ -13,20 +13,20 @@ import java.util.List;
 @Dao
 public interface HistoryDAO {
 
-//    @Query("SELECT * FROM history_table")
-//    List<History> getAll();
-//
-//    @Insert
-//    void insertHistory(History... histories);
+    @Query("SELECT * FROM history_table")
+    List<History> getAll();
 
-//    @Delete
-//    void delete(History history);
+    @Query("SELECT * FROM history_table WHERE result LIKE :result LIMIT 1")
+    History findByResult(String result);
 
-//    @Delete("DELETE * FROM history_table")
-//    void deleteAll();
+//    @Query("DELETE FROM history_table")
+//    History deleteAll();
 
-//    @Query("SELECT * FROM history_table WHERE answer LIKE :answer LIMIT 1")
-//    History findByAnswer(String expression, String answer);
+    @Insert
+    void insertHistory(History... histories);
+
+    @Delete
+    void delete(History history);
 
 }
 

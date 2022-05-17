@@ -13,7 +13,8 @@ public class History {
     @ColumnInfo(name = "expression")
     public String expression;
 
-    @ColumnInfo(name = "answer")
-    public String answer;
+    @ColumnInfo(name = "result")
+    public String result;
+
 
 }

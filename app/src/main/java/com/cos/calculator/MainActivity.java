@@ -12,7 +12,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.util.StringUtil;
+import androidx.room.Room;
+
+import com.cos.calculator.dao.HistoryDAO;
+import com.cos.calculator.model.History;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -48,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
         //tvResult.requestFocus();
         initListener();
         initData();
+
+        AppDatabase database = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class,
+                "historyDB").build();
 
         //setBinValue();
         //setNumbers();
@@ -214,10 +221,21 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        //전체 지우기
+        btnClear.setOnClickListener(v -> {
+            tvExpression.setText("");
+            tvResult.setText("");
+
+            isOperator = false;
+            hasOperator = false;
+
+        });
+
 
         //enter
         btnEnter.setOnClickListener(view -> {
 
+            
 
             /*//ptCurrResult.append("=");
 
@@ -449,7 +467,7 @@ public class MainActivity extends AppCompatActivity {
     private void numberButtonClicked(String number){
 
         if(isOperator){
-            //tvExpression.setText(" ");
+            tvExpression.setText(" ");
             tvResult.setText(number);
 
         } else{
@@ -467,7 +485,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(enteredNumber.isEmpty()) return;
 
-        if(isOperator){
+        if(isOperator){//사칙연산 연속 클릭 시
             String enteredSentence = tvExpression.getText().toString();
             String removedSentence = removeLastChar(enteredSentence);
             String changedSentence = removedSentence + operator;

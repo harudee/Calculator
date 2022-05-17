@@ -41,7 +41,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:paddingStart="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topLayout"
@@ -50,13 +49,14 @@
 
         <TableRow>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_hex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="HEX  "
-                android:clickable="true"
-                android:textSize="20sp"/>
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:background="@null"
+                android:text="HEX"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/print_hex_value"
@@ -67,13 +67,14 @@
 
         <TableRow>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_dec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DEC  "
-                android:clickable="true"
-                android:textSize="20sp"/>
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:background="@null"
+                android:text="DEC"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/print_dec_value"
@@ -84,13 +85,14 @@
 
         <TableRow>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_oct"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OCT  "
-                android:clickable="true"
-                android:textSize="20sp"/>
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:background="@null"
+                android:text="OCT"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/print_oct_value"
@@ -101,13 +103,14 @@
 
         <TableRow>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_bin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BIN  "
-                android:clickable="true"
-                android:textSize="20sp"/>
+                android:layout_height="25dp"
+                android:background="@null"
+                android:text="BIN"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/print_bin_value"

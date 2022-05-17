@@ -2,6 +2,7 @@ package com.cos.calculator;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -35,7 +36,6 @@ public class PopupActivity extends AppCompatActivity {
 
     private AlertDialog.Builder builder;
     private AlertDialog mRecodeDialog;
-    private String[] mRecode = {"2+3=5", "4-3=2"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +44,16 @@ public class PopupActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_popup);
 
         init();
         initLr();
         initData();
+
+        AppDatabase database = Room.databaseBuilder(
+                getApplicationContext(),
+                AppDatabase.class,
+                "historyDB").build();
 
 //        builder = new AlertDialog.Builder(mContext);
 //        builder.setTitle("계산기록");
@@ -61,8 +65,8 @@ public class PopupActivity extends AppCompatActivity {
 
     private void init(){
 
-        btnBack = findViewById(R.id.btn_back);
-        tvRecode = findViewById(R.id.tv_recode);
+        //btnBack = findViewById(R.id.btn_back);
+        //tvRecode = findViewById(R.id.tv_recode);
 
 //        tvExpression = findViewById(R.id.tv_expression);//계산식
 //        tvAnswer = findViewById(R.id.tv_answer);//결과
