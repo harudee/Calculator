@@ -75,10 +75,10 @@ public class PopupActivity extends AppCompatActivity {
     }
 
     private void initLr(){
-        btnBack.setOnClickListener(view -> {
+        /*btnBack.setOnClickListener(view -> {
             Log.d(TAG, "initLr: 실행됨");
             finish(); //화면 날리기
-        });
+        });*/
 
     }
 
@@ -102,7 +102,7 @@ public class PopupActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        tvRecode.setText(str);
+        //tvRecode.setText(str);
 
 
 

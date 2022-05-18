@@ -12,10 +12,75 @@ public class MyEval {
 
     public static String calculation(String result){
 
-        Log.d(TAG, "calculation : result "+result);
-        // 3+4*5 이런건 어짬
+        //Log.d(TAG, "calculation : result "+result);
+        //3+4*5 이런건 어짬
+        //double 값도 처리해야함
+        String trimResult = result.trim(); //앞뒤 공백제거
 
-        if(result.contains("*")){
+        String[] arrResult = trimResult.split(" ");
+        Log.d(TAG, "calculation: "+ Arrays.toString(arrResult));
+
+        String answer = "";
+        String exp1 = arrResult[0];
+        int integerExp1 = Integer.parseInt(exp1);
+        String op = arrResult[1];
+        String exp2 = arrResult[2];
+        int integerExp2 = Integer.parseInt(exp2);
+
+        if(op.equals("*")){
+            answer = Integer.toString(integerExp1 * integerExp2);
+            return answer;
+
+        } else if(op.equals("/")){
+            answer = Integer.toString(integerExp1 / integerExp2);
+            return answer;
+
+        } else if(op.equals("+")){
+            answer = Integer.toString(integerExp1 + integerExp2);
+            return answer;
+
+        } else if(op.equals("-")){
+            answer = Integer.toString(integerExp1 - integerExp2);
+            return answer;
+
+        } else if(op.equals("%")){
+            answer = Integer.toString(integerExp1 % integerExp2);
+            return answer;
+        }
+
+
+        /*for(int i = 0; i<arrResult.length; i++){
+            String answer = "";
+            //String exp1 = arrResult[i];
+            //int integerExp1 = Integer.parseInt(exp1);
+
+            for(int j = i+2; j<arrResult.length; j++){
+
+                String exp2 = arrResult[j];
+                int integerExp2 = Integer.parseInt(exp2);
+
+                if(i%2 == 0){
+                    String exp1 = arrResult[i];
+                    int integerExp1 = Integer.parseInt(exp1);
+
+                } else if(i%2 ==1){
+                    String operator = arrResult[i];
+
+                    if(operator.equals("*")){
+                        answer = Integer.toString(integerExp1 * integerExp2);
+
+                        Log.d(TAG, "calculation: answer "+ answer);
+                        return answer;
+                    }
+
+                }
+
+
+            }
+
+        }//for*/
+
+        /*if(result.contains("*")){
             String[] arrMultiple = result.split("\\*");
 
             int ansMultiple=1;
@@ -111,7 +176,7 @@ public class MyEval {
             //Log.d(TAG, "calculation: " + ansModular);
             return String.valueOf(ansModular);
 
-        }
+        }*/
 
 
         /* //1+2=3 만들기
@@ -130,9 +195,66 @@ public class MyEval {
 
         return calResult;*/
 
+
+
         return null;
 
+    }//calculation
+
+    /*private String plus(String exp1, String exp2){
+        int integerExp1 = Integer.parseInt(exp1);
+        int integerExp2 = Integer.parseInt(exp2);
+
+        int calculation = integerExp1 + integerExp2;
+        String result = Integer.toString(calculation);
+
+        return result;
     }
+
+    private String minus(String exp1, String exp2){
+        int integerExp1 = Integer.parseInt(exp1);
+        int integerExp2 = Integer.parseInt(exp2);
+
+        int calculation = integerExp1 - integerExp2;
+        String result = Integer.toString(calculation);
+
+        return result;
+    }
+
+    private String multiple(String exp1, String exp2){
+
+        int integerExp1 = Integer.parseInt(exp1);
+        int integerExp2 = Integer.parseInt(exp2);
+
+        int calculation = integerExp1 * integerExp2;
+        String result = Integer.toString(calculation);
+
+        return result;
+
+    }
+
+    private String division(String exp1, String exp2){
+        int integerExp1 = Integer.parseInt(exp1);
+        int integerExp2 = Integer.parseInt(exp2);
+
+        int calculation = integerExp1 / integerExp2;
+        String result = Integer.toString(calculation);
+
+        return result;
+    }
+
+    private String modular(String exp1, String exp2){
+
+        int integerExp1 = Integer.parseInt(exp1);
+        int integerExp2 = Integer.parseInt(exp2);
+
+        int calculation = integerExp1 % integerExp2;
+        String result = Integer.toString(calculation);
+
+        return result;
+    }*/
+
+
 
 
 }
