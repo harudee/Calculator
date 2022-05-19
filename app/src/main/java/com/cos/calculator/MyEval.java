@@ -13,8 +13,10 @@ public class MyEval {
     public static String calculation(String result){
 
         //Log.d(TAG, "calculation : result "+result);
-        //3+4*5 이런건 어짬
-        //double 값도 처리해야함
+
+        //// 3+4*5 이런건 어짬
+        //// double 값도 처리해야함
+
         String trimResult = result.trim(); //앞뒤 공백제거
 
         String[] arrResult = trimResult.split(" ");

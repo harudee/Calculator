@@ -126,7 +126,8 @@
         android:id="@+id/tableLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="10dp"
+        android:padding="10dp"
+        android:stretchColumns="*"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -138,9 +139,20 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_a"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_radius"
+                android:text="A"
+                android:textSize="24sp"
+                android:visibility="gone"/>
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_clear"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="C"
                 android:textColor="@android:color/holo_red_light"
@@ -149,6 +161,7 @@
             <ImageButton
                 android:id="@+id/btn_recode"
                 android:layout_width="wrap_content"
+                android:layout_weight="1"
                 android:layout_height="50dp"
                 android:background="@drawable/btn_radius"
                 app:srcCompat="@drawable/ic_recode" />
@@ -156,6 +169,7 @@
             <ImageButton
                 android:id="@+id/btn_undo"
                 android:layout_width="wrap_content"
+                android:layout_weight="1"
                 android:layout_height="50dp"
                 android:background="@drawable/btn_radius"
                 app:srcCompat="@drawable/ic_undo" />
@@ -175,9 +189,20 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_b"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_radius"
+                android:text="B"
+                android:textSize="24sp"
+                android:visibility="gone"/>
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_modular"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="%"
                 android:textColor="@color/btn_background_green"
@@ -187,6 +212,7 @@
                 android:id="@+id/btn_parenthesis_left"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="("
                 android:textColor="@color/btn_background_green"
@@ -196,6 +222,7 @@
                 android:id="@+id/btn_parenthesis_right"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text=")"
                 android:textColor="@color/btn_background_green"
@@ -205,10 +232,11 @@
                 android:id="@+id/btn_plus"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="+"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="24sp" />
 
         </TableRow>
 
@@ -217,9 +245,20 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_c"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_radius"
+                android:text="C"
+                android:textSize="24sp"
+                android:visibility="gone"/>
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/num_7"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="7"
                 android:textSize="24sp" />
@@ -228,6 +267,7 @@
                 android:id="@+id/num_8"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="8"
                 android:textSize="24sp" />
@@ -236,6 +276,7 @@
                 android:id="@+id/num_9"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="9"
                 android:textSize="24sp" />
@@ -244,6 +285,7 @@
                 android:id="@+id/btn_division"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="/"
                 android:textColor="@color/btn_background_green"
@@ -257,9 +299,20 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_d"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_radius"
+                android:text="D"
+                android:textSize="24sp"
+                android:visibility="gone"/>
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/num_4"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="4"
                 android:textSize="24sp" />
@@ -268,6 +321,7 @@
                 android:id="@+id/num_5"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="5"
                 android:textSize="24sp" />
@@ -276,6 +330,7 @@
                 android:id="@+id/num_6"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="6"
                 android:textSize="24sp" />
@@ -284,6 +339,7 @@
                 android:id="@+id/btn_multiple"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="*"
                 android:textColor="@color/btn_background_green"
@@ -296,9 +352,20 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_e"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_radius"
+                android:text="E"
+                android:textSize="24sp"
+                android:visibility="gone"/>
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/num_1"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="1"
                 android:textSize="24sp" />
@@ -307,6 +374,7 @@
                 android:id="@+id/num_2"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="2"
                 android:textSize="24sp" />
@@ -315,6 +383,7 @@
                 android:id="@+id/num_3"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="3"
                 android:textSize="24sp" />
@@ -323,6 +392,7 @@
                 android:id="@+id/btn_minus"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="-"
                 android:textColor="@color/btn_background_green"
@@ -335,17 +405,29 @@
             android:layout_weight="1"
             android:gravity="center">
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_f"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_radius"
+                android:text="F"
+                android:textSize="24sp"
+                android:visibility="gone"/>
+
             <ImageButton
                 android:id="@+id/btn_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                app:srcCompat="@drawable/ic_menu" />
+                app:srcCompat="@drawable/ic_exposure" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/num_0"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="0"
                 android:textSize="24sp" />
@@ -354,6 +436,7 @@
                 android:id="@+id/btn_dot"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius"
                 android:text="."
                 android:textSize="24sp" />
@@ -362,6 +445,7 @@
                 android:id="@+id/btn_enter"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:background="@drawable/btn_radius_green"
                 android:text="="
                 android:textColor="@color/white"
