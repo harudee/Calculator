@@ -8,22 +8,38 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextClock
+        android:id="@+id/text_clock"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:format24Hour="yyyy-MM-dd hh:mm:ss"
+        android:format12Hour="yyyy-MM-dd hh:mm:ss a"
+        android:gravity="center"
+        android:textSize="25sp"
+        app:layout_constraintVertical_weight="0.2"
+        app:layout_constraintBottom_toTopOf="@+id/topLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <TableLayout
         android:id="@+id/topLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingRight="25dp"
         android:gravity="bottom"
+        android:paddingRight="25dp"
         app:layout_constraintBottom_toTopOf="@+id/tl_middle_layout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="0.5">
+        app:layout_constraintTop_toBottomOf="@+id/text_clock"
+        app:layout_constraintVertical_weight="0.2">
 
         <TextView
             android:id="@+id/tv_expression"
-            android:hint="현재 계산식"
             android:gravity="end"
+            android:hint="현재 계산식"
             android:textSize="20sp" />
 
         <EditText

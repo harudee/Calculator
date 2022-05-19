@@ -156,6 +156,13 @@ public class MainActivity extends AppCompatActivity {
         btn9.setOnClickListener(myOnClickListener);
         btnDot.setOnClickListener(myOnClickListener);
 
+        btnA.setOnClickListener(myOnClickListener);
+        btnB.setOnClickListener(myOnClickListener);
+        btnC.setOnClickListener(myOnClickListener);
+        btnD.setOnClickListener(myOnClickListener);
+        btnE.setOnClickListener(myOnClickListener);
+        btnF.setOnClickListener(myOnClickListener);
+
         //operator
         btnPlus.setOnClickListener(myOnClickListener);
         btnMinus.setOnClickListener(myOnClickListener);
@@ -563,6 +570,26 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.num_9:
                     numberButtonClicked("9");
                     break;
+
+                case R.id.btn_a:
+                    numberButtonClicked("A");
+                    break;
+                case R.id.btn_b:
+                    numberButtonClicked("B");
+                    break;
+                case R.id.btn_c:
+                    numberButtonClicked("C");
+                    break;
+                case R.id.btn_d:
+                    numberButtonClicked("D");
+                    break;
+                case R.id.btn_e:
+                    numberButtonClicked("E");
+                    break;
+                case R.id.btn_f:
+                    numberButtonClicked("F");
+                    break;
+
                 case R.id.btn_plus:
                     operatorButtonClicked("+");
                     break;
@@ -578,6 +605,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_modular:
                     operatorButtonClicked("%");
                     break;
+
+
 
                 /*case R.id.btn_dot:
                     break;
@@ -609,28 +638,24 @@ public class MainActivity extends AppCompatActivity {
             tvResult.setText(number);
         }*/
 
-
-        if(isOperator){ //연산자 입력 후
+        if(isOperator){
 
             if(hasEntered){
                 tvExpression.setText("");
-                tvResult.setText(number);
 
             } else{
                 tvExpression.append(" ");
-                tvResult.setText(number);
             }
+            tvResult.setText(number);
 
         } else{
             tvResult.append(number);
         }
 
 
-
         isOperator = false;
         hasEntered = false;
         hasDotted = false;
-
         isModeChanged = false;
         //tvResult.setSelection(tvResult.length());
 
@@ -735,7 +760,7 @@ public class MainActivity extends AppCompatActivity {
 
             String strDecimal = Integer.toString(intDecimal);
             String octalNumber = Integer.toOctalString(intDecimal);
-            String hexNumber = Integer.toHexString(intDecimal);
+            String hexNumber = (Integer.toHexString(intDecimal)).toUpperCase();
 
             //Log.d(TAG, "setNumbers: decimal "+ decimal);  //voila
             //Log.d(TAG, "setNumbers: octalNumber "+ octalNumber);
@@ -747,7 +772,7 @@ public class MainActivity extends AppCompatActivity {
             printBinValue.setText(binNumber);
 
         } else if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL){
-            String hexNumber = tvResult.getText().toString();
+            String hexNumber = (tvResult.getText().toString()).toUpperCase();
 
             if(hexNumber.isEmpty()) return;
 
@@ -773,7 +798,7 @@ public class MainActivity extends AppCompatActivity {
             int intDecimal = Integer.parseInt(octalNumber, 8);
 
             String strDecimal = Integer.toString(intDecimal);
-            String hexNumber = Integer.toHexString(intDecimal);
+            String hexNumber = (Integer.toHexString(intDecimal)).toUpperCase();
             String binNumber = Integer.toBinaryString(intDecimal);
 
             printDecValue.setText(strDecimal);
@@ -784,6 +809,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
     private void setBinNumber(){
 

@@ -15,7 +15,7 @@ public class MyEval {
         //Log.d(TAG, "calculation : result "+result);
 
         //// 3+4*5 이런건 어짬
-        //// double 값도 처리해야함
+        //// double 값도 처리해야함 => 일단 .을 비활성화해놓음
 
         String trimResult = result.trim(); //앞뒤 공백제거
 
