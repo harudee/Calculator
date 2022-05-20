@@ -23,6 +23,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -244,9 +248,11 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
         //enter
         btnEnter.setOnClickListener(view -> {
+
+            if(hasEntered)
+                return;
 
             String cutSentence = tvExpression.getText().toString();
 
@@ -259,10 +265,111 @@ public class MainActivity extends AppCompatActivity {
             String calculatingExpression = removeLastChar(lastExpression);
 
             //Log.d(TAG, "initListener: " + lastExpression); // 5 * 9 + 8 =
-            //Log.d(TAG, "initListener: "+ calculatingExpression);// 5 * 9 + 8
+            //Log.d(TAG, "initListener: 표현식 "+ calculatingExpression);// C8 * 6
 
-            String calculatedResult = MyEval.calculation(calculatingExpression);
-            tvResult.setText(calculatedResult);
+            String[] arr = calculatingExpression.split(" ");
+            //Log.d(TAG, "initListener: arr " + Arrays.toString(arr)); //arr [C8, *, C8]
+
+            List<String> arrList = new ArrayList<>(Arrays.asList(arr));
+
+            if(calculatorMode == CALCULATOR_MODE_BINARY){
+
+                for(int i =0; i<arrList.size();i++){
+                    if(i%2 == 0){
+                        String binNumber = arrList.get(i);
+                        int intDecimal = Integer.parseInt(binNumber, 2);
+
+                        String strDecimal = Integer.toString(intDecimal);
+
+                        arrList.set(i, strDecimal);
+                    }
+
+                }
+
+                //Log.d(TAG, "initListener: bin "+arrList.toString());
+
+                String changedExpression = "";
+                for(int i =0; i<arrList.size(); i++){
+                    changedExpression += arrList.get(i)+" ";
+                }
+
+                //Log.d(TAG, "initListener: arrList "+ changedExpression);
+
+                //계산하고 반환값도 다시 각 진수에 맞게 바꿔줘야함
+                String changedResult = MyEval.calculation(changedExpression); // 얘는 지금 String decimal
+                int integerChangedResult = Integer.parseInt(changedResult);
+                String binNumber = Integer.toBinaryString(integerChangedResult);
+
+                tvResult.setText(binNumber);
+
+
+            } else if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL){
+
+                //int intDecimal = Integer.parseInt(hexNumber, 16);
+                for(int i =0; i<arrList.size();i++){
+                    if(i%2 == 0){
+                        String hexNumber = arrList.get(i);
+                        int intDecimal = Integer.parseInt(hexNumber, 16);
+
+                        String strDecimal = Integer.toString(intDecimal);
+
+                        arrList.set(i, strDecimal);
+                    }
+
+                }
+
+                //Log.d(TAG, "initListener: hex "+arrList.toString()); //[200, *, 200]
+
+                //String으로 바꾸기
+                String changedExpression = "";
+
+                for(int i =0; i<arrList.size(); i++){
+                    changedExpression += arrList.get(i)+" ";
+                }
+
+                //Log.d(TAG, "initListener: arrList "+ changedExpression); //200*8
+
+                String changedResult = MyEval.calculation(changedExpression);
+                int integerChangedResult = Integer.parseInt(changedResult);
+                String hexNumber = Integer.toHexString(integerChangedResult);
+
+                tvResult.setText(hexNumber);
+
+
+            } else if(calculatorMode == CALCULATOR_MODE_OCTAL){
+
+                for(int i =0; i<arrList.size();i++){
+                    if(i%2 == 0){
+                        String octNumber = arrList.get(i);
+                        int intDecimal = Integer.parseInt(octNumber, 8);
+
+                        String strDecimal = Integer.toString(intDecimal);
+
+                        arrList.set(i, strDecimal);
+                    }
+
+                }
+
+                //Log.d(TAG, "initListener: oct "+arrList.toString());
+
+                String changedExpression = "";
+                for(int i =0; i<arrList.size(); i++){
+                    changedExpression += arrList.get(i)+" ";
+                }
+
+                //Log.d(TAG, "initListener: arrList "+ changedExpression);
+
+                String changedResult = MyEval.calculation(changedExpression);
+                int integerChangedResult = Integer.parseInt(changedResult);
+                String octNumber = Integer.toOctalString(integerChangedResult);
+
+                tvResult.setText(octNumber);
+
+            } else if(calculatorMode == CALCULATOR_MODE_DECIMAL) {
+
+                String calculatedResult = MyEval.calculation(calculatingExpression);
+                tvResult.setText(calculatedResult);
+            }
 
             isOperator = false;
             hasEntered = true;
@@ -612,8 +719,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_right:
                     break;
 
-
-
                 /*case R.id.btn_dot:
                     break;
                 case R.id.btn_parenthesis_left:
@@ -873,10 +978,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-
-    //mode 변경 -> 키패드 등등
+    //mode 변경 -> 키패드 등 상태변경
     private void setBinMode(){
 
         //Log.d(TAG, "setBinMode: 2진수 모드");
