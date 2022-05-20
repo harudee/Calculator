@@ -5,6 +5,7 @@ import android.util.Log;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MyEval {
 
@@ -12,20 +13,166 @@ public class MyEval {
 
     public static String calculation(String result){
 
-        //Log.d(TAG, "calculation : result "+result);
+        Log.d(TAG, "calculation : result "+result);
 
-        //// 3+4*5 이런건 어짬
-        //// double 값도 처리해야함 => 일단 .을 비활성화해놓음
+        // double 값도 처리해야함 => 일단 .을 비활성화해놓음
+        // 괄호는 우짬
 
         String trimResult = result.trim(); //앞뒤 공백제거
+        String[] arrResult = trimResult.split(" "); //
+        List<String> arrayList = new ArrayList<>(Arrays.asList(arrResult));
 
-        String[] arrResult = trimResult.split(" ");
-        Log.d(TAG, "calculation: "+ Arrays.toString(arrResult));
+        Log.d(TAG, "calculation: "+ arrayList);
 
-        String answer = "";
+        String calResult = "";
+
+        while(arrayList.size()>1){
+
+            if(arrayList.contains("*"))
+            { //곱셈 후 배열 바꾸기
+                int indexOfMultiple = arrayList.indexOf("*"); // 찾지 못한경우 -1을 반환
+
+//                Log.d(TAG, "calculation: " + indexOfMultiple); //[1, +, 2, *, 3] 일때 3번 째
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple - 1)); // 2
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple + 1)); // 3
+
+                String exp1 = arrayList.get(indexOfMultiple - 1);
+                String exp2 = arrayList.get(indexOfMultiple + 1);
+
+                int integerExp1 = Integer.parseInt(exp1);
+                int integerExp2 = Integer.parseInt(exp2);
+
+                int answer1 = integerExp1 * integerExp2;
+                String strAnswer1 = Integer.toString(answer1);
+
+                arrayList.set(indexOfMultiple - 1, strAnswer1);
+                arrayList.remove(indexOfMultiple + 1);
+                arrayList.remove(indexOfMultiple);
+
+                //Log.d(TAG, "calculation: " + arrayList.toString()); // [1, +, 6]
+
+                calResult = arrayList.get(0);
+            }
+
+            if(arrayList.contains("/"))
+            { //나눗셈
+                int indexOfDivision = arrayList.indexOf("/"); // 찾지 못한경우 -1을 반환
+
+//                Log.d(TAG, "calculation: " + indexOfDivision);
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfDivision - 1));
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfDivision + 1));
+
+                String exp1 = arrayList.get(indexOfDivision - 1);
+                String exp2 = arrayList.get(indexOfDivision + 1);
+
+                int integerExp1 = Integer.parseInt(exp1);
+                int integerExp2 = Integer.parseInt(exp2);
+
+                int answer1 = integerExp1 / integerExp2;
+                String strAnswer1 = Integer.toString(answer1);
+
+                arrayList.set(indexOfDivision - 1, strAnswer1);
+                arrayList.remove(indexOfDivision + 1);
+                arrayList.remove(indexOfDivision);
+
+                //Log.d(TAG, "calculation: " + arrayList.toString());
+
+                calResult = arrayList.get(0);
+            }
+
+            if(arrayList.contains("%"))
+            { //나머지 연산
+                int indexOfModular = arrayList.indexOf("%"); // 찾지 못한경우 -1을 반환
+
+//                Log.d(TAG, "calculation: " + indexOfModular);
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfModular - 1));
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfModular + 1));
+
+                String exp1 = arrayList.get(indexOfModular - 1);
+                String exp2 = arrayList.get(indexOfModular + 1);
+
+                int integerExp1 = Integer.parseInt(exp1);
+                int integerExp2 = Integer.parseInt(exp2);
+
+                int answer1 = integerExp1 % integerExp2;
+                String strAnswer1 = Integer.toString(answer1);
+
+                arrayList.set(indexOfModular - 1, strAnswer1);
+                arrayList.remove(indexOfModular + 1);
+                arrayList.remove(indexOfModular);
+
+                //Log.d(TAG, "calculation: " + arrayList.toString());
+
+                calResult = arrayList.get(0);
+            }
+
+            if(arrayList.contains("+"))
+            { //덧셈
+                int indexOfPlus = arrayList.indexOf("+"); // 찾지 못한경우 -1을 반환
+
+//                Log.d(TAG, "calculation: " + indexOfPlus);
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfPlus - 1));
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfPlus + 1));
+
+                String exp1 = arrayList.get(indexOfPlus - 1);
+                String exp2 = arrayList.get(indexOfPlus + 1);
+
+                int integerExp1 = Integer.parseInt(exp1);
+                int integerExp2 = Integer.parseInt(exp2);
+
+                int answer1 = integerExp1 + integerExp2;
+                String strAnswer1 = Integer.toString(answer1);
+
+                arrayList.set(indexOfPlus - 1, strAnswer1);
+                arrayList.remove(indexOfPlus + 1);
+                arrayList.remove(indexOfPlus);
+
+                //Log.d(TAG, "calculation: " + arrayList.toString()); //[7]
+
+                calResult = arrayList.get(0);
+            }
+
+            if(arrayList.contains("-"))
+            { //뺄셈
+                int indexOfMinus = arrayList.indexOf("-"); // 찾지 못한경우 -1을 반환
+
+//                Log.d(TAG, "calculation: " + indexOfMinus);
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfMinus - 1));
+//                Log.d(TAG, "calculation: " + arrayList.get(indexOfMinus + 1));
+
+                String exp1 = arrayList.get(indexOfMinus - 1);
+                String exp2 = arrayList.get(indexOfMinus + 1);
+
+                int integerExp1 = Integer.parseInt(exp1);
+                int integerExp2 = Integer.parseInt(exp2);
+
+                int answer1 = integerExp1 - integerExp2;
+                String strAnswer1 = Integer.toString(answer1);
+
+                arrayList.set(indexOfMinus - 1, strAnswer1);
+                arrayList.remove(indexOfMinus + 1);
+                arrayList.remove(indexOfMinus);
+
+                //Log.d(TAG, "calculation: " + arrayList.toString());//[40]
+
+                calResult = arrayList.get(0);
+
+            }
+
+            //Log.d(TAG, "calculation: 여기1" + calResult);
+
+        }// while문 끝
+
+        //Log.d(TAG, "calculation: 여기여기 " + calResult);
+        return calResult;
+
+        // 연산자 한개만 처리됨
+        /*String answer = "";
         String exp1 = arrResult[0];
         int integerExp1 = Integer.parseInt(exp1);
+
         String op = arrResult[1];
+
         String exp2 = arrResult[2];
         int integerExp2 = Integer.parseInt(exp2);
 
@@ -48,10 +195,11 @@ public class MyEval {
         } else if(op.equals("%")){
             answer = Integer.toString(integerExp1 % integerExp2);
             return answer;
-        }
+        }*/
 
 
-        /*for(int i = 0; i<arrResult.length; i++){
+        /*//홀수자리에 연산자가 들어온다
+        for(int i = 0; i<arrResult.length; i++){
             String answer = "";
             //String exp1 = arrResult[i];
             //int integerExp1 = Integer.parseInt(exp1);
@@ -82,7 +230,8 @@ public class MyEval {
 
         }//for*/
 
-        /*if(result.contains("*")){
+        /*//#01.
+        if(result.contains("*")){
             String[] arrMultiple = result.split("\\*");
 
             int ansMultiple=1;
@@ -198,10 +347,10 @@ public class MyEval {
         return calResult;*/
 
 
-
-        return null;
+        //return null;
 
     }//calculation
+
 
     /*private String plus(String exp1, String exp2){
         int integerExp1 = Integer.parseInt(exp1);

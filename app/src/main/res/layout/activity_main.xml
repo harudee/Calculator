@@ -225,7 +225,7 @@
                 android:textSize="28sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_parenthesis_left"
+                android:id="@+id/btn_left"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_weight="1"
@@ -235,7 +235,7 @@
                 android:textSize="28sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_parenthesis_right"
+                android:id="@+id/btn_right"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_weight="1"

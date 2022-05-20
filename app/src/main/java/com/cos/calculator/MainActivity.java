@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
         btnPlus = findViewById(R.id.btn_plus);
         btnMinus = findViewById(R.id.btn_minus);
         btnModular = findViewById(R.id.btn_modular);
-        btnLeft = findViewById(R.id.btn_parenthesis_left);
-        btnRight = findViewById(R.id.btn_parenthesis_right);
+        btnLeft = findViewById(R.id.btn_left);
+        btnRight = findViewById(R.id.btn_right);
 
         btnEnter = findViewById(R.id.btn_enter);
         btnClear = findViewById(R.id.btn_clear);
@@ -169,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
         btnMultiple.setOnClickListener(myOnClickListener);
         btnDivision.setOnClickListener(myOnClickListener);
         btnModular.setOnClickListener(myOnClickListener);
+        btnLeft.setOnClickListener(myOnClickListener);
+        btnRight.setOnClickListener(myOnClickListener);
 
         /*btnLeft.setOnClickListener(myOnClickListener);
         btnRight.setOnClickListener(myOnClickListener);
@@ -485,8 +487,8 @@ public class MainActivity extends AppCompatActivity {
         btnBin.setOnClickListener(v -> {
 
             if(calculatorMode == CALCULATOR_MODE_BINARY ){
-                Log.d(TAG, "initListener: 모드 안변함 ");
                 return;
+
             } else {
                 setBinMode();
             }
@@ -605,6 +607,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_modular:
                     operatorButtonClicked("%");
                     break;
+                case R.id.btn_left:
+                    break;
+                case R.id.btn_right:
+                    break;
 
 
 
@@ -638,20 +644,29 @@ public class MainActivity extends AppCompatActivity {
             tvResult.setText(number);
         }*/
 
-        if(isOperator){
-
-            if(hasEntered){
+        /*if(hasEntered){
                 tvExpression.setText("");
 
             } else{
                 tvExpression.append(" ");
-            }
+            }*/
+
+        if(isOperator){
+
+            tvExpression.append(" ");
             tvResult.setText(number);
 
         } else{
-            tvResult.append(number);
-        }
 
+            if(hasEntered){
+                tvExpression.setText("");
+                tvResult.setText(number);
+
+            } else{
+                tvResult.append(number);//
+            }
+
+        }
 
         isOperator = false;
         hasEntered = false;
