@@ -30,21 +30,26 @@ public class MyEval {
 
             if(arrayList.contains("*"))
             { //곱셈 후 배열 바꾸기
-                int indexOfMultiple = arrayList.indexOf("*"); // 찾지 못한경우 -1을 반환
+                int indexOfMultiple = arrayList.indexOf("*");
 
 //                Log.d(TAG, "calculation: " + indexOfMultiple); //[1, +, 2, *, 3] 일때 3번 째
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple - 1)); // 2
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple + 1)); // 3
 
+                //얘네는 계속 같이 반복됨 위에서 받아 -> 인덱스번호로 찾지마 문제가 생긴다... 너?
+                //찾는 함수01
                 String exp1 = arrayList.get(indexOfMultiple - 1);
                 String exp2 = arrayList.get(indexOfMultiple + 1);
 
+                //파싱
                 int integerExp1 = Integer.parseInt(exp1);
                 int integerExp2 = Integer.parseInt(exp2);
 
+                //연산함수02
                 int answer1 = integerExp1 * integerExp2;
                 String strAnswer1 = Integer.toString(answer1);
 
+                //갱신함수03 로 따로 나눠
                 arrayList.set(indexOfMultiple - 1, strAnswer1);
                 arrayList.remove(indexOfMultiple + 1);
                 arrayList.remove(indexOfMultiple);
@@ -52,11 +57,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString()); // [1, +, 6]
 
                 calResult = arrayList.get(0);
-            }
-
-            if(arrayList.contains("/"))
+            } else if(arrayList.contains("/"))
             { //나눗셈
-                int indexOfDivision = arrayList.indexOf("/"); // 찾지 못한경우 -1을 반환
+                int indexOfDivision = arrayList.indexOf("/");
 
 //                Log.d(TAG, "calculation: " + indexOfDivision);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfDivision - 1));
@@ -78,11 +81,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString());
 
                 calResult = arrayList.get(0);
-            }
-
-            if(arrayList.contains("%"))
+            } else if(arrayList.contains("%"))
             { //나머지 연산
-                int indexOfModular = arrayList.indexOf("%"); // 찾지 못한경우 -1을 반환
+                int indexOfModular = arrayList.indexOf("%");
 
 //                Log.d(TAG, "calculation: " + indexOfModular);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfModular - 1));
@@ -104,11 +105,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString());
 
                 calResult = arrayList.get(0);
-            }
-
-            if(arrayList.contains("+"))
+            } else if(arrayList.contains("+"))
             { //덧셈
-                int indexOfPlus = arrayList.indexOf("+"); // 찾지 못한경우 -1을 반환
+                int indexOfPlus = arrayList.indexOf("+");
 
 //                Log.d(TAG, "calculation: " + indexOfPlus);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfPlus - 1));
@@ -130,11 +129,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString()); //[7]
 
                 calResult = arrayList.get(0);
-            }
-
-            if(arrayList.contains("-"))
+            } else if(arrayList.contains("-"))
             { //뺄셈
-                int indexOfMinus = arrayList.indexOf("-"); // 찾지 못한경우 -1을 반환
+                int indexOfMinus = arrayList.indexOf("-");
 
 //                Log.d(TAG, "calculation: " + indexOfMinus);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMinus - 1));
