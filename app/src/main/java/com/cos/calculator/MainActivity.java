@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isOperator = false; //연산자
     private boolean hasEntered = false;
     private boolean hasDotted = false;
-    private boolean isModeChanged = false;
+    //private boolean isModeChanged = false;
     //private boolean hasOperator = false;
 
     private int calculatorMode = CALCULATOR_MODE_DECIMAL;
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
             isOperator = true;
             hasEntered = false;
-            hasDotted = false;
+            //hasDotted = false;
 
             /*if (tvResult.getText().length() == 0) return;
 
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
             isOperator = false;
             hasEntered = false;
-            hasDotted = false;
+            //hasDotted = false;
             //hasOperator = false;
 
         });
@@ -403,8 +403,8 @@ public class MainActivity extends AppCompatActivity {
             tvResult.setSelection(tvResult.length());
 
             //계산 기록 저장
-            String recode1 = Double.toString(a);//5
-            String recode2 = result + str; //2+3=
+            String recode1 = Double.toString(a);//5 result
+            String recode2 = result + str; //2+3= expression
 
             if (recode1.equals(recode2)) return;
             saveRecode(recode2 + recode1 + "\n"); //2+3=5
@@ -417,6 +417,8 @@ public class MainActivity extends AppCompatActivity {
             lastCal = result;*/
 
         });//enter
+
+
 
         //계산기록 확인
         /*btnRecode.setOnClickListener(view -> {
@@ -714,6 +716,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_modular:
                     operatorButtonClicked("%");
                     break;
+
                 case R.id.btn_left:
                     break;
                 case R.id.btn_right:
@@ -725,6 +728,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_parenthesis_right:
                     break;*/
+
+                case R.id.btn_enter:
+                    break;
 
                 default:
                     break;
@@ -775,8 +781,8 @@ public class MainActivity extends AppCompatActivity {
 
         isOperator = false;
         hasEntered = false;
-        hasDotted = false;
-        isModeChanged = false;
+        //hasDotted = false;
+        //isModeChanged = false;
         //tvResult.setSelection(tvResult.length());
 
     }
@@ -809,7 +815,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         isOperator = true;
-        hasDotted = false;
+        //hasDotted = false;
         hasEntered = false;
 
     }
@@ -1019,7 +1025,7 @@ public class MainActivity extends AppCompatActivity {
         btnE.setVisibility(View.GONE);
         btnF.setVisibility(View.GONE);
 
-        isModeChanged = true;
+        //isModeChanged = true;
 
     }
 
@@ -1061,7 +1067,7 @@ public class MainActivity extends AppCompatActivity {
         btn8.setTextColor(getResources().getColorStateList(R.color.black));
         btn9.setTextColor(getResources().getColorStateList(R.color.black));
 
-        isModeChanged = true;
+        //isModeChanged = true;
 
     }
 
@@ -1101,7 +1107,7 @@ public class MainActivity extends AppCompatActivity {
         btn8.setTextColor(getResources().getColorStateList(R.color.btn_pressed_grey));
         btn9.setTextColor(getResources().getColorStateList(R.color.btn_pressed_grey));
 
-        isModeChanged = true;
+        //isModeChanged = true;
 
     }
 
@@ -1142,7 +1148,7 @@ public class MainActivity extends AppCompatActivity {
         btn8.setTextColor(getResources().getColorStateList(R.color.black));
         btn9.setTextColor(getResources().getColorStateList(R.color.black));
 
-        isModeChanged = true;
+        //isModeChanged = true;
 
     }
 
