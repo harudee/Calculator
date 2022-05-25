@@ -2,14 +2,62 @@ package com.cos.calculator;
 
 import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class MyEval {
 
     private static final String TAG = "MyEval";
+
+    private static final char MULTIPLE = '*';
+    private static final char DIVISION = '/';
+    private static final char MODULAR = '%';
+    private static final char PLUS = '+';
+    private static final char MINUS = '-';
+
+    private static final char LEFT = '(';
+    private static final char RIGHT = ')';
+
+    private Stack<Character> stack = new Stack<>();
+    private static List<String> arrayList = new ArrayList<>();
+
+    private static int exp1 = 0;
+    private static int exp2 = 0;
+    private Character operator;
+
+    public static int findOperator(char operator){
+        int indexOfOperator = arrayList.indexOf(operator);
+
+        exp1 = Integer.parseInt(arrayList.get(indexOfOperator-1));
+        exp2 = Integer.parseInt(arrayList.get(indexOfOperator+1));
+
+        int answer = 0;
+
+        switch (operator){
+            case MULTIPLE:
+                answer = exp1 * exp2;
+                break;
+            case DIVISION:
+                answer = exp1 / exp2;
+                break;
+            case MODULAR:
+                answer = exp1 % exp2;
+                break;
+            case PLUS:
+                answer = exp1 + exp2;
+                break;
+            case MINUS:
+                answer = exp1 - exp2;
+            default:
+                break;
+        }
+
+        Log.d(TAG, "findOperator: "+ answer);
+        return answer;
+
+    }
 
     public static String calculation(String result){
 
@@ -18,26 +66,29 @@ public class MyEval {
         // double 값도 처리해야함 => 일단 .을 비활성화해놓음
         // 괄호는 우짬
 
-        String trimResult = result.trim(); //앞뒤 공백제거
-        String[] arrResult = trimResult.split(" "); //
+        String trimResult = result.trim();
+        String[] arrResult = trimResult.split(" ");
         List<String> arrayList = new ArrayList<>(Arrays.asList(arrResult));
 
-        Log.d(TAG, "calculation: "+ arrayList);
 
+        Log.d(TAG, "calculation: "+ arrayList);
         String calResult = "";
+
+
+
 
         while(arrayList.size()>1){
 
-            if(arrayList.contains("*"))
+            if(arrayList.contains(MULTIPLE))
             { //곱셈 후 배열 바꾸기
-                int indexOfMultiple = arrayList.indexOf("*");
 
 //                Log.d(TAG, "calculation: " + indexOfMultiple); //[1, +, 2, *, 3] 일때 3번 째
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple - 1)); // 2
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple + 1)); // 3
 
-                //얘네는 계속 같이 반복됨 위에서 받아 -> 인덱스번호로 찾지마 문제가 생긴다... 너?
+
                 //찾는 함수01
+                int indexOfMultiple = arrayList.indexOf(MULTIPLE);
                 String exp1 = arrayList.get(indexOfMultiple - 1);
                 String exp2 = arrayList.get(indexOfMultiple + 1);
 
@@ -57,9 +108,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString()); // [1, +, 6]
 
                 calResult = arrayList.get(0);
-            } else if(arrayList.contains("/"))
-            { //나눗셈
-                int indexOfDivision = arrayList.indexOf("/");
+            } else if(arrayList.contains(DIVISION)) { //나눗셈
+
+                int indexOfDivision = arrayList.indexOf(DIVISION);
 
 //                Log.d(TAG, "calculation: " + indexOfDivision);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfDivision - 1));
@@ -81,9 +132,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString());
 
                 calResult = arrayList.get(0);
-            } else if(arrayList.contains("%"))
-            { //나머지 연산
-                int indexOfModular = arrayList.indexOf("%");
+            } else if(arrayList.contains(MODULAR)) { //나머지 연산
+
+                int indexOfModular = arrayList.indexOf(MODULAR);
 
 //                Log.d(TAG, "calculation: " + indexOfModular);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfModular - 1));
@@ -105,9 +156,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString());
 
                 calResult = arrayList.get(0);
-            } else if(arrayList.contains("+"))
+            } else if(arrayList.contains(PLUS))
             { //덧셈
-                int indexOfPlus = arrayList.indexOf("+");
+                int indexOfPlus = arrayList.indexOf(PLUS);
 
 //                Log.d(TAG, "calculation: " + indexOfPlus);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfPlus - 1));
@@ -129,9 +180,9 @@ public class MyEval {
                 //Log.d(TAG, "calculation: " + arrayList.toString()); //[7]
 
                 calResult = arrayList.get(0);
-            } else if(arrayList.contains("-"))
-            { //뺄셈
-                int indexOfMinus = arrayList.indexOf("-");
+            } else if(arrayList.contains(MINUS)) { //뺄셈
+
+                int indexOfMinus = arrayList.indexOf(MINUS);
 
 //                Log.d(TAG, "calculation: " + indexOfMinus);
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMinus - 1));

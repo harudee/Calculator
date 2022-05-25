@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
+
 
     //내부 저장소 room
     def room_version = "2.2.6"//최신버전은 2.4.2임

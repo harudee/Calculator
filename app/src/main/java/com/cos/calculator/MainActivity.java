@@ -5,19 +5,25 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.room.Room;
 
 import com.cos.calculator.dao.HistoryDAO;
 import com.cos.calculator.model.History;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -33,9 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity222";
     private MainActivity mContext = this;
 
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ImageView menuIcon;
 
-    private EditText tvResult;
-    private TextView tvExpression, printHexValue, printDecValue, printOctValue, printBinValue;
+    //private EditText tvResult;
+    private TextView tvExpression, printHexValue, printDecValue, printOctValue, printBinValue, tvResult;
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
     private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
@@ -61,19 +71,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int CALCULATOR_MODE_OCTAL = 3;
 
 
-    /*private Runnable historyRunnable = new Runnable() {
-        @Override
-        public void run() {
-
-        }
-    };*/
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         init();
@@ -81,19 +82,23 @@ public class MainActivity extends AppCompatActivity {
         initListener();
         initData();
 
-        AppDatabase database = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class,
-                "historyDB").build();
+        //setToolbar();
+        setSupportActionBar(toolbar);
 
+//        AppDatabase database = Room.databaseBuilder(getApplicationContext(),
+//                AppDatabase.class,
+//                "historyDB").build();
 
-
-        //setBinValue();
-        //setNumbers();
-//        tvResult.setText("0"); //초기값 설정
-//        tvResult.setSelection(tvResult.length());
     }
 
+
+
     private void init() {
+
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        menuIcon = findViewById(R.id.menu_icon);
 
         btnDot = findViewById(R.id.btn_dot);
         btn0 = findViewById(R.id.num_0);
@@ -147,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initListener() {
 
+        menuIcon.setOnClickListener(myOnClickListener);
+
+
         //number
         btn0.setOnClickListener(myOnClickListener);
         btn1.setOnClickListener(myOnClickListener);
@@ -176,12 +184,17 @@ public class MainActivity extends AppCompatActivity {
         btnLeft.setOnClickListener(myOnClickListener);
         btnRight.setOnClickListener(myOnClickListener);
 
-        /*btnLeft.setOnClickListener(myOnClickListener);
-        btnRight.setOnClickListener(myOnClickListener);*/
+        btnLeft.setOnClickListener(myOnClickListener);
+        btnRight.setOnClickListener(myOnClickListener);
 
         btnClear.setOnClickListener(myOnClickListener);
         btnEnter.setOnClickListener(myOnClickListener);
         btnBackSpace.setOnClickListener(myOnClickListener);
+
+        btnBin.setOnClickListener(myOnClickListener);
+        btnDec.setOnClickListener(myOnClickListener);
+        btnOct.setOnClickListener(myOnClickListener);
+        btnHex.setOnClickListener(myOnClickListener);
 
         //소수점 처리
         /*btnDot.setOnClickListener(v -> {
@@ -595,44 +608,44 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        btnBin.setOnClickListener(v -> {
-
-            if(calculatorMode == CALCULATOR_MODE_BINARY ){
-                return;
-
-            } else {
-                setBinMode();
-            }
-
-        });
-
-        btnHex.setOnClickListener(v -> {
-            if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL ){
-                return;
-
-            }else{
-                setHexMode();
-            }
-
-        });
-
-        btnOct.setOnClickListener(v -> {
-            if(calculatorMode == CALCULATOR_MODE_OCTAL ){
-                return;
-
-            }else{
-                setOctMode();
-            }
-
-        });
-
-        btnDec.setOnClickListener(v -> {
-            if(calculatorMode == CALCULATOR_MODE_DECIMAL ){
-                return;
-            }else{
-                setDecMode();
-            }
-        });
+//        btnBin.setOnClickListener(v -> {
+//
+//            if(calculatorMode == CALCULATOR_MODE_BINARY ){
+//                return;
+//
+//            } else {
+//                setBinMode();
+//            }
+//
+//        });
+//
+//        btnHex.setOnClickListener(v -> {
+//            if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL ){
+//                return;
+//
+//            }else{
+//                setHexMode();
+//            }
+//
+//        });
+//
+//        btnOct.setOnClickListener(v -> {
+//            if(calculatorMode == CALCULATOR_MODE_OCTAL ){
+//                return;
+//
+//            }else{
+//                setOctMode();
+//            }
+//
+//        });
+//
+//        btnDec.setOnClickListener(v -> {
+//            if(calculatorMode == CALCULATOR_MODE_DECIMAL ){
+//                return;
+//            }else{
+//                setDecMode();
+//            }
+//        });
 
 
     }//initListener
@@ -648,13 +661,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+//    private void setToolbar(){
+//        //setSupportActionBar(toolbar);
+//        Log.d(TAG, "setToolbar: 나 실행됨");
+//
+//        menuIcon.setOnClickListener(v -> {
+//            drawerLayout.openDrawer(GravityCompat.START);
+//        });
+//
+//    }
+
     private View.OnClickListener myOnClickListener = new View.OnClickListener() { //클릭했을때 뭐가 처리되는 이벤트들은 다 여기서 handle
         @Override
         public void onClick(View view) {
 
-            //Button btn = (Button) view;
-
             switch (view.getId()) {
+
+                case R.id.menu_icon:
+                    Log.d(TAG, "onClick: 메뉴 클릭됨");
+                    drawerLayout.openDrawer(GravityCompat.START);
+                    break;
 
                 case R.id.num_0:
                     numberButtonClicked("0");
@@ -703,7 +729,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_f:
                     numberButtonClicked("F");
-                    //numberButtonClicked(btn.getText().toString()); //getText를 가져와서 한번에... 해보자!
+                    //numberButtonClicked(str); //getText를 가져와서 한번에... 해보자!
                     break;
 
                 case R.id.btn_plus:
@@ -720,15 +746,15 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_modular:
                     operatorButtonClicked("%");
-                    //operatorButtonClicked(btn.getText().toString());
+                    //operatorButtonClicked(str);
                     break;
 
-                /*case R.id.btn_dot:
+                case R.id.btn_left:
+                    numberButtonClicked("(");
                     break;
-                case R.id.btn_parenthesis_left:
+                case R.id.btn_right:
+                    numberButtonClicked(")");
                     break;
-                case R.id.btn_parenthesis_right:
-                    break;*/
 
                 case R.id.btn_enter:
                     startCalculation();
@@ -738,6 +764,35 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_backSpace:
                     deleteOne();
+                    break;
+
+                case R.id.btn_bin:
+                    if(calculatorMode == CALCULATOR_MODE_BINARY ){
+                        return;
+                    }else{
+                        setBinMode();
+                    }
+                    break;
+                case R.id.btn_oct:
+                    if(calculatorMode == CALCULATOR_MODE_OCTAL){
+                        return;
+                    }else{
+                        setOctMode();
+                    }
+                    break;
+                case R.id.btn_dec:
+                    if(calculatorMode == CALCULATOR_MODE_DECIMAL){
+                        return;
+                    }else{
+                        setDecMode();
+                    }
+                    break;
+                case R.id.btn_hex:
+                    if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL){
+                        return;
+                    }else{
+                        setHexMode();
+                    }
                     break;
 
                 default:
@@ -1024,6 +1079,12 @@ public class MainActivity extends AppCompatActivity {
 
             if(decNumber.contains("."))
                 return;
+
+//            if(decNumber.contains("("))
+//                return;
+//
+//            if(decNumber.contains(")"))
+//                return;
 
             int changeNumber = Integer.parseInt(decNumber);//string->integer
 
