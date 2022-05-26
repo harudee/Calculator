@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.NormalFragment">
+
+    <!--작동 확인 먼저하고 여기 밑에 배치만 바꿔보자~~ -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:id="@+id/tl_middle_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="65dp"
+                android:gravity="start"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TableRow>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_hex"
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:text="HEX"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/print_hex_value"
+                        android:hint="16진수"
+                        android:textSize="20sp" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_dec"
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:text="DEC"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/print_dec_value"
+                        android:hint="10진수"
+                        android:textSize="20sp" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_oct"
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:text="OCT"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/print_oct_value"
+                        android:hint="8진수"
+                        android:textSize="20sp" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_bin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:text="BIN"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/print_bin_value"
+                        android:hint="2진수"
+                        android:textSize="20sp" />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <include layout="@layout/activity_main_content" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

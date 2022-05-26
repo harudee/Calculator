@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -15,14 +16,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
 import com.cos.calculator.dao.HistoryDAO;
 import com.cos.calculator.model.History;
+import com.cos.calculator.view.NormalFragment;
+import com.cos.calculator.view.ProgrammerFragment;
+import com.cos.calculator.view.ScienceFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedOutputStream;
@@ -33,6 +40,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.BlockingDeque;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     //private EditText tvResult;
     private TextView tvExpression, printHexValue, printDecValue, printOctValue, printBinValue, tvResult;
+    private TextView toolbarTitle;
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
     private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
@@ -77,28 +86,36 @@ public class MainActivity extends AppCompatActivity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        init();
-        //tvResult.requestFocus();
-        initListener();
-        initData();
+//        init();
+//        initListener();
+//        initData();
 
-        //setToolbar();
-        setSupportActionBar(toolbar);
+        Fragment normalFragment = new NormalFragment();
+
+        setToolbar();
+        //setSupportActionBar(toolbar);
 
 //        AppDatabase database = Room.databaseBuilder(getApplicationContext(),
 //                AppDatabase.class,
-//                "historyDB").build();
-
-    }
-
-
-
-    private void init() {
+//                "historyDB").build()
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         menuIcon = findViewById(R.id.menu_icon);
+        toolbarTitle = findViewById(R.id.toolbar_title);
+
+        menuIcon.setOnClickListener(v -> {
+
+            drawerLayout.openDrawer(GravityCompat.START);
+        });
+        navigationView.setNavigationItemSelectedListener(new NavigationViewHelper());
+
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new NormalFragment()).commit();
+
+    }
+
+    private void init() {
 
         btnDot = findViewById(R.id.btn_dot);
         btn0 = findViewById(R.id.num_0);
@@ -152,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initListener() {
 
-        menuIcon.setOnClickListener(myOnClickListener);
 
 
         //number
@@ -661,15 +677,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    private void setToolbar(){
-//        //setSupportActionBar(toolbar);
-//        Log.d(TAG, "setToolbar: 나 실행됨");
-//
+    private void setToolbar(){
+        setSupportActionBar(toolbar);
+        Log.d(TAG, "setToolbar: 나 실행됨");
+
 //        menuIcon.setOnClickListener(v -> {
 //            drawerLayout.openDrawer(GravityCompat.START);
 //        });
-//
-//    }
+
+    }
+
+    class NavigationViewHelper implements NavigationView.OnNavigationItemSelectedListener{
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
+            Fragment selectedFragment = null;
+
+
+
+            switch (menuitem.getItemId()){
+                case R.id.nav_normal:
+                    toolbarTitle.setText(menuitem.getTitle()+" 계산기");
+                    selectedFragment = new NormalFragment();
+                    break;
+                case R.id.nav_programmer:
+                    toolbarTitle.setText(menuitem.getTitle()+" 계산기");
+                    selectedFragment = new ProgrammerFragment();
+                    break;
+                case R.id.nav_science:
+                    toolbarTitle.setText(menuitem.getTitle()+" 계산기");
+                    selectedFragment = new ScienceFragment();
+                    break;
+            }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+    }
 
     private View.OnClickListener myOnClickListener = new View.OnClickListener() { //클릭했을때 뭐가 처리되는 이벤트들은 다 여기서 handle
         @Override

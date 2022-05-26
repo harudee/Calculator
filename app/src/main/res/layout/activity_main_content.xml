@@ -6,33 +6,19 @@
     android:layout_height="match_parent"
     >
 
-    <TextClock
-        android:id="@+id/text_clock"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:format24Hour="yyyy-MM-dd hh:mm:ss"
-        android:format12Hour="yyyy-MM-dd hh:mm:ss a"
-        android:gravity="center"
-        android:textSize="25sp"
-        app:layout_constraintVertical_weight="0.2"
-        app:layout_constraintBottom_toTopOf="@+id/topLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
     <TableLayout
         android:id="@+id/topLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="bottom"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
         android:paddingRight="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/tl_middle_layout"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_clock"
-        app:layout_constraintVertical_weight="0.2">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="0.5">
 
         <TextView
             android:id="@+id/tv_expression"
@@ -52,91 +38,6 @@
     </TableLayout>
 
     <TableLayout
-        android:id="@+id/tl_middle_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLayout"
-        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
-        app:layout_constraintVertical_weight="0.5">
-
-        <TableRow>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_hex"
-                android:layout_width="0dp"
-                android:layout_height="25dp"
-                android:background="@null"
-                android:text="HEX"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/print_hex_value"
-                android:hint="16진수"
-                android:textSize="20sp" />
-
-        </TableRow>
-
-        <TableRow>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_dec"
-                android:layout_width="0dp"
-                android:layout_height="25dp"
-                android:background="@null"
-                android:text="DEC"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/print_dec_value"
-                android:hint="10진수"
-                android:textSize="20sp" />
-
-        </TableRow>
-
-        <TableRow>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_oct"
-                android:layout_width="0dp"
-                android:layout_height="25dp"
-                android:background="@null"
-                android:text="OCT"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/print_oct_value"
-                android:hint="8진수"
-                android:textSize="20sp" />
-
-        </TableRow>
-
-        <TableRow>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_bin"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:background="@null"
-                android:text="BIN"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/print_bin_value"
-                android:hint="2진수"
-                android:textSize="20sp" />
-
-        </TableRow>
-
-    </TableLayout>
-
-    <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -145,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tl_middle_layout"
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
         app:layout_constraintVertical_weight="1.5">
 
         <TableRow

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.drawerlayout.widget.DrawerLayout
-
     android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +17,29 @@
         android:orientation="vertical">
 
         <include layout="@layout/custom_tool_bar"/>
-        <include layout="@layout/activity_main_content"/>
+        <!--<include layout="@layout/activity_main_content"/>-->
+
+        <TextClock
+            android:id="@+id/text_clock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:format24Hour="yyyy-MM-dd hh:mm:ss"
+            android:format12Hour="yyyy-MM-dd hh:mm:ss a"
+            android:gravity="center"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            layout="@layout/activity_main_content"/>
 
     </LinearLayout>
 

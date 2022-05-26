@@ -7,7 +7,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@color/purple_500"
+    android:background="@color/btn_background_green"
     app:contentInsetStart="0dp"
     app:layout_constraintTop_toTopOf="parent">
 
@@ -25,6 +25,7 @@
             android:src="@drawable/ic_menu" />
 
         <TextView
+            android:id="@+id/toolbar_title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical|center_horizontal"
