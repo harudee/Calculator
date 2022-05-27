@@ -34,27 +34,27 @@ public class MyEval {
         exp2 = Integer.parseInt(arrayList.get(indexOfOperator+1));
 
         int answer = 0;
-
-        switch (operator){
-            case MULTIPLE:
-                answer = exp1 * exp2;
-                break;
-            case DIVISION:
-                answer = exp1 / exp2;
-                break;
-            case MODULAR:
-                answer = exp1 % exp2;
-                break;
-            case PLUS:
-                answer = exp1 + exp2;
-                break;
-            case MINUS:
-                answer = exp1 - exp2;
-            default:
-                break;
-        }
-
-        Log.d(TAG, "findOperator: "+ answer);
+//
+//        switch (operator){
+//            case MULTIPLE:
+//                answer = exp1 * exp2;
+//                break;
+//            case DIVISION:
+//                answer = exp1 / exp2;
+//                break;
+//            case MODULAR:
+//                answer = exp1 % exp2;
+//                break;
+//            case PLUS:
+//                answer = exp1 + exp2;
+//                break;
+//            case MINUS:
+//                answer = exp1 - exp2;
+//            default:
+//                break;
+//        }
+//
+//        Log.d(TAG, "findOperator: "+ answer);
         return answer;
 
     }
@@ -70,12 +70,8 @@ public class MyEval {
         String[] arrResult = trimResult.split(" ");
         List<String> arrayList = new ArrayList<>(Arrays.asList(arrResult));
 
-
         Log.d(TAG, "calculation: "+ arrayList);
         String calResult = "";
-
-
-
 
         while(arrayList.size()>1){
 

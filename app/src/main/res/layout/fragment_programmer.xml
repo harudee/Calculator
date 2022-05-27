@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".view.NormalFragment">
 
-    <!--작동 확인 먼저하고 여기 밑에 배치만 바꿔보자~~ -->
+    <!-- 작동 확인 먼저하고 배치만 -->
 
     <LinearLayout
         android:layout_width="match_parent"
