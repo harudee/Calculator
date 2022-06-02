@@ -2,6 +2,7 @@ package com.cos.calculator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -73,16 +74,19 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isOperator = false; //연산자
     private boolean hasEntered = false;
+
     private boolean hasDotted = false;
+    private boolean hasNumbered = false;
+
     //private boolean isModeChanged = false;
     //private boolean hasOperator = false;
 
     private int calculatorMode = CALCULATOR_MODE_DECIMAL;
 
-    public static final int CALCULATOR_MODE_BINARY = 0;
-    public static final int CALCULATOR_MODE_DECIMAL = 1;
-    public static final int CALCULATOR_MODE_HEXADECIMAL= 2;
-    public static final int CALCULATOR_MODE_OCTAL = 3;
+    private static final int CALCULATOR_MODE_BINARY = 0;
+    private static final int CALCULATOR_MODE_DECIMAL = 1;
+    private static final int CALCULATOR_MODE_HEXADECIMAL = 2;
+    private static final int CALCULATOR_MODE_OCTAL = 3;
 
 
     @Override
@@ -222,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
         btnDec.setOnClickListener(myOnClickListener);
         btnOct.setOnClickListener(myOnClickListener);
         btnHex.setOnClickListener(myOnClickListener);
+
 
         //소수점 처리
         /*btnDot.setOnClickListener(v -> {
@@ -610,30 +615,6 @@ public class MainActivity extends AppCompatActivity {
 
         }*/
 
-        tvResult.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //변경이전 상태를 보여줌
-                //Log.d(TAG, "변경 전 : "+charSequence);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //변경될 때 자동으로 실행
-                //Log.d(TAG, "변경 중: "+charSequence);
-                //setNumbers();
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                //변경완료된 뒤 자동실행
-                //Log.d(TAG, "변경 후: "+editable);
-                //setNumbers();
-
-            }
-        });
-
 
 //        btnBin.setOnClickListener(v -> {
 //
@@ -674,9 +655,32 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        tvResult.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //변경이전 상태를 보여줌
+                //Log.d(TAG, "변경 전 : "+charSequence);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //변경될 때 자동으로 실행
+                //Log.d(TAG, "변경 중: "+charSequence);
+                //setNumbers();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //변경완료된 뒤 자동실행
+                //Log.d(TAG, "변경 후: "+editable);
+                setNumbers();
+
+            }
+        });
+
 
     }//initListener
-
 
     private void initData() {
 
@@ -688,7 +692,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setToolbar(){
+    private void setToolbar() {
         setSupportActionBar(toolbar);
         //Log.d(TAG, "setToolbar: 나 실행됨");
 
@@ -698,21 +702,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    class NavigationViewHelper implements NavigationView.OnNavigationItemSelectedListener{
+    class NavigationViewHelper implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
             Fragment selectedFragment = null;
 
-            switch (menuitem.getItemId()){
+            toolbarTitle.setText(menuitem.getTitle() + " 계산기");
+
+            switch (menuitem.getItemId()) {
                 case R.id.nav_normal:
                 case R.id.nav_science:
-                    toolbarTitle.setText(menuitem.getTitle()+" 계산기");
+                    deleteAll();
                     tlMiddleLayout.setVisibility(View.GONE);
+                    setDecMode();
+                    btnDot.setEnabled(true);
+                    btnDot.setTextColor(getResources().getColorStateList(R.color.black));
                     //selectedFragment = new NormalFragment();
                     break;
                 case R.id.nav_programmer:
-                    toolbarTitle.setText(menuitem.getTitle()+" 계산기");
+                    deleteAll();
                     tlMiddleLayout.setVisibility(View.VISIBLE);
+                    btnDot.setEnabled(false);
+                    btnDot.setTextColor(getResources().getColorStateList(R.color.btn_pressed_grey));
+
+                    //btnDot.setTextColor();
                     //selectedFragment = new ProgrammerFragment();
                     break;
             }
@@ -730,6 +743,19 @@ public class MainActivity extends AppCompatActivity {
             Button btn = (Button) view;
 
             switch (view.getId()) {
+
+                case R.id.btn_dot:
+
+                    if (hasDotted && hasNumbered)
+                        return;
+
+                    else if(isOperator || tvResult.getText().toString().isEmpty())
+                        tvResult.setText("0.");
+                    else
+                        tvResult.append(".");
+
+                    hasDotted = true;
+                    break;
 
                 case R.id.menu_icon:
                     Log.d(TAG, "onClick: 메뉴 클릭됨");
@@ -772,30 +798,30 @@ public class MainActivity extends AppCompatActivity {
 
 
                 case R.id.btn_bin:
-                    if(calculatorMode == CALCULATOR_MODE_BINARY ){
+                    if (calculatorMode == CALCULATOR_MODE_BINARY) {
                         return;
-                    }else{
+                    } else {
                         setBinMode();
                     }
                     break;
                 case R.id.btn_oct:
-                    if(calculatorMode == CALCULATOR_MODE_OCTAL){
+                    if (calculatorMode == CALCULATOR_MODE_OCTAL) {
                         return;
-                    }else{
+                    } else {
                         setOctMode();
                     }
                     break;
                 case R.id.btn_dec:
-                    if(calculatorMode == CALCULATOR_MODE_DECIMAL){
+                    if (calculatorMode == CALCULATOR_MODE_DECIMAL) {
                         return;
-                    }else{
+                    } else {
                         setDecMode();
                     }
                     break;
                 case R.id.btn_hex:
-                    if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL){
+                    if (calculatorMode == CALCULATOR_MODE_HEXADECIMAL) {
                         return;
-                    }else{
+                    } else {
                         setHexMode();
                     }
                     break;
@@ -807,7 +833,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void deleteOne(){
+    private void deleteOne() {
         //계산식 한 개씩 지움
         String enteredExpression = tvExpression.getText().toString();
         String changedExpression = removeLastChar(enteredExpression);
@@ -820,9 +846,11 @@ public class MainActivity extends AppCompatActivity {
 
         isOperator = true;
         hasEntered = false;
+        hasDotted = false;
+        hasNumbered = false;
     }
 
-    private void deleteAll(){
+    private void deleteAll() {
         tvExpression.setText("");
         tvResult.setText("");
 
@@ -833,12 +861,15 @@ public class MainActivity extends AppCompatActivity {
 
         isOperator = false;
         hasEntered = false;
+        hasDotted = false;
+        hasNumbered = false;
 
     }
 
-    private void startCalculation(){//enter치면 계산 시작
+    private void startCalculation() {//enter치면 계산 시작
 
-        Toast.makeText(mContext, "엔터 누르지마 바보야", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "엔터 누르지마 아직 처리 안함 ", Toast.LENGTH_SHORT).show();
+
 //        if(hasEntered)
 //            return;
 //
@@ -967,102 +998,116 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String removeLastChar(String sentence){
+    private String removeLastChar(String sentence) {
 
-        if(sentence.isEmpty())
+        if (sentence.isEmpty())
             return null;
 
-        return sentence.substring(0, sentence.length()-1);
+        return sentence.substring(0, sentence.length() - 1);
 
     }
 
     private Stack<Character> stack = new Stack<>();
 
-    private void onBracketClicked(String bracket){
+    private void onBracketClicked(String bracket) {
 
-        //문제
+        //Error
         //1. backspace에서 stack 처리
         //2. (공백 안넣을거임..? 계산할 때 split 여러개 처리..?
         //3. isOperator 하면 setText로..?
 
         char lastChar = bracket.charAt(0);
 
-        if(bracket.equals("(")){
+        if (bracket.equals("(")) {
             stack.push(lastChar);
+
+            if(hasNumbered){
+                tvResult.append("*"+bracket);
+            }
+            
             tvResult.append(bracket);
 
-        } else if (bracket.equals(")") && !stack.isEmpty()){
+        } else if (bracket.equals(")") && !stack.isEmpty()) {
 
             stack.pop();
             tvResult.append(bracket);
 
-        } else if(stack.isEmpty() && stack.isEmpty()){
+        } else if (stack.isEmpty()) {
 
             Toast.makeText(mContext, "먼저 수식을 시작하세요", Toast.LENGTH_SHORT).show();
         }
 
 
-        Log.d(TAG, "onBracketClicked: "+ stack.size());
+        //Log.d(TAG, "onBracketClicked: "+ stack.size());
 
     }
 
-    private void numberButtonClicked(String number){
+    private void numberButtonClicked(String number) {
 
-
-        if(isOperator){//변수 이름 바꾸쇼
+        if(hasDotted) {
+            tvExpression.append(" ");
+            tvResult.append(number);
+        }
+        else if (isOperator) {//변수 이름 바꿔
 
             tvExpression.append(" ");
             tvResult.setText(number);
 
-        } else{
+        } else {
 
-            if(hasEntered){ //얘도 이름 이상함
+            if (hasEntered) { //얘도 이름 이상함
                 tvExpression.setText("");
                 tvResult.setText(number);
 
-            } else{
-                tvResult.append(number);//
+            } else {
+                tvResult.append(number);
             }
 
         }
 
         isOperator = false;
         hasEntered = false;
-        //hasDotted = false;
+        hasNumbered = true;
+
         //isModeChanged = false;
         //tvResult.setSelection(tvResult.length());
 
     }
 
-    private void operatorButtonClicked(String operator){
+    private void operatorButtonClicked(String operator) {
 
         String enteredNumber = tvResult.getText().toString();
 
         //Log.d(TAG, "operatorButtonClicked: "+ enteredNumber);
 
-        if(enteredNumber.isEmpty()) return;
+        if (enteredNumber.isEmpty()) return;
 
-        if(isOperator){//사칙연산 연속 클릭 시 다른 연산으로 변경
+        if(hasNumbered) {
 
-            String enteredSentence = tvExpression.getText().toString();
-            String removedSentence = removeLastChar(enteredSentence);
-            String changedSentence = removedSentence + operator;
+            if (isOperator) {//사칙연산 연속 클릭 시 다른 연산으로 변경
 
-            tvExpression.setText(changedSentence);
+                String enteredSentence = tvExpression.getText().toString();
+                String removedSentence = removeLastChar(enteredSentence);
+                String changedSentence = removedSentence + operator;
 
-        }  else {
+                tvExpression.setText(changedSentence);
 
-            if(hasEntered){
-                //Log.d(TAG, "operatorButtonClicked: 엔터 후 실행 ");
-                tvExpression.setText(enteredNumber + " " + operator);
-            }else {
-                //Log.d(TAG, "operatorButtonClicked: ㄴㄴ 내가 실행");
-                tvExpression.append(enteredNumber + " " + operator);
+            } else {
+
+                if (hasEntered) {
+                    tvExpression.setText(enteredNumber + " " + operator);
+                } else {
+                    tvExpression.append(enteredNumber + " " + operator);
+                }
             }
+        } else{
+            return;
+
         }
 
         isOperator = true;
-        //hasDotted = false;
+        hasNumbered = false;
+        hasDotted = false;
         hasEntered = false;
 
     }
@@ -1098,26 +1143,26 @@ public class MainActivity extends AppCompatActivity {
     //radix 숫자 값 변경
     private void setNumbers() {
 
+        if (tvResult.getText().toString().isEmpty())
+            return;
+
+        if (tvResult.getText().toString().contains("."))
+            return;
+
+        if (tvResult.getText().toString().contains("("))
+            return;
+
+        if (tvResult.getText().toString().contains(")"))
+            return;
+
+
         //if(isModeChanged) return;
-        if(calculatorMode == CALCULATOR_MODE_DECIMAL){
+        if (calculatorMode == CALCULATOR_MODE_DECIMAL) {
 
             String decNumber = tvResult.getText().toString();
 
-            if(decNumber.isEmpty())
-                return;
-
-            if(decNumber.contains("."))
-                return;
-
-//            if(decNumber.contains("("))
-//                return;
-//
-//            if(decNumber.contains(")"))
-//                return;
-
             int changeNumber = Integer.parseInt(decNumber);//string->integer
 
-            //String binNumber = String.format("%0" + 4 + "d", Integer.parseInt(Integer.toBinaryString(changeNumber)));
             String binNumber = Integer.toBinaryString(changeNumber);
             String octNumber = Integer.toOctalString(changeNumber);
             String hexNumber = (Integer.toHexString(changeNumber)).toUpperCase();
@@ -1126,15 +1171,15 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d(TAG, "octNumber " + octNumber);
 //        Log.d(TAG, "hexUpper " + hexNumber);
 
+            Log.d(TAG, "setNumbers: "+String.format("%0"+4+"d", Integer.parseInt(binNumber)));
+
             printBinValue.setText(binNumber);
             printHexValue.setText(hexNumber);
             printOctValue.setText(octNumber);
             printDecValue.setText(decNumber);
 
-        } else if(calculatorMode == CALCULATOR_MODE_BINARY){
+        } else if (calculatorMode == CALCULATOR_MODE_BINARY) {
             String binNumber = tvResult.getText().toString();//100
-
-            if(binNumber.isEmpty()) return;
 
             int intDecimal = Integer.parseInt(binNumber, 2);
 
@@ -1151,10 +1196,8 @@ public class MainActivity extends AppCompatActivity {
             printHexValue.setText(hexNumber);
             printBinValue.setText(binNumber);
 
-        } else if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL){
+        } else if (calculatorMode == CALCULATOR_MODE_HEXADECIMAL) {
             String hexNumber = (tvResult.getText().toString()).toUpperCase();
-
-            if(hexNumber.isEmpty()) return;
 
             int intDecimal = Integer.parseInt(hexNumber, 16);
 
@@ -1169,11 +1212,9 @@ public class MainActivity extends AppCompatActivity {
             printHexValue.setText(hexNumber);
             printBinValue.setText(binNumber);
 
-        } else if(calculatorMode == CALCULATOR_MODE_OCTAL){
+        } else if (calculatorMode == CALCULATOR_MODE_OCTAL) {
 
             String octalNumber = tvResult.getText().toString();
-
-            if(octalNumber.isEmpty()) return;
 
             int intDecimal = Integer.parseInt(octalNumber, 8);
 
@@ -1191,7 +1232,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setBinNumber(){
+    private void setBinNumber() {
 
         //Toast.makeText(getApplicationContext(), "2진수 계산기 모드",Toast.LENGTH_SHORT).show();
 
@@ -1217,21 +1258,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setOctNumber(){
+    private void setOctNumber() {
 
         String octNumber = printOctValue.getText().toString();
         tvResult.setText(octNumber);
 
     }
 
-    private void setDecNumber(){
+    private void setDecNumber() {
 
         String decNumber = printDecValue.getText().toString();
         tvResult.setText(decNumber);
 
     }
 
-    private void setHexNumber(){
+    private void setHexNumber() {
 
         String hexNumber = printHexValue.getText().toString();
         tvResult.setText(hexNumber);
@@ -1239,7 +1280,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //mode 변경 -> 키패드 등 상태변경
-    private void setBinMode(){
+    private void setBinMode() {
 
         //Log.d(TAG, "setBinMode: 2진수 모드");
         calculatorMode = CALCULATOR_MODE_BINARY;
@@ -1283,8 +1324,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setDecMode(){
-       //Log.d(TAG, "setDecMode: 10진수 모드");
+    private void setDecMode() {
+        //Log.d(TAG, "setDecMode: 10진수 모드");
         calculatorMode = CALCULATOR_MODE_DECIMAL;
 
         setDecNumber();
@@ -1293,7 +1334,6 @@ public class MainActivity extends AppCompatActivity {
         btnDec.setTextColor(getResources().getColorStateList(R.color.teal_700));
         btnOct.setTextColor(getResources().getColorStateList(R.color.black));
         btnBin.setTextColor(getResources().getColorStateList(R.color.black));
-
 
 
         btnA.setVisibility(View.GONE);
@@ -1325,7 +1365,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setOctMode(){
+    private void setOctMode() {
         //Log.d(TAG, "setOctMode: 8진수 모드");
         calculatorMode = CALCULATOR_MODE_OCTAL;
 
@@ -1365,7 +1405,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setHexMode(){
+    private void setHexMode() {
 
         //Log.d(TAG, "setHexMode: 16진수 모드");
         calculatorMode = CALCULATOR_MODE_HEXADECIMAL;
@@ -1405,7 +1445,6 @@ public class MainActivity extends AppCompatActivity {
         //isModeChanged = true;
 
     }
-
 
 
 }//mainActivity
