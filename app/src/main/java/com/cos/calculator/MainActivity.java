@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.style.TabStopSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity222";
     private MainActivity mContext = this;
+
+    //undo, redo
+    private Stack<String> undoStack = new Stack<>(); //실행취소
+    private Stack<String> redoStack = new Stack<>(); //다시 실행
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -151,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         btnEnter = findViewById(R.id.btn_enter);
         btnClear = findViewById(R.id.btn_clear);
         btnBackSpace = findViewById(R.id.btn_backSpace);
-        btnRecode = findViewById(R.id.btn_recode); //계산기록
+        btnRecode = findViewById(R.id.btn_recode);
         btnUndo = findViewById(R.id.btn_undo); //실행취소 ㄹㅇ Ctrl+z
 
 
@@ -226,6 +231,10 @@ public class MainActivity extends AppCompatActivity {
         btnDec.setOnClickListener(myOnClickListener);
         btnOct.setOnClickListener(myOnClickListener);
         btnHex.setOnClickListener(myOnClickListener);
+
+        btnUndo.setOnClickListener(v -> {
+            setUndo();
+        });
 
 
         //소수점 처리
@@ -833,6 +842,25 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void setUndo(){
+        Log.d(TAG, "setUndo: undo 실행됨");
+
+        if(undoStack.isEmpty()){
+            Toast.makeText(mContext, "마지막 입니다 ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        String redoSentence = tvExpression.getText().toString() + tvResult.getText().toString();
+        Log.d(TAG, "setRedo: "+ redoSentence);
+        redoStack.push(redoSentence);
+
+        String undoSentence = undoStack.pop();
+        Log.d(TAG, "setUndo: "+ undoSentence);
+        tvExpression.setText(undoSentence);
+        
+    }
+
     private void deleteOne() {
         //계산식 한 개씩 지움
         String enteredExpression = tvExpression.getText().toString();
@@ -866,19 +894,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void startCalculation() {//enter치면 계산 시작
+    private void startCalculation() {//enter 눌렀을 때 처리
 
         Toast.makeText(mContext, "엔터 누르지마 아직 처리 안함 ", Toast.LENGTH_SHORT).show();
 
-//        if(hasEntered)
-//            return;
-//
-//        String cutSentence = tvExpression.getText().toString();
-//
+        if(hasEntered)
+            return;
+
+        String cutSentence = tvExpression.getText().toString();
+
+        //Log.d(TAG, "startCalculation: 마지막 "+ cutSentence); //5 *
+
+        String undoSentence = cutSentence + tvResult.getText().toString();
+
+        Log.d(TAG, "startCalculation: ㄹㅇ 마지막 저장 " + undoSentence); //5 * 6
+
+        undoStack.push(undoSentence);
+
 //        if(cutSentence.isEmpty() || isOperator)
 //            return;
 //
-//        String lastExpression = cutSentence + tvResult.getText().toString()+" =";
+//        String lastExpression = cutSentence + undoSentence +" =";
 //        tvExpression.setText(lastExpression);
 //
 //        String calculatingExpression = removeLastChar(lastExpression);
@@ -1034,7 +1070,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (stack.isEmpty()) {
 
-            Toast.makeText(mContext, "먼저 수식을 시작하세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "수식을 다시 확인하세요", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -1155,7 +1191,6 @@ public class MainActivity extends AppCompatActivity {
         if (tvResult.getText().toString().contains(")"))
             return;
 
-
         //if(isModeChanged) return;
         if (calculatorMode == CALCULATOR_MODE_DECIMAL) {
 
@@ -1171,7 +1206,7 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d(TAG, "octNumber " + octNumber);
 //        Log.d(TAG, "hexUpper " + hexNumber);
 
-            Log.d(TAG, "setNumbers: "+String.format("%0"+4+"d", Integer.parseInt(binNumber)));
+            //Log.d(TAG, "setNumbers: "+String.format("%0"+4+"d", Integer.parseInt(binNumber)));
 
             printBinValue.setText(binNumber);
             printHexValue.setText(hexNumber);
