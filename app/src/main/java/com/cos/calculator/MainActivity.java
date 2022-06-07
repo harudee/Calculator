@@ -1,6 +1,7 @@
 package com.cos.calculator;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -82,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean hasDotted = false;
     private boolean hasNumbered = false;
+
+    private boolean endedWithBracket = false;
+    private boolean hasReturned = false;
 
     //private boolean isModeChanged = false;
     //private boolean hasOperator = false;
@@ -701,6 +705,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(mContext, "landscape", Toast.LENGTH_SHORT).show();
+            setContentView(R.layout.activity_landscape);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Toast.makeText(mContext, "portrait", Toast.LENGTH_SHORT).show();
+            setContentView(R.layout.activity_main);
+        }
+
+    }
+
     private void setToolbar() {
         setSupportActionBar(toolbar);
         //Log.d(TAG, "setToolbar: 나 실행됨");
@@ -758,7 +776,7 @@ public class MainActivity extends AppCompatActivity {
                     if (hasDotted && hasNumbered)
                         return;
 
-                    else if(isOperator || tvResult.getText().toString().isEmpty())
+                    else if (isOperator || tvResult.getText().toString().isEmpty())
                         tvResult.setText("0.");
                     else
                         tvResult.append(".");
@@ -842,23 +860,54 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void setUndo(){
+    private void setRedo() {
+        if (redoStack.isEmpty())
+            return;
+
+        String redoSentence = redoStack.pop();
+//        String lastRedoExp = removeLastChar(redoSentence);
+//        char lastRedoChar = redoSentence.charAt(redoSentence.length() - 1);
+//
+//        tvExpression.setText(lastRedoExp);
+//        tvResult.setText(String.valueOf(lastRedoChar));
+
+        tvExpression.setText(redoSentence);
+        tvResult.setText("");
+
+        isOperator = false;
+        hasReturned = true;
+
+    }
+
+    private void setUndo() {
         Log.d(TAG, "setUndo: undo 실행됨");
 
-        if(undoStack.isEmpty()){
+        if (undoStack.isEmpty()) {
             Toast.makeText(mContext, "마지막 입니다 ", Toast.LENGTH_SHORT).show();
             return;
         }
 
 
         String redoSentence = tvExpression.getText().toString() + tvResult.getText().toString();
-        Log.d(TAG, "setRedo: "+ redoSentence);
+        Log.d(TAG, "setRedo: " + redoSentence);
         redoStack.push(redoSentence);
 
         String undoSentence = undoStack.pop();
-        Log.d(TAG, "setUndo: "+ undoSentence);
+        Log.d(TAG, "setUndo: " + undoSentence);
+
+//        String lastUndoExp = removeLastChar(undoSentence);
+//        char lastUndoChar = undoSentence.charAt(undoSentence.length() - 1);
+//
+//        tvExpression.setText(lastUndoExp);
+//        tvResult.setText(String.valueOf(lastUndoChar));
+
         tvExpression.setText(undoSentence);
-        
+        tvResult.setText("");
+
+        isOperator = false;
+        hasReturned = true;
+        //hasEntered = true; //expression, result 둘다 삭제되고 다시 입력됨
+
     }
 
     private void deleteOne() {
@@ -876,6 +925,7 @@ public class MainActivity extends AppCompatActivity {
         hasEntered = false;
         hasDotted = false;
         hasNumbered = false;
+        hasReturned = false;
     }
 
     private void deleteAll() {
@@ -891,14 +941,14 @@ public class MainActivity extends AppCompatActivity {
         hasEntered = false;
         hasDotted = false;
         hasNumbered = false;
-
+        hasReturned = false;
     }
 
     private void startCalculation() {//enter 눌렀을 때 처리
 
         Toast.makeText(mContext, "엔터 누르지마 아직 처리 안함 ", Toast.LENGTH_SHORT).show();
 
-        if(hasEntered)
+        if (hasEntered)
             return;
 
         String cutSentence = tvExpression.getText().toString();
@@ -1029,8 +1079,8 @@ public class MainActivity extends AppCompatActivity {
 //        String calculatedResult = MyEval.calculation(calculatingExpression);
 //        tvResult.setText(calculatedResult);
 //
-//        isOperator = false;
-//        hasEntered = true;
+        isOperator = false;
+        hasEntered = true;
 
     }
 
@@ -1048,43 +1098,51 @@ public class MainActivity extends AppCompatActivity {
     private void onBracketClicked(String bracket) {
 
         //Error
-        //1. backspace에서 stack 처리
+        //1. backspace에서 stack 처리✔✔✔
         //2. (공백 안넣을거임..? 계산할 때 split 여러개 처리..?
         //3. isOperator 하면 setText로..?
 
         char lastChar = bracket.charAt(0);
+        String lastStr = tvResult.getText().toString();
 
         if (bracket.equals("(")) {
+
+            tvExpression.append(" ");
+            tvExpression.append(bracket);
+
             stack.push(lastChar);
 
-            if(hasNumbered){
-                tvResult.append("*"+bracket);
-            }
-            
-            tvResult.append(bracket);
 
         } else if (bracket.equals(")") && !stack.isEmpty()) {
 
             stack.pop();
-            tvResult.append(bracket);
+
+            if (hasNumbered)
+                tvExpression.append(lastStr + " " + bracket);
+            else
+                tvExpression.append(bracket);
+
+            tvExpression.append(" ");
+            tvResult.setText("");
 
         } else if (stack.isEmpty()) {
 
             Toast.makeText(mContext, "수식을 다시 확인하세요", Toast.LENGTH_SHORT).show();
         }
 
-
+        endedWithBracket = true;
+        hasNumbered = false;
         //Log.d(TAG, "onBracketClicked: "+ stack.size());
 
     }
 
     private void numberButtonClicked(String number) {
 
-        if(hasDotted) {
-            tvExpression.append(" ");
+        if (hasDotted || hasReturned) {
+            //tvExpression.append(" ");
             tvResult.append(number);
-        }
-        else if (isOperator) {//변수 이름 바꿔
+
+        } else if (isOperator) {//변수 이름 바꿔
 
             tvExpression.append(" ");
             tvResult.setText(number);
@@ -1104,6 +1162,8 @@ public class MainActivity extends AppCompatActivity {
         isOperator = false;
         hasEntered = false;
         hasNumbered = true;
+        endedWithBracket = false;
+        hasReturned = false;
 
         //isModeChanged = false;
         //tvResult.setSelection(tvResult.length());
@@ -1111,14 +1171,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void operatorButtonClicked(String operator) {
+        //코드가 개에바
 
         String enteredNumber = tvResult.getText().toString();
 
         //Log.d(TAG, "operatorButtonClicked: "+ enteredNumber);
 
-        if (enteredNumber.isEmpty()) return;
+        if (endedWithBracket) {
+            tvExpression.append(operator+" ");
 
-        if(hasNumbered) {
+        } else if (hasReturned){
+            tvExpression.append(" "+operator);
+
+        } else if (enteredNumber.isEmpty()) {
+            return;
+        } else if (hasNumbered) {
 
             if (isOperator) {//사칙연산 연속 클릭 시 다른 연산으로 변경
 
@@ -1136,16 +1203,15 @@ public class MainActivity extends AppCompatActivity {
                     tvExpression.append(enteredNumber + " " + operator);
                 }
             }
-        } else{
+        }  else
             return;
-
-        }
 
         isOperator = true;
         hasNumbered = false;
         hasDotted = false;
         hasEntered = false;
-
+        endedWithBracket = false;
+        hasReturned = false;
     }
 
 
