@@ -1,15 +1,18 @@
 package com.cos.calculator;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.style.TabStopSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -97,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int CALCULATOR_MODE_HEXADECIMAL = 2;
     private static final int CALCULATOR_MODE_OCTAL = 3;
 
+    private int nMode;
+    private static final int NORMAL_MODE = 0;
+    private static final int SCIENCE_MODE = 1;
+    private static final int PROGRAMMER_MODE = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         initData();
 
 
-        setToolbar();
-        //setSupportActionBar(toolbar);
+
+        setSupportActionBar(toolbar);
 
 //        AppDatabase database = Room.databaseBuilder(getApplicationContext(),
 //                AppDatabase.class,
@@ -668,6 +676,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        //바뀔때마다 변경
         tvResult.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -705,55 +714,95 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+
+    // Manifest에서 attribute 수정해서 화면 띄울때 사용함
+    /*@Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Toast.makeText(mContext, "landscape", Toast.LENGTH_SHORT).show();
-            setContentView(R.layout.activity_landscape);
+            setContentView(R.layout.activity_land_main_content);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             Toast.makeText(mContext, "portrait", Toast.LENGTH_SHORT).show();
             setContentView(R.layout.activity_main);
         }
 
+    }*/
+
+    private String saveExpression;
+    private String saveResult;
+    private int saveMode;
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //저장할 데이터
+        saveExpression = tvExpression.getText().toString();
+        saveResult = tvResult.getText().toString();
+        saveMode = nMode;
+
+        outState.putString("Expression", saveExpression);
+        outState.putString("Result", saveResult);
+        outState.putInt("MODE", saveMode);
+
+        //Log.d(TAG, "onSaveInstanceState: 저장해! "+saveMode);
     }
 
-    private void setToolbar() {
-        setSupportActionBar(toolbar);
-        //Log.d(TAG, "setToolbar: 나 실행됨");
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        //저장한 데이터 불러오기
 
-//        menuIcon.setOnClickListener(v -> {
-//            drawerLayout.openDrawer(GravityCompat.START);
-//        });
+        saveExpression = savedInstanceState.getString("Expression");
+        saveResult = savedInstanceState.getString("Result");
+        saveMode = savedInstanceState.getInt("MODE");
 
+        setMode(saveMode);
+        tvExpression.setText(saveExpression);
+        tvResult.setText(saveResult);
+
+        //Log.d(TAG, "onRestoreInstanceState: 지금 바뀜! "+saveMode);
+
+    }
+
+    private void setMode(int nMode){
+        switch(nMode){
+            case 0:
+                setNormalMode();
+                break;
+            case 1:
+                setScienceMode();
+                break;
+            case 2:
+                setProgrammerMode();
+                break;
+            default:
+                break;
+        }
     }
 
     class NavigationViewHelper implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-            Fragment selectedFragment = null;
+            Fragment selectedFragment = null; //이거 하면 버튼 하나하나 다시 입력해야함
 
-            toolbarTitle.setText(menuitem.getTitle() + " 계산기");
+            if(getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_0){//세로모드일때
+                toolbarTitle.setText(menuitem.getTitle() + " 계산기");
+            }
 
             switch (menuitem.getItemId()) {
                 case R.id.nav_normal:
-                case R.id.nav_science:
-                    deleteAll();
-                    tlMiddleLayout.setVisibility(View.GONE);
-                    setDecMode();
-                    btnDot.setEnabled(true);
-                    btnDot.setTextColor(getResources().getColorStateList(R.color.black));
-                    //selectedFragment = new NormalFragment();
+                    setNormalMode();
                     break;
-                case R.id.nav_programmer:
-                    deleteAll();
-                    tlMiddleLayout.setVisibility(View.VISIBLE);
-                    btnDot.setEnabled(false);
-                    btnDot.setTextColor(getResources().getColorStateList(R.color.btn_pressed_grey));
 
-                    //btnDot.setTextColor();
-                    //selectedFragment = new ProgrammerFragment();
+                case R.id.nav_science:
+                    setScienceMode();
+                    break;
+
+                case R.id.nav_programmer:
+                    setProgrammerMode();
                     break;
             }
 
@@ -762,6 +811,42 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    private void setNormalMode(){
+        nMode = NORMAL_MODE;
+        deleteAll();
+        tlMiddleLayout.setVisibility(View.GONE);
+        setDecMode();
+
+    }
+
+    private void setScienceMode(){
+        //누르면 가로모드로...?!
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //Toast.makeText(mContext, "화면을 회전시키세요", Toast.LENGTH_SHORT).show();
+
+        nMode = SCIENCE_MODE;
+
+        deleteAll();
+        tlMiddleLayout.setVisibility(View.GONE);
+        setDecMode();
+
+        //selectedFragment = new NormalFragment();
+    }
+
+    private void setProgrammerMode(){
+        nMode = PROGRAMMER_MODE;
+
+        deleteAll();
+        tlMiddleLayout.setVisibility(View.VISIBLE);
+        btnDot.setEnabled(false);
+        btnDot.setTextColor(getResources().getColorStateList(R.color.btn_pressed_grey));
+
+
+        //btnDot.setTextColor();
+        //selectedFragment = new ProgrammerFragment();
+    }
+
 
     private View.OnClickListener myOnClickListener = new View.OnClickListener() { //클릭했을때 뭐가 처리되는 이벤트들은 다 여기서 handle
         @Override
@@ -946,10 +1031,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void startCalculation() {//enter 눌렀을 때 처리
 
-        Toast.makeText(mContext, "엔터 누르지마 아직 처리 안함 ", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "엔터 누르지마 아직 처리 안함 ", Toast.LENGTH_SHORT).show();
 
-        if (hasEntered)
+        if (hasEntered || tvResult.getText().toString().isEmpty() || tvExpression.getText().toString().isEmpty() || isOperator)
             return;
+
 
         String cutSentence = tvExpression.getText().toString();
 
@@ -961,14 +1047,11 @@ public class MainActivity extends AppCompatActivity {
 
         undoStack.push(undoSentence);
 
-//        if(cutSentence.isEmpty() || isOperator)
-//            return;
-//
-//        String lastExpression = cutSentence + undoSentence +" =";
-//        tvExpression.setText(lastExpression);
-//
-//        String calculatingExpression = removeLastChar(lastExpression);
-//
+        String lastExpression = undoSentence +" =";
+        tvExpression.setText(lastExpression);
+
+        String calculatingExpression = removeLastChar(lastExpression); // '= 제거'
+
 //        Log.d(TAG, "initListener: " + lastExpression); // 5 * 9 + 8 =
 //        Log.d(TAG, "initListener: 표현식 "+ calculatingExpression);// C8 * 6
 //
@@ -1185,7 +1268,9 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (enteredNumber.isEmpty()) {
             return;
-        } else if (hasNumbered) {
+        }
+
+        if (hasNumbered) {
 
             if (isOperator) {//사칙연산 연속 클릭 시 다른 연산으로 변경
 
@@ -1461,6 +1546,9 @@ public class MainActivity extends AppCompatActivity {
         btn7.setTextColor(getResources().getColorStateList(R.color.black));
         btn8.setTextColor(getResources().getColorStateList(R.color.black));
         btn9.setTextColor(getResources().getColorStateList(R.color.black));
+
+        btnDot.setEnabled(true);
+        btnDot.setTextColor(getResources().getColorStateList(R.color.black));
 
         //isModeChanged = true;
 
