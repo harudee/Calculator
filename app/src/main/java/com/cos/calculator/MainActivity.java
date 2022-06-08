@@ -861,8 +861,10 @@ public class MainActivity extends AppCompatActivity {
                     if (hasDotted && hasNumbered)
                         return;
 
-                    else if (isOperator || tvResult.getText().toString().isEmpty())
+                    else if (isOperator || tvResult.getText().toString().isEmpty()) {
+                        tvExpression.append(" ");
                         tvResult.setText("0.");
+                    }
                     else
                         tvResult.append(".");
 
