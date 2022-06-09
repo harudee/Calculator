@@ -2,71 +2,71 @@ package com.cos.calculator;
 
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 public class MyEval {
 
     private static final String TAG = "MyEval";
-
-    private static final char MULTIPLE = '*';
-    private static final char DIVISION = '/';
-    private static final char MODULAR = '%';
-    private static final char PLUS = '+';
-    private static final char MINUS = '-';
-
-    private static final char LEFT = '(';
-    private static final char RIGHT = ')';
-
-    private Stack<Character> stack = new Stack<>();
-    private static List<String> arrayList = new ArrayList<>();
-
-    private static int exp1 = 0;
-    private static int exp2 = 0;
-    private Character operator;
-
-    public static int findOperator(char operator){
-        int indexOfOperator = arrayList.indexOf(operator);
-
-        exp1 = Integer.parseInt(arrayList.get(indexOfOperator-1));
-        exp2 = Integer.parseInt(arrayList.get(indexOfOperator+1));
-
-        int answer = 0;
-//
-//        switch (operator){
-//            case MULTIPLE:
-//                answer = exp1 * exp2;
-//                break;
-//            case DIVISION:
-//                answer = exp1 / exp2;
-//                break;
-//            case MODULAR:
-//                answer = exp1 % exp2;
-//                break;
-//            case PLUS:
-//                answer = exp1 + exp2;
-//                break;
-//            case MINUS:
-//                answer = exp1 - exp2;
-//            default:
-//                break;
-//        }
-//
-//        Log.d(TAG, "findOperator: "+ answer);
-        return answer;
-
-    }
+    private MyEval mContext = this;
 
     public static String calculation(String result){
 
-        Log.d(TAG, "calculation : result "+result);
+        Log.d(TAG, "calculation : result "+result); //1*(6-2)+9
+
+        StringTokenizer token = new StringTokenizer(result, "*/%+-()", true);
+
+        //확인
+//        while(token.hasMoreTokens())
+//            Log.d(TAG, "calculation: "+token.nextToken());
+
+        List<String> arrAllToken = new ArrayList<>();// 전체 토큰 싹다 (원본)
+
+        // 저장 배열
+        ArrayList<String> arrNumber = new ArrayList<>();
+        // 연산자 stack
+        Stack<String> stackOp = new Stack<>();
+        // 계산 stack
+        Stack<String> stackCal = new Stack<>();
+
+        while(token.hasMoreTokens()){
+            arrAllToken.add(token.nextToken());
+        }
+        Log.d(TAG, "calculation: arrAllToken "+arrAllToken.toString());
+
+
+        for(int i=0; i<arrAllToken.size();i++) {
+
+            setClassification(arrAllToken, arrNumber, i, stackOp); //결과
+
+
+            if(arrAllToken.get(i).equals("(")){
+                int j = 0;
+                calBracket(arrAllToken, arrNumber, j, stackOp);
+
+            }
+
+        }
+
+
+        Log.d(TAG, "calculation: "+stackOp.toString()); //[*, -, +]
+        Log.d(TAG, "calculation: "+arrAllToken.toString()); //[1, *, (, 6, -, 2, ), +, 9] //처음 그대로
+        Log.d(TAG, "calculation: "+arrNumber.toString()); //[1, 6, 2, ), 9]
+
+
+
+
+
+
 
         // double 값도 처리해야함 => 일단 .을 비활성화해놓음
         // 괄호는 우짬
 
-        String trimResult = result.trim();
+        /*String trimResult = result.trim();
         String[] arrResult = trimResult.split(" ");
         List<String> arrayList = new ArrayList<>(Arrays.asList(arrResult));
 
@@ -78,6 +78,7 @@ public class MyEval {
             if(arrayList.contains(MULTIPLE))
             { //곱셈 후 배열 바꾸기
 
+                   //인덱스 번호 말고 다른걸로 바꿔봐
 //                Log.d(TAG, "calculation: " + indexOfMultiple); //[1, +, 2, *, 3] 일때 3번 째
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple - 1)); // 2
 //                Log.d(TAG, "calculation: " + arrayList.get(indexOfMultiple + 1)); // 3
@@ -205,10 +206,10 @@ public class MyEval {
 
             //Log.d(TAG, "calculation: 여기1" + calResult);
 
-        }// while문 끝
+        }// while문 끝*/
 
         //Log.d(TAG, "calculation: 여기여기 " + calResult);
-        return calResult;
+        //return calResult;
 
         // 연산자 한개만 처리됨
         /*String answer = "";
@@ -391,10 +392,68 @@ public class MyEval {
         return calResult;*/
 
 
-        //return null;
+        return null;
 
     }//calculation
 
+
+
+    public static void setClassification(List<String> arr, ArrayList<String> arrSplit, int i, Stack<String> stackOp){
+        Log.d(TAG, "setClassification: 나 실행됨");
+
+        //사칙연산
+        switch(arr.get(i)){
+            case "+":
+            case "-":
+                if(arr.get(i-1).equals(")") ){
+                    arrSplit.add(stackOp.get(stackOp.size() - 1));
+                    stackOp.pop();
+                }
+                stackOp.push(arr.get(i));
+                break;
+            case "*":
+            case "/":
+            case "%":
+            case "(":
+            case ")":
+                stackOp.push(arr.get(i));
+                break;
+            default:
+                arrSplit.add(arr.get(i)); //기본 숫자
+                break;
+
+        }
+
+
+    }
+
+    public static void calBracket(List<String> arr, ArrayList<String> arrSplit, int j, Stack<String> stackOp){
+
+        if (stackOp.isEmpty())
+            return;
+
+        //괄호는 연산자에 안 넣을것임
+        while(true){
+//            if(stackOp.get(j).equals("(")){
+//                stackOp.pop();
+//                break;
+//            } else {
+//                if(!stackOp.get(j).equals(")")){
+//                    arrSplit.add(stackOp.get(stackOp.size()-1));//마지막 값을 arrSplit에 넣기
+//                    stackOp.pop();
+//
+//                } else if (stackOp.get(j).equals(")")){
+//                    stackOp.pop();
+//
+//                }
+//
+//            }
+
+            j++;
+            break;
+        }
+
+    }
 
     /*private String plus(String exp1, String exp2){
         int integerExp1 = Integer.parseInt(exp1);

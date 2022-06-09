@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import java.util.StringTokenizer;
 import java.util.concurrent.BlockingDeque;
 
 public class MainActivity extends AppCompatActivity {
@@ -862,7 +863,7 @@ public class MainActivity extends AppCompatActivity {
                         return;
 
                     else if (isOperator || tvResult.getText().toString().isEmpty()) {
-                        tvExpression.append(" ");
+                        //tvExpression.append(" ");
                         tvResult.setText("0.");
                     }
                     else
@@ -1035,9 +1036,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Toast.makeText(mContext, "엔터 누르지마 아직 처리 안함 ", Toast.LENGTH_SHORT).show();
 
-        if (hasEntered || tvResult.getText().toString().isEmpty() || tvExpression.getText().toString().isEmpty() || isOperator)
+        if (hasEntered || isOperator || (tvResult.getText().toString().isEmpty() && tvExpression.getText().toString().isEmpty()))
             return;
-
 
         String cutSentence = tvExpression.getText().toString();
 
@@ -1046,17 +1046,22 @@ public class MainActivity extends AppCompatActivity {
         String undoSentence = cutSentence + tvResult.getText().toString();
 
         Log.d(TAG, "startCalculation: ㄹㅇ 마지막 저장 " + undoSentence); //5 * 6
-
         undoStack.push(undoSentence);
 
-        String lastExpression = undoSentence +" =";
+
+
+        String lastExpression = undoSentence +"=";
         tvExpression.setText(lastExpression);
 
         String calculatingExpression = removeLastChar(lastExpression); // '= 제거'
 
 //        Log.d(TAG, "initListener: " + lastExpression); // 5 * 9 + 8 =
 //        Log.d(TAG, "initListener: 표현식 "+ calculatingExpression);// C8 * 6
-//
+
+
+        MyEval.calculation(calculatingExpression); //일단 보냄 MyEval로 보냈슴
+
+
 //        String[] arr = calculatingExpression.split(" ");
 //        //Log.d(TAG, "initListener: arr " + Arrays.toString(arr)); //arr [C8, *, C8]
 //
@@ -1178,13 +1183,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private Stack<Character> stack = new Stack<>();
+    private Stack<Character> stackBracket = new Stack<>();
 
     private void onBracketClicked(String bracket) {
 
         //Error
         //1. backspace에서 stack 처리✔✔✔
-        //2. (공백 안넣을거임..? 계산할 때 split 여러개 처리..?
         //3. isOperator 하면 setText로..?
 
         char lastChar = bracket.charAt(0);
@@ -1192,25 +1196,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (bracket.equals("(")) {
 
-            tvExpression.append(" ");
+            //tvExpression.append(" ");
             tvExpression.append(bracket);
 
-            stack.push(lastChar);
+            stackBracket.push(lastChar);
 
 
-        } else if (bracket.equals(")") && !stack.isEmpty()) {
+        } else if (bracket.equals(")") && !stackBracket.isEmpty()) {
 
-            stack.pop();
+            stackBracket.pop();
 
             if (hasNumbered)
-                tvExpression.append(lastStr + " " + bracket);
+                tvExpression.append(lastStr + bracket);
             else
                 tvExpression.append(bracket);
 
-            tvExpression.append(" ");
+            //tvExpression.append(" ");
             tvResult.setText("");
 
-        } else if (stack.isEmpty()) {
+        } else if (stackBracket.isEmpty()) {
 
             Toast.makeText(mContext, "수식을 다시 확인하세요", Toast.LENGTH_SHORT).show();
         }
@@ -1229,7 +1233,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (isOperator) {//변수 이름 바꿔
 
-            tvExpression.append(" ");
+            //tvExpression.append(" ");
             tvResult.setText(number);
 
         } else {
@@ -1262,44 +1266,35 @@ public class MainActivity extends AppCompatActivity {
 
         //Log.d(TAG, "operatorButtonClicked: "+ enteredNumber);
 
-        if (endedWithBracket) {
-            tvExpression.append(operator+" ");
-
-        } else if (hasReturned){
-            tvExpression.append(" "+operator);
-
-        } else if (enteredNumber.isEmpty()) {
+        if (enteredNumber.isEmpty() && !endedWithBracket)
             return;
-        }
 
-        if (hasNumbered) {
+        else if (isOperator) {//사칙연산 연속 클릭 시 다른 연산으로 변경
 
-            if (isOperator) {//사칙연산 연속 클릭 시 다른 연산으로 변경
+            String enteredSentence = tvExpression.getText().toString();
+            String removedSentence = removeLastChar(enteredSentence);
+            String changedSentence = removedSentence + operator;
 
-                String enteredSentence = tvExpression.getText().toString();
-                String removedSentence = removeLastChar(enteredSentence);
-                String changedSentence = removedSentence + operator;
+            tvExpression.setText(changedSentence);
 
-                tvExpression.setText(changedSentence);
+        } else {
 
+            if (hasEntered) {
+                tvExpression.setText(enteredNumber + operator);
             } else {
-
-                if (hasEntered) {
-                    tvExpression.setText(enteredNumber + " " + operator);
-                } else {
-                    tvExpression.append(enteredNumber + " " + operator);
-                }
+                tvExpression.append(enteredNumber + operator);
             }
-        }  else
-            return;
+        }
 
         isOperator = true;
         hasNumbered = false;
         hasDotted = false;
         hasEntered = false;
-        endedWithBracket = false;
+        //endedWithBracket = false;
         hasReturned = false;
+
     }
+
 
 
     private void saveRecode(String msg) {
