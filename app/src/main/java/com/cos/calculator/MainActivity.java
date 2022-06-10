@@ -1059,8 +1059,8 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d(TAG, "initListener: 표현식 "+ calculatingExpression);// C8 * 6
 
 
-        MyEval.calculation(calculatingExpression); //일단 보냄 MyEval로 보냈슴
-
+        String Result = MyEval.calculation(calculatingExpression); //일단 보냄 MyEval로 보냈슴
+        tvResult.setText(Result);
 
 //        String[] arr = calculatingExpression.split(" ");
 //        //Log.d(TAG, "initListener: arr " + Arrays.toString(arr)); //arr [C8, *, C8]
