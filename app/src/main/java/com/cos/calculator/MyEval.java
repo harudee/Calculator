@@ -20,33 +20,59 @@ public class MyEval {
         Log.d(TAG, "calculation : result "+result); //1*(6-2)+9
 
         StringTokenizer token = new StringTokenizer(result, "*/%+-()", true);
+        char operation[] = {'*', '/', '%', '+', '-', '(', ')'};
 
-        //확인
-//        while(token.hasMoreTokens())
-//            Log.d(TAG, "calculation: "+token.nextToken());
 
         List<String> arrAllToken = new ArrayList<>();// 전체 토큰 싹다 (원본)
 
-        // 저장 배열
+
         ArrayList<String> arrNumber = new ArrayList<>();
-        // 연산자 stack
         Stack<String> stackOp = new Stack<>();
-        // 계산 stack
         Stack<String> stackCal = new Stack<>();
 
-        Stack<String> stackBraCal = new Stack<>();
+
+        String op = "";
 
 
+        //전체 나누기
         while(token.hasMoreTokens()){
             arrAllToken.add(token.nextToken());
         }
         Log.d(TAG, "calculation: arrAllToken "+arrAllToken.toString());
 
 
+//        for(int i=0; i<arrAllToken.size(); i++){
+//
+//            switch (arrAllToken.get(i)){
+//                case "*":
+//                case "/":
+//                case "%":
+//                case "+":
+//                case "-":
+//                    op = arrAllToken.get(i);
+//                    break;
+//                case "(":
+//                    while(arrAllToken.get(i).equals(")")){
+//                        stackCal.push(arrAllToken.get(i));
+//                    }
+//                    break;
+//                default:
+//                    stackCal.push(arrAllToken.get(i));
+//                    break;
+//
+//
+//            }
+//
+//            if(!op.equals("")){
+//
+//            }
+//
+//
+//        }
+
         for(int i=0; i<arrAllToken.size();i++) {
 
-            setClassification(arrAllToken, arrNumber, i, stackOp);
-
+            setClassification(arrAllToken, arrNumber, i, stackOp);//여기서 이미 정리 완
 
             if(arrAllToken.get(i).equals("(")){
 
@@ -76,87 +102,12 @@ public class MyEval {
 
         }
 
-        Log.d(TAG, "stackOp2222 : "+stackOp.toString());
-        Log.d(TAG, "arrNumber(arrSplit)222 : "+arrNumber.toString()); //[1, 6, (, 5, 2, ), 3.2, +, -, *, *]
-
-//        double ans111 = 0;
-//        while(!arrNumber.isEmpty()){
-//
-//            if(arrNumber.size() == 1)
-//                return Double.toString(ans111);
-//
-//            double exp1 = 0.0;
-//            double exp2 = 0.0;
-//
-//            if(arrNumber.contains("(")){
-//                exp1 = Double.parseDouble(arrNumber.get(0));
-//                arrNumber.remove(0); //0번 (
-//                arrNumber.remove(0);
-//
-//                exp2 = Double.parseDouble(arrNumber.get(0));
-//                arrNumber.remove(0);
-//
-//
-//            } else{
-//                exp1 = Double.parseDouble(arrNumber.get(0));
-//                arrNumber.remove(0);
-//
-//                exp2 = Double.parseDouble(arrNumber.get(0));
-//                arrNumber.remove(0);
-//            }
-//
-//
-//            switch(arrNumber.get(arrNumber.size()-1)){
-//
-//                case "*":
-//                    ans111 = exp1*exp2;
-//                    break;
-//                case "/":
-//                    ans111 = exp1/exp2;
-//                    break;
-//                case "%":
-//                    ans111 = exp1%exp2;
-//                    break;
-//                case "+":
-//                    ans111 = exp1+exp2;
-//                    break;
-//                case "-":
-//                    ans111 = exp1-exp2;
-//                    break;
-//
-//                default:
-//                    break;
-//
-//
-//            }
-//
-//            arrNumber.remove(arrNumber.size()-1);
-//
-//            stackCal.push(Double.toString(ans111));
-//
-//            for(int i=0; i<arrNumber.size(); i++){
-//                stackCal.push(arrNumber.get(i));
-//            }
-//
-//            arrNumber.clear();
-//
-//            Log.d(TAG, "calculation 어떻게 됨: "+stackCal.toString());
-//            Log.d(TAG, "calculation arrNumber11: "+arrNumber.toString());
-//
-//            for(int i=0; i<stackCal.size(); i++){
-//                arrNumber.add(stackCal.get(i));
-//            }
-//
-//            stackCal.clear();
-//
-//            Log.d(TAG, "calculation 어떻게 됨: "+stackCal.toString());
-//            Log.d(TAG, "calculation arrNumber22: "+arrNumber.toString());
-//
-//
-//        }
+//        Log.d(TAG, "stackOp2222 : "+stackOp.toString());
+        Log.d(TAG, "arrNumber(arrSplit)222 : "+arrNumber.toString()); //[1, 6, (, 5, 2, ), 3.2, +, -, *,* ]
 
 
-        moveCal(arrNumber, stackCal, stackOp);
+         //여기부터 calculation 다시
+        moveCal(arrNumber, stackCal);
         Log.d(TAG, "stackCal stackCal 이거111 : "+stackCal.toString());
         Log.d(TAG, "calculation 이거333: "+stackOp.toString());
         Log.d(TAG, "calculation arrSplit 이거222 : "+arrNumber.toString());
@@ -168,15 +119,15 @@ public class MyEval {
 
             if(distinction(arrNumber)){//true 연산자
 
-                double exp1 = Double.parseDouble(stackCal.get(0));
-                stackCal.remove(0);
-                double exp2 = Double.parseDouble(stackCal.get(0));
-                stackCal.remove(0);
+                double exp1 = Double.parseDouble(stackCal.pop());
+                //stackCal.remove(0);
+                double exp2 = Double.parseDouble(stackCal.pop());
+                //stackCal.remove(0);
 
                 Log.d(TAG, "calculation: "+exp1);
                 Log.d(TAG, "calculation: "+exp2);
 
-                //제일 뒤 값이
+                //
                 switch (arrNumber.get(0)){
                     case "*":
                         answer = exp1*exp2;
@@ -231,6 +182,30 @@ public class MyEval {
     }//calculation
 
 
+    static int opOrder(char op){//연산자 우선순위 처리
+        switch (op){
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '%':
+                return 3;
+            case '(':
+            case ')':
+                return 4;
+            default:
+                return -1;
+        }
+
+
+    }
+
+
+
+
+
     //토큰 분류
     public static void setClassification(List<String> arr, ArrayList<String> arrSplit, int i, Stack<String> stackOp){
         Log.d(TAG, "setClassification: 실행");
@@ -248,9 +223,9 @@ public class MyEval {
             case "*":
             case "/":
             case "%":
-            case "(":
-            case ")":
                 stackOp.push(arr.get(i));
+                break;
+            case ")":
                 break;
             default:
                 arrSplit.add(arr.get(i)); //기본 숫자
@@ -290,10 +265,10 @@ public class MyEval {
     }
 
     //계산할 숫자를 옮김
-    public static void moveCal(ArrayList<String> arrSplit, Stack<String> stackCal, Stack<String> stackOp){
+    public static void moveCal(ArrayList<String> arrSplit, Stack<String> stackCal){
         Log.d(TAG, "moveCal: 나 실행됨");
 
-        while(true) {
+        //while(true) {
             switch (arrSplit.get(0)) {
 
                 case "+":
@@ -301,6 +276,11 @@ public class MyEval {
                 case "*":
                 case "/":
                 case "%":
+//                case "(":
+//                    while(arrSplit.get(0).equals(")")){
+//                        stackCal.push(arrSplit.get(0));
+//                        arrSplit.remove(0);
+//                    }
                     break;
                 default:
                     stackCal.push(arrSplit.get(0));
@@ -308,7 +288,7 @@ public class MyEval {
                     break;
 
             }
-        }
+        //}
 
     }
 
