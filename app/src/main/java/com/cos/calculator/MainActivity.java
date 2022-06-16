@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
     //private boolean hasOperator = false;
 
     private int calculatorMode = CALCULATOR_MODE_DECIMAL;
-
     private static final int CALCULATOR_MODE_BINARY = 0;
     private static final int CALCULATOR_MODE_DECIMAL = 1;
     private static final int CALCULATOR_MODE_HEXADECIMAL = 2;
@@ -734,6 +733,7 @@ public class MainActivity extends AppCompatActivity {
     private String saveExpression;
     private String saveResult;
     private int saveMode;
+    private int saveCalculatorMode;
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -743,10 +743,12 @@ public class MainActivity extends AppCompatActivity {
         saveExpression = tvExpression.getText().toString();
         saveResult = tvResult.getText().toString();
         saveMode = nMode;
+        saveCalculatorMode = calculatorMode;
 
         outState.putString("Expression", saveExpression);
         outState.putString("Result", saveResult);
         outState.putInt("MODE", saveMode);
+        outState.putInt("CAL_MODE", saveCalculatorMode);
 
         //Log.d(TAG, "onSaveInstanceState: 저장해! "+saveMode);
     }
@@ -759,8 +761,10 @@ public class MainActivity extends AppCompatActivity {
         saveExpression = savedInstanceState.getString("Expression");
         saveResult = savedInstanceState.getString("Result");
         saveMode = savedInstanceState.getInt("MODE");
+        saveCalculatorMode = savedInstanceState.getInt("CAL_MODE");
 
         setMode(saveMode);
+        setCalculatorMode(saveCalculatorMode);
         tvExpression.setText(saveExpression);
         tvResult.setText(saveResult);
 
@@ -783,6 +787,27 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    private void setCalculatorMode(int calculatorMode){
+        switch (calculatorMode){
+            case 0:
+                setBinMode();
+                break;
+            case 1:
+                setDecMode();
+                break;
+            case 2:
+                setHexMode();
+                break;
+            case 3:
+                setOctMode();
+                break;
+            default:
+                break;
+        }
+
+    }
+
 
     class NavigationViewHelper implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -813,7 +838,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setNormalMode(){
+    private void setNormalMode(){ //표준 계산기
         nMode = NORMAL_MODE;
         deleteAll();
         tlMiddleLayout.setVisibility(View.GONE);
@@ -821,7 +846,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setScienceMode(){
+    private void setScienceMode(){//공학용 계산기
         //누르면 가로모드로...?!
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //Toast.makeText(mContext, "화면을 회전시키세요", Toast.LENGTH_SHORT).show();
@@ -835,7 +860,7 @@ public class MainActivity extends AppCompatActivity {
         //selectedFragment = new NormalFragment();
     }
 
-    private void setProgrammerMode(){
+    private void setProgrammerMode(){ //프로그래머 계산기
         nMode = PROGRAMMER_MODE;
 
         deleteAll();
@@ -1055,120 +1080,149 @@ public class MainActivity extends AppCompatActivity {
 
         String calculatingExpression = removeLastChar(lastExpression); // '= 제거'
 
-//        Log.d(TAG, "initListener: " + lastExpression); // 5 * 9 + 8 =
-//        Log.d(TAG, "initListener: 표현식 "+ calculatingExpression);// C8 * 6
 
+        //진법 계산
+        StringTokenizer token = new StringTokenizer(calculatingExpression, "*/%+-()", true);
 
-        String Result = MyEval.calculation(calculatingExpression); //일단 보냄 MyEval로 보냈슴
-        tvResult.setText(Result);
+        List<String> arrTokenSplit = new ArrayList<>();
+        while(token.hasMoreTokens()){
+            arrTokenSplit.add(token.nextToken());
+        }
 
+        //진법 계산
 //        String[] arr = calculatingExpression.split(" ");
 //        //Log.d(TAG, "initListener: arr " + Arrays.toString(arr)); //arr [C8, *, C8]
 //
 //        List<String> arrList = new ArrayList<>(Arrays.asList(arr));
 //
-//        if(calculatorMode == CALCULATOR_MODE_BINARY){
-//
-//            for(int i =0; i<arrList.size();i++){
-//                if(i%2 == 0){
-//                    String binNumber = arrList.get(i);
-//                    int intDecimal = Integer.parseInt(binNumber, 2);
-//
-//                    String strDecimal = Integer.toString(intDecimal);
-//
-//                    arrList.set(i, strDecimal);
-//                }
-//
-//            }
-//
-//            //Log.d(TAG, "initListener: bin "+arrList.toString());
-//
-//            String changedExpression = "";
-//            for(int i =0; i<arrList.size(); i++){
-//                changedExpression += arrList.get(i)+" ";
-//            }
-//
-//            //Log.d(TAG, "initListener: arrList "+ changedExpression);
-//
-//            //계산하고 반환값도 다시 각 진수에 맞게 바꿔줘야함
-//            String changedResult = MyEval.calculation(changedExpression); // 얘는 지금 String decimal
-//            int integerChangedResult = Integer.parseInt(changedResult);
-//            String binNumber = Integer.toBinaryString(integerChangedResult);
-//
-//            tvResult.setText(binNumber);
-//
-//
-//        } else if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL){
-//
-//            //int intDecimal = Integer.parseInt(hexNumber, 16);
-//            for(int i =0; i<arrList.size();i++){
-//                if(i%2 == 0){
-//                    String hexNumber = arrList.get(i);
-//                    int intDecimal = Integer.parseInt(hexNumber, 16);
-//
-//                    String strDecimal = Integer.toString(intDecimal);
-//
-//                    arrList.set(i, strDecimal);
-//                }
-//
-//            }
-//
-//            //Log.d(TAG, "initListener: hex "+arrList.toString()); //[200, *, 200]
-//
-//            //String으로 바꾸기
-//            String changedExpression = "";
-//
-//            for(int i =0; i<arrList.size(); i++){
-//                changedExpression += arrList.get(i)+" ";
-//            }
-//
-//            //Log.d(TAG, "initListener: arrList "+ changedExpression); //200*8
-//
-//            String changedResult = MyEval.calculation(changedExpression);
-//            int integerChangedResult = Integer.parseInt(changedResult);
-//            String hexNumber = (Integer.toHexString(integerChangedResult)).toUpperCase();
-//
-//            tvResult.setText(hexNumber);
-//
-//
-//        } else if(calculatorMode == CALCULATOR_MODE_OCTAL){
-//
-//            for(int i =0; i<arrList.size();i++){
-//                if(i%2 == 0){
-//                    String octNumber = arrList.get(i);
-//                    int intDecimal = Integer.parseInt(octNumber, 8);
-//
-//                    String strDecimal = Integer.toString(intDecimal);
-//
-//                    arrList.set(i, strDecimal);
-//                }
-//
-//            }
-//
-//            //Log.d(TAG, "initListener: oct "+arrList.toString());
-//
-//            String changedExpression = "";
-//            for(int i =0; i<arrList.size(); i++){
-//                changedExpression += arrList.get(i)+" ";
-//            }
-//
-//            //Log.d(TAG, "initListener: arrList "+ changedExpression);
-//
-//            String changedResult = MyEval.calculation(changedExpression);
-//            int integerChangedResult = Integer.parseInt(changedResult);
-//            String octNumber = Integer.toOctalString(integerChangedResult);
-//
-//            tvResult.setText(octNumber);
-//
-//        } else  {
-//
-//            String calculatedResult = MyEval.calculation(calculatingExpression);
-//            tvResult.setText(calculatedResult);
-//        }
-//
-//        String calculatedResult = MyEval.calculation(calculatingExpression);
-//        tvResult.setText(calculatedResult);
-//
+        if(calculatorMode == CALCULATOR_MODE_BINARY){
+
+            for(int i =0; i<arrTokenSplit.size();i++){
+                switch(arrTokenSplit.get(i)){
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                    case "%":
+                    case "(":
+                    case ")":
+                        break;
+                    default:
+                        String binNumber = arrTokenSplit.get(i);
+                        int intDecimal = Integer.parseInt(binNumber, 2);
+
+                        String strDecimal = Integer.toString(intDecimal);
+
+                        arrTokenSplit.set(i, strDecimal);
+                        break;
+                }
+
+            }
+
+            //Log.d(TAG, "initListener: bin "+arrList.toString());
+
+            String changedExpression = "";
+            for(int i =0; i<arrTokenSplit.size(); i++){ //전송할 식 다시 만들기
+                changedExpression += arrTokenSplit.get(i);
+            }
+
+            //Log.d(TAG, "initListener: arrList "+ changedExpression);
+
+            //계산하고 반환값도 다시 각 진수에 맞게 바꿔줘야함
+            String changedResult = MyEval.calculation(changedExpression); // 얘는 지금 String decimal
+            int integerChangedResult = Integer.parseInt(changedResult);
+            String binNumber = Integer.toBinaryString(integerChangedResult);
+
+            tvResult.setText(binNumber);
+
+
+        } else if(calculatorMode == CALCULATOR_MODE_HEXADECIMAL){
+
+            //int intDecimal = Integer.parseInt(hexNumber, 16);
+
+            for(int i =0; i<arrTokenSplit.size();i++){
+                switch(arrTokenSplit.get(i)){
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                    case "%":
+                    case "(":
+                    case ")":
+                        break;
+                    default:
+                        String hexNumber = arrTokenSplit.get(i);
+                        int intDecimal = Integer.parseInt(hexNumber, 16);
+
+                        String strDecimal = Integer.toString(intDecimal);
+
+                        arrTokenSplit.set(i, strDecimal);
+                        break;
+                }
+
+            }
+
+            //Log.d(TAG, "initListener: hex "+arrList.toString()); //[200, *, 200]
+
+            //String으로 바꾸기
+            String changedExpression = "";
+            for(int i =0; i<arrTokenSplit.size(); i++){
+                changedExpression += arrTokenSplit.get(i)+" ";
+            }
+
+            //Log.d(TAG, "initListener: arrList "+ changedExpression); //200*8
+
+            String changedResult = MyEval.calculation(changedExpression);
+            int integerChangedResult = Integer.parseInt(changedResult);
+            String hexNumber = (Integer.toHexString(integerChangedResult)).toUpperCase();
+
+            tvResult.setText(hexNumber);
+
+
+        } else if(calculatorMode == CALCULATOR_MODE_OCTAL){
+
+            for(int i =0; i<arrTokenSplit.size();i++){
+                switch(arrTokenSplit.get(i)){
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                    case "%":
+                    case "(":
+                    case ")":
+                        break;
+                    default:
+                        String octNumber = arrTokenSplit.get(i);
+                        int intDecimal = Integer.parseInt(octNumber, 8);
+
+                        String strDecimal = Integer.toString(intDecimal);
+
+                        arrTokenSplit.set(i, strDecimal);
+                        break;
+                }
+
+            }
+
+            String changedExpression = "";
+            for(int i =0; i<arrTokenSplit.size(); i++){
+                changedExpression += arrTokenSplit.get(i)+" ";
+            }
+
+
+            String changedResult = MyEval.calculation(changedExpression);
+            int integerChangedResult = Integer.parseInt(changedResult);
+            String octNumber = Integer.toOctalString(integerChangedResult);
+
+            tvResult.setText(octNumber);
+
+        } else  { //일반 모드 decimal
+
+            //계산하러 보냄
+            String calculatedResult = MyEval.calculation(calculatingExpression); //일단 보냄 MyEval로 보냈슴
+            tvResult.setText(calculatedResult);
+
+        }
+
         isOperator = false;
         hasEntered = true;
 
