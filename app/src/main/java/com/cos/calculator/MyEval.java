@@ -46,8 +46,6 @@ public class MyEval {
                 arrSplit.add(stackOp.pop());
             }
 
-            //Log.d(TAG, "calculation arrSplit222 : "+arrSplit.toString()); //후위식 정리 끝
-            //Log.d(TAG, "calculation stackOp222 : "+stackOp.toString()); //stack에 남은 연산자 확인
 
         }
 
@@ -58,16 +56,13 @@ public class MyEval {
 
         }
 
-        //Log.d(TAG, "calculation stackCal : " + stackCal.toString());
-        //Log.d(TAG, "calculation: "+stackCal.get(0));
-
 
         return stackCal.get(0);
 
     }//calculation
 
 
-    static int opOrder(char op){//연산자 우선순위 처리
+    static int opOrder(char op){//연산자 우선순위
 
         switch (op){
             case '(':
@@ -157,10 +152,15 @@ public class MyEval {
 
     public static String fmt(double d){
 
-        if(d == (long) d)
-            return String.format("%d", (long)d); //10진수
-        else
+        if(d == (long) d) {
+            Log.d(TAG, "fmt: %d 실행됨");
+            return String.format("%d", (long) d); //10진수
+
+        }
+        else {
+            Log.d(TAG, "fmt: %s 실행됨");
             return String.format("%g", d); //문자열 형식
+        }
 
     }
 
@@ -176,6 +176,7 @@ public class MyEval {
             case "+":
                 ans = exp1 + exp2;
                 result = fmt(ans);
+                //result = String.format("%g", ans);
                 stackCal.push(result);
                 break;
             case "-":
@@ -187,16 +188,19 @@ public class MyEval {
                 ans = exp1 * exp2;
                 result = fmt(ans);
                 //result = Double.toString(ans); //30.0
+                //result = String.format("%g", ans);
                 stackCal.push(result);
                 break;
             case "/":
                 ans = exp1 / exp2;
                 result = fmt(ans);
+                //result = String.format("%g", ans);
                 stackCal.push(result);
                 break;
             case "%":
                 ans = exp1 % exp2;
                 result = fmt(ans);
+                //result = String.format("%g", ans);
                 stackCal.push(result);
                 break;
             default:
