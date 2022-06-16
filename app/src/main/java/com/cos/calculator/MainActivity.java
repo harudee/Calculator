@@ -632,10 +632,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void startCalculation() {//enter 눌렀을 때 처리
 
-        //Toast.makeText(mContext, "엔터 누르지마 아직 처리 안함 ", Toast.LENGTH_SHORT).show();
-
+        //수식 상태 체크
         if (hasEntered || isOperator || (tvResult.getText().toString().isEmpty() && tvExpression.getText().toString().isEmpty()))
             return;
+
+        if(!stackBracket.isEmpty()){ // 괄호 닫혔는지 확인
+            Toast.makeText(mContext, "먼저 수식을 완성하세요", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
 
         String cutSentence = tvExpression.getText().toString();
 
@@ -645,7 +650,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "startCalculation: ㄹㅇ 마지막 저장 " + undoSentence); //5 * 6
         undoStack.push(undoSentence);
-
 
 
         String lastExpression = undoSentence +"=";
