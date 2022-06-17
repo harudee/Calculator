@@ -187,6 +187,39 @@
                 android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="."
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="28sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_rad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="Rad"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="20sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_sqrt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="√"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="20sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_b"
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
@@ -243,6 +276,39 @@
                 android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_sin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="sin"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_cos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="cos"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_tan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="tan"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_c"
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
@@ -295,6 +361,39 @@
             <TableRow
                 android:layout_weight="1"
                 android:gravity="center">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_integral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="ln"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_log"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="log"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="1/x"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_d"
@@ -350,6 +449,39 @@
                 android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_exp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="e^"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="x²"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="x^"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_e"
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
@@ -402,6 +534,40 @@
             <TableRow
                 android:layout_weight="1"
                 android:gravity="center">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_abs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="|x|"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_pi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="π"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_radius"
+                    android:text="e"
+                    android:textColor="@color/btn_background_green"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_f"

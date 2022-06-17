@@ -140,7 +140,7 @@ public class MyEval {
             case "*":
             case "/":
             case "%":
-                letCalculation(arrSplit, i, stackCal);
+                goCalculation(arrSplit, i, stackCal);
                 break;
             default:
                 stackCal.push(arrSplit.get(i));
@@ -153,18 +153,16 @@ public class MyEval {
     public static String fmt(double d){
 
         if(d == (long) d) {
-            Log.d(TAG, "fmt: %d 실행됨");
             return String.format("%d", (long) d); //10진수
 
         }
         else {
-            Log.d(TAG, "fmt: %s 실행됨");
             return String.format("%g", d); //문자열 형식
         }
 
     }
 
-    public static void letCalculation(ArrayList<String> arrSplit, int i, Stack<String> stackCal){
+    public static void goCalculation(ArrayList<String> arrSplit, int i, Stack<String> stackCal){
 
         double ans =0.0;
         String result = "";

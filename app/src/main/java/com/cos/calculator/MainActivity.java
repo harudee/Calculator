@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
     private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
+    private Button btnSin, btnTan, btnCos, btnRad, btnSqrt, btnIntegral, btnLog, btnExp, btnAbs, btnPi;
 
     private Button btnA, btnB, btnC, btnD, btnE, btnF, btnHex, btnDec, btnOct, btnBin;
 
@@ -142,6 +143,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
+        //Science
+        btnSin = findViewById(R.id.btn_sin);
+        btnTan = findViewById(R.id.btn_tan);
+        btnCos = findViewById(R.id.btn_cos);
+        btnRad = findViewById(R.id.btn_rad);
+        btnIntegral = findViewById(R.id.btn_integral);
+        btnLog = findViewById(R.id.btn_log);
+        btnExp = findViewById(R.id.btn_exp);
+        btnAbs = findViewById(R.id.btn_abs);
+        btnPi = findViewById(R.id.btn_pi);
+
         btnDot = findViewById(R.id.btn_dot);
         btn0 = findViewById(R.id.num_0);
         btn1 = findViewById(R.id.num_1);
@@ -196,6 +208,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListener() {
+        
+        //Science
+        btnSin.setOnClickListener(myOnClickListener);
+        btnCos.setOnClickListener(myOnClickListener);
+        btnTan.setOnClickListener(myOnClickListener);
+        btnRad.setOnClickListener(myOnClickListener);
+        btnIntegral.setOnClickListener(myOnClickListener);
+        btnLog.setOnClickListener(myOnClickListener);
+        btnExp.setOnClickListener(myOnClickListener);
+        btnAbs.setOnClickListener(myOnClickListener);
+        btnPi.setOnClickListener(myOnClickListener);
 
         //number
         btn0.setOnClickListener(myOnClickListener);
@@ -455,16 +478,34 @@ public class MainActivity extends AppCompatActivity {
 
             switch (view.getId()) {
 
-                case R.id.btn_dot:
+                //Science
+                case R.id.btn_sin:
+                case R.id.btn_cos:
+                case R.id.btn_tan:
+                case R.id.btn_integral:
+                case R.id.btn_log:
+                case R.id.btn_exp:
+                    if(hasNumbered){
+                        operatorButtonClicked("*");
+                    }
+                    tvExpression.append(btn.getText().toString());
+                    onBracketClicked("(");
+                    break;
 
+                case R.id.btn_rad:
+                case R.id.btn_abs:
+                case R.id.btn_pi:
+                    break;
+
+
+                case R.id.btn_dot:
                     if (hasDotted && hasNumbered)
                         return;
 
-                    else if (isOperator || tvResult.getText().toString().isEmpty()) {
+                    if (isOperator || tvResult.getText().toString().isEmpty()) {
                         //tvExpression.append(" ");
                         tvResult.setText("0.");
-                    }
-                    else
+                    } else
                         tvResult.append(".");
 
                     hasDotted = true;
@@ -503,10 +544,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.btn_left:
-                    onBracketClicked("(");
-                    break;
                 case R.id.btn_right:
-                    onBracketClicked(")");
+                    onBracketClicked(btn.getText().toString());
                     break;
 
 
@@ -546,7 +585,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void setRedo() {
+
+
+    private void setRedo() {//안만들었네..?
         if (redoStack.isEmpty())
             return;
 
@@ -569,7 +610,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "setUndo: undo 실행됨");
 
         if (undoStack.isEmpty()) {
-            Toast.makeText(mContext, "마지막 입니다 ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, " 더 뒤로갈 수 없습니다 ", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -637,7 +678,7 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         if(!stackBracket.isEmpty()){ // 괄호 닫혔는지 확인
-            Toast.makeText(mContext, "먼저 수식을 완성하세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "완성되지않은 수식입니다", Toast.LENGTH_SHORT).show();
             return;
         }
         
@@ -819,8 +860,6 @@ public class MainActivity extends AppCompatActivity {
     private void onBracketClicked(String bracket) {
 
         //Error
-        //1. backspace에서 stack 처리✔✔✔
-        //3. isOperator 하면 setText로..?
 
         char lastChar = bracket.charAt(0);
         String lastStr = tvResult.getText().toString();

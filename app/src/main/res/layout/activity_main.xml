@@ -17,7 +17,9 @@
         android:orientation="vertical">
 
         <include layout="@layout/custom_tool_bar"/>
-        <!--<include layout="@layout/activity_main_content"/>-->
+
+        <!--
+        <include layout="@layout/activity_main_content"/>-->
 
         <TextClock
             android:id="@+id/text_clock"
@@ -37,6 +39,9 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />-->
+
+
+        <!--<include layout="@layout/activity_land_main_content"/>-->
 
         <include
             layout="@layout/activity_main_content"/>

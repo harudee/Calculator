@@ -197,29 +197,29 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="."
                 android:textColor="@color/btn_background_green"
                 android:textSize="28sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_2"
+                android:id="@+id/btn_rad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="Rad"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_1"
+                android:id="@+id/btn_sqrt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="√"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_b"
@@ -278,34 +278,34 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_6"
+                android:id="@+id/btn_sin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="sin"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_5"
+                android:id="@+id/btn_cos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="cos"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="17sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_4"
+                android:id="@+id/btn_tan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="tan"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_c"
@@ -362,24 +362,24 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_9"
+                android:id="@+id/btn_integral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="ln"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_8"
+                android:id="@+id/btn_log"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="log"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_7"
@@ -387,9 +387,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="1/x"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_d"
@@ -445,14 +445,14 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_12"
+                android:id="@+id/btn_exp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="e^"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_11"
@@ -460,9 +460,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="x²"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_10"
@@ -470,9 +470,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="x^"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_e"
@@ -529,24 +529,24 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_15"
+                android:id="@+id/btn_abs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="|x|"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_14"
+                android:id="@+id/btn_pi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="π"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_13"
@@ -554,9 +554,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_radius"
-                android:text="%"
+                android:text="e"
                 android:textColor="@color/btn_background_green"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_f"
