@@ -17,7 +17,7 @@ public class MyEval {
 
         Log.d(TAG, "calculation : result "+result);
 
-        StringTokenizer token = new StringTokenizer(result, "*/%+-()", true);
+        StringTokenizer token = new StringTokenizer(result, "*/%+-()^√", true);
         //char[] operation = {'*', '/', '%', '+', '-', '(', ')'};
 
 
@@ -62,19 +62,25 @@ public class MyEval {
     }//calculation
 
 
-    static int opOrder(char op){//연산자 우선순위
+    static int opOrder(String op){//연산자 우선순위
 
         switch (op){
-            case '(':
+            case "(":
                 return 0;
-            case '+':
-            case '-':
+            case "+":
+            case "-":
                 return 1;
-            case '*':
-            case '/':
+            case "*":
+            case "/":
                 return 2;
-            case '%':
+            case "%":
                 return 3;
+            case "sin":
+            case "cos":
+            case "tan":
+            case "^":
+            case "√":
+                return 4;
             default:
                 return -1;
         }
@@ -82,23 +88,31 @@ public class MyEval {
     }
 
 
-    //토큰 분류
+    //postfix 만들기
     public static void setClassification(List<String> arr, ArrayList<String> arrSplit, int i, Stack<String> stackOp){
         Log.d(TAG, "setClassification: 실행");
 
         //사칙연산
         switch(arr.get(i)){
-            case "+":
             case "-":
+                if(arr.get(i-1).equals("("))
+                    arrSplit.add(arr.get(i));
+                break;
+            case "+":
             case "*":
             case "/":
             case "%":
+            case "sin":
+            case "cos":
+            case "tan":
+            case "^":
+            case "√":
                 if(stackOp.isEmpty()){
                     stackOp.push(arr.get(i));
 
                 } else {
-                    char prevOp = (stackOp.get(stackOp.size()-1)).charAt(0);
-                    char currOp = (arr.get(i)).charAt(0);
+                    String prevOp = (stackOp.get(stackOp.size()-1));
+                    String currOp = (arr.get(i));
 
                     if (opOrder(prevOp) < opOrder(currOp)) {
                         stackOp.push(arr.get(i));
@@ -133,13 +147,20 @@ public class MyEval {
     //계산할 식을 옮김
     public static void moveCal(ArrayList<String> arrSplit, int i,  Stack<String> stackCal){
 
+        Log.d(TAG, "moveCal: arrSplit "+arrSplit.toString());
+
         switch (arrSplit.get(i)) {
 
-            case "+":
             case "-":
+            case "+":
             case "*":
             case "/":
             case "%":
+            case "sin":
+            case "cos":
+            case "tan":
+            case "^":
+            case "√":
                 goCalculation(arrSplit, i, stackCal);
                 break;
             default:
@@ -167,6 +188,9 @@ public class MyEval {
         double ans =0.0;
         String result = "";
 
+        Log.d(TAG, "goCalculation: 계산직전 arrSplit " + arrSplit.toString());
+        Log.d(TAG, "goCalculation: 계산직전 stackCal "+stackCal.toString());
+
         Double exp2 = Double.parseDouble(stackCal.pop());
         Double exp1 = Double.parseDouble(stackCal.pop());
 
@@ -192,13 +216,21 @@ public class MyEval {
             case "/":
                 ans = exp1 / exp2;
                 result = fmt(ans);
-                //result = String.format("%g", ans);
                 stackCal.push(result);
                 break;
             case "%":
                 ans = exp1 % exp2;
                 result = fmt(ans);
-                //result = String.format("%g", ans);
+                stackCal.push(result);
+                break;
+            case "^":
+                ans = Math.pow(exp1,exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
+            case "√":
+                ans= Math.sqrt(exp2);
+                result = fmt(ans);
                 stackCal.push(result);
                 break;
             default:

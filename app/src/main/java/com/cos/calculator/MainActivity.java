@@ -74,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
     private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
-    private Button btnSin, btnTan, btnCos, btnRad, btnSqrt, btnIntegral, btnLog, btnExp, btnAbs, btnPi;
+    private Button btnSin, btnTan, btnCos, btnRad, btnSqrt, btnIntegral, btnLog, btnDivisionX, btnExp, btnSquare, btnPow, btnAbs, btnPi;
 
     private Button btnA, btnB, btnC, btnD, btnE, btnF, btnHex, btnDec, btnOct, btnBin;
 
-    private ImageButton btnRecode, btnUndo, btnBackSpace;
+    private ImageButton btnRecode, btnUndo, btnBackSpace, btnNegative;
 
     //private int cursorPosition;
     //private String lastCal = "";
@@ -150,9 +150,14 @@ public class MainActivity extends AppCompatActivity {
         btnRad = findViewById(R.id.btn_rad);
         btnIntegral = findViewById(R.id.btn_integral);
         btnLog = findViewById(R.id.btn_log);
+        btnDivisionX = findViewById(R.id.btn_divisionX);
         btnExp = findViewById(R.id.btn_exp);
+        btnSquare = findViewById(R.id.btn_square);
+        btnPow = findViewById(R.id.btn_pow);
         btnAbs = findViewById(R.id.btn_abs);
         btnPi = findViewById(R.id.btn_pi);
+
+        btnNegative = findViewById(R.id.btn_negative);
 
         btnDot = findViewById(R.id.btn_dot);
         btn0 = findViewById(R.id.num_0);
@@ -216,7 +221,10 @@ public class MainActivity extends AppCompatActivity {
         btnRad.setOnClickListener(myOnClickListener);
         btnIntegral.setOnClickListener(myOnClickListener);
         btnLog.setOnClickListener(myOnClickListener);
+        btnDivisionX.setOnClickListener(myOnClickListener);
         btnExp.setOnClickListener(myOnClickListener);
+        btnSquare.setOnClickListener(myOnClickListener);
+        btnPow.setOnClickListener(myOnClickListener);
         btnAbs.setOnClickListener(myOnClickListener);
         btnPi.setOnClickListener(myOnClickListener);
 
@@ -269,6 +277,11 @@ public class MainActivity extends AppCompatActivity {
 
         btnUndo.setOnClickListener(v -> {
             setUndo();
+        });
+
+        btnNegative.setOnClickListener(v -> {
+            onBracketClicked("(");
+            tvExpression.append("-");
         });
 
 
@@ -482,9 +495,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_sin:
                 case R.id.btn_cos:
                 case R.id.btn_tan:
-                case R.id.btn_integral:
                 case R.id.btn_log:
-                case R.id.btn_exp:
+                case R.id.btn_exp: // e의 n승
+                case R.id.btn_pi:
+                case R.id.btn_sqrt: // √ 제곱근
                     if(hasNumbered){
                         operatorButtonClicked("*");
                     }
@@ -492,12 +506,40 @@ public class MainActivity extends AppCompatActivity {
                     onBracketClicked("(");
                     break;
 
-                case R.id.btn_rad:
-                case R.id.btn_abs:
-                case R.id.btn_pi:
+                case R.id.btn_divisionX: // 1/n
+                    if(hasNumbered){
+                        operatorButtonClicked("*");
+                    }
+                    numberButtonClicked("1");
+                    operatorButtonClicked("/");
                     break;
 
+                case R.id.btn_square: //2승
+                    if(hasNumbered){
+                        operatorButtonClicked("^");
+                        onBracketClicked("(");
+                        numberButtonClicked("2");
+                    }else{
+                        Toast.makeText(mContext, " 완성되지 않은 수식입니다 ", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
 
+                case R.id.btn_pow:  //n승
+                    if(hasNumbered){
+                        operatorButtonClicked("^");
+                        onBracketClicked("(");
+                    } else{
+                        Toast.makeText(mContext, " 완성되지 않은 수식입니다 ", Toast.LENGTH_SHORT).show();
+                    }
+
+                    break;
+
+                case R.id.btn_rad:
+                case R.id.btn_integral:
+                case R.id.btn_abs: // 절대값
+                    break;
+
+                    //normal
                 case R.id.btn_dot:
                     if (hasDotted && hasNumbered)
                         return;
@@ -610,7 +652,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "setUndo: undo 실행됨");
 
         if (undoStack.isEmpty()) {
-            Toast.makeText(mContext, " 더 뒤로갈 수 없습니다 ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, " 계산기록이 없습니다 ", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -664,6 +706,8 @@ public class MainActivity extends AppCompatActivity {
         printOctValue.setText("");
         printDecValue.setText("");
 
+        stackBracket.clear();
+
         isOperator = false;
         hasEntered = false;
         hasDotted = false;
@@ -700,7 +744,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //진법 계산
-        StringTokenizer token = new StringTokenizer(calculatingExpression, "*/%+-()", true);
+        StringTokenizer token = new StringTokenizer(calculatingExpression, "*/%+-()√^", true);
 
         List<String> arrTokenSplit = new ArrayList<>();
         while(token.hasMoreTokens()){
@@ -724,6 +768,12 @@ public class MainActivity extends AppCompatActivity {
                     case "%":
                     case "(":
                     case ")":
+                    //공학계산 추가
+                    case "√":
+                    case "^":
+                    case "sin":
+                    case "cos":
+                    case "tan":
                         break;
                     default:
                         String binNumber = arrTokenSplit.get(i);
@@ -767,6 +817,12 @@ public class MainActivity extends AppCompatActivity {
                     case "%":
                     case "(":
                     case ")":
+                    //공학계산 추가
+                    case "√":
+                    case "^":
+                    case "sin":
+                    case "cos":
+                    case "tan":
                         break;
                     default:
                         String hexNumber = arrTokenSplit.get(i);
@@ -808,6 +864,12 @@ public class MainActivity extends AppCompatActivity {
                     case "%":
                     case "(":
                     case ")":
+                    //공학계산 추가
+                    case "√":
+                    case "^":
+                    case "sin":
+                    case "cos":
+                    case "tan":
                         break;
                     default:
                         String octNumber = arrTokenSplit.get(i);
@@ -860,7 +922,6 @@ public class MainActivity extends AppCompatActivity {
     private void onBracketClicked(String bracket) {
 
         //Error
-
         char lastChar = bracket.charAt(0);
         String lastStr = tvResult.getText().toString();
 

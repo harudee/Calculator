@@ -382,7 +382,7 @@
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_7"
+                android:id="@+id/btn_divisionX"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -455,7 +455,7 @@
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_11"
+                android:id="@+id/btn_square"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -465,7 +465,7 @@
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_10"
+                android:id="@+id/btn_pow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -569,7 +569,7 @@
                 android:visibility="gone" />
 
             <ImageButton
-                android:id="@+id/btn_menu"
+                android:id="@+id/btn_negative"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_weight="1"
