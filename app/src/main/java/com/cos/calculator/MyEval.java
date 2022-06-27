@@ -94,10 +94,10 @@ public class MyEval {
 
         //사칙연산
         switch(arr.get(i)){
+
             case "-":
                 if(arr.get(i-1).equals("("))
-                    arrSplit.add(arr.get(i));
-                break;
+                    break;
             case "+":
             case "*":
             case "/":
@@ -131,7 +131,6 @@ public class MyEval {
                     arrSplit.add(stackOp.pop());
                 }
 
-                //Log.d(TAG, "setClassification : stackOp "+ stackOp.toString());
                 if(stackOp.get(stackOp.size()-1).equals("(")) // (까지 제거
                     stackOp.pop();
 
@@ -148,6 +147,7 @@ public class MyEval {
     public static void moveCal(ArrayList<String> arrSplit, int i,  Stack<String> stackCal){
 
         Log.d(TAG, "moveCal: arrSplit "+arrSplit.toString());
+        Log.d(TAG, "moveCal: stackCal "+stackCal.toString());
 
         switch (arrSplit.get(i)) {
 
@@ -235,6 +235,15 @@ public class MyEval {
                 break;
             default:
                 break;
+        }
+
+    }
+
+    public static void minus(ArrayList<String> arrSplit){
+        if(arrSplit.get(0).equals("")){
+
+        } else {
+
         }
 
     }
