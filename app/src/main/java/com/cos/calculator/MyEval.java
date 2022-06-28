@@ -27,7 +27,6 @@ public class MyEval {
         Stack<String> stackOp = new Stack<>();
         Stack<String> stackCal = new Stack<>();
 
-
         //전체 나누기
         while(token.hasMoreTokens()){
             arrAllToken.add(token.nextToken());
@@ -96,8 +95,12 @@ public class MyEval {
         switch(arr.get(i)){
 
             case "-":
-                if(arr.get(i-1).equals("("))
+                if(arr.get(i-1).equals("(")){ //음수 부호 처리
+                    arrSplit.add(arr.get(i)+arr.get(i+1));
+                    arr.remove(i+1);
+
                     break;
+                }
             case "+":
             case "*":
             case "/":
@@ -191,6 +194,7 @@ public class MyEval {
         Log.d(TAG, "goCalculation: 계산직전 arrSplit " + arrSplit.toString());
         Log.d(TAG, "goCalculation: 계산직전 stackCal "+stackCal.toString());
 
+
         Double exp2 = Double.parseDouble(stackCal.pop());
         Double exp1 = Double.parseDouble(stackCal.pop());
 
@@ -239,14 +243,6 @@ public class MyEval {
 
     }
 
-    public static void minus(ArrayList<String> arrSplit){
-        if(arrSplit.get(0).equals("")){
-
-        } else {
-
-        }
-
-    }
 
 
 } //main
