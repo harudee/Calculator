@@ -21,7 +21,7 @@ public class MyEval {
         //char[] operation = {'*', '/', '%', '+', '-', '(', ')'};
 
 
-        List<String> arrAllToken = new ArrayList<>();// 전체 토큰 싹다 (원본)
+        List<String> arrAllToken = new ArrayList<>();
 
         ArrayList<String> arrSplit = new ArrayList<>();
         Stack<String> stackOp = new Stack<>();
@@ -44,7 +44,6 @@ public class MyEval {
             while (stackOp.size() > 0) {
                 arrSplit.add(stackOp.pop());
             }
-
 
         }
 
@@ -77,6 +76,8 @@ public class MyEval {
             case "sin":
             case "cos":
             case "tan":
+            case "log":
+            case "e":
             case "^":
             case "√":
                 return 4;
@@ -101,6 +102,7 @@ public class MyEval {
 
                     break;
                 }
+
             case "+":
             case "*":
             case "/":
@@ -108,6 +110,7 @@ public class MyEval {
             case "sin":
             case "cos":
             case "tan":
+            case "log":
             case "^":
             case "√":
                 if(stackOp.isEmpty()){
@@ -138,6 +141,12 @@ public class MyEval {
                     stackOp.pop();
 
                 break;
+            case "π":
+                arrSplit.add("3.1415926536");
+                break;
+            case "e":
+                arrSplit.add("2.7182818285");
+                break;
             default:
                 arrSplit.add(arr.get(i));
                 break;
@@ -159,12 +168,16 @@ public class MyEval {
             case "*":
             case "/":
             case "%":
+            case "^":
+                goCalculation(arrSplit, i, stackCal);
+                break;
             case "sin":
             case "cos":
             case "tan":
-            case "^":
             case "√":
-                goCalculation(arrSplit, i, stackCal);
+            //case "e":
+            case "log":
+                sciCalculation(arrSplit,i,stackCal);
                 break;
             default:
                 stackCal.push(arrSplit.get(i));
@@ -174,11 +187,11 @@ public class MyEval {
 
     }
 
-    public static String fmt(double d){
+    public static String fmt(double d){// 소수점이하 포맷변경
+
 
         if(d == (long) d) {
             return String.format("%d", (long) d); //10진수
-
         }
         else {
             return String.format("%g", d); //문자열 형식
@@ -232,14 +245,61 @@ public class MyEval {
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
+
+            default:
+                break;
+        }
+
+    }
+
+    public static void sciCalculation(ArrayList<String> arrSplit, int i, Stack<String> stackCal){
+
+        double ans =0.0;
+        String result = "";
+
+        Log.d(TAG, "goCalculation: 공학계산 arrSplit " + arrSplit.toString());
+        Log.d(TAG, "goCalculation: 공학계산 stackCal "+stackCal.toString());
+
+        Double exp2 = Double.parseDouble(stackCal.pop());
+
+        switch (arrSplit.get(i)){
             case "√":
                 ans= Math.sqrt(exp2);
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
+            case "e":
+                ans = Math.exp(exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
+            case "sin":
+                ans = Math.sin(exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
+            case "cos":
+                ans = Math.cos(exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
+            case "tan":
+                ans = Math.tan(exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
+            case "log":
+                ans = Math.log(exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
             default:
                 break;
+
         }
+
+
+
 
     }
 

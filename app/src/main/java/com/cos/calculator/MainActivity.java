@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
     private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
-    private Button btnSin, btnTan, btnCos, btnRad, btnSqrt, btnIntegral, btnLog, btnDivisionX, btnExp, btnSquare, btnPow, btnAbs, btnPi;
+    private Button btnSin, btnTan, btnCos, btnRad, btnSqrt, btnIntegral, btnLog, btnDivisionX, btnExp, btnSquare, btnPow, btnAbs, btnPi, btnExpo;
 
     private Button btnA, btnB, btnC, btnD, btnE, btnF, btnHex, btnDec, btnOct, btnBin;
 
@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
         btnPow = findViewById(R.id.btn_pow);
         btnAbs = findViewById(R.id.btn_abs);
         btnPi = findViewById(R.id.btn_pi);
+        btnExpo = findViewById(R.id.btn_expo);
+        btnSqrt = findViewById(R.id.btn_sqrt);
 
         btnNegative = findViewById(R.id.btn_negative);
 
@@ -227,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
         btnPow.setOnClickListener(myOnClickListener);
         btnAbs.setOnClickListener(myOnClickListener);
         btnPi.setOnClickListener(myOnClickListener);
+        btnExpo.setOnClickListener(myOnClickListener);
+        btnSqrt.setOnClickListener(myOnClickListener);
 
         //number
         btn0.setOnClickListener(myOnClickListener);
@@ -497,7 +501,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_tan:
                 case R.id.btn_log:
                 case R.id.btn_exp: // e의 n승
-                case R.id.btn_pi:
                 case R.id.btn_sqrt: // √ 제곱근
                     if(hasNumbered){
                         operatorButtonClicked("*");
@@ -532,6 +535,14 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(mContext, " 완성되지 않은 수식입니다 ", Toast.LENGTH_SHORT).show();
                     }
 
+                    break;
+
+                case R.id.btn_pi:
+                case R.id.btn_expo:
+                    if(hasNumbered)
+                        operatorButtonClicked("*");
+
+                    numberButtonClicked(btn.getText().toString());
                     break;
 
                 case R.id.btn_rad:
@@ -1069,6 +1080,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (tvResult.getText().toString().contains(")"))
             return;
+
+        if(tvResult.getText().toString().contains("π"))
+            return;
+
+        if(tvResult.getText().toString().contains("e"))
+            return;
+
 
         //if(isModeChanged) return;
         if (calculatorMode == CALCULATOR_MODE_DECIMAL) {
