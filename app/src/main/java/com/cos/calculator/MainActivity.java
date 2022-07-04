@@ -545,9 +545,16 @@ public class MainActivity extends AppCompatActivity {
                     numberButtonClicked(btn.getText().toString());
                     break;
 
+                case R.id.btn_abs: // 절대값
+                    if(hasNumbered){
+                        operatorButtonClicked("*");
+                    }
+                    tvExpression.append("abs");
+                    onBracketClicked("(");
+                    break;
+
                 case R.id.btn_rad:
                 case R.id.btn_integral:
-                case R.id.btn_abs: // 절대값
                     break;
 
                     //normal
@@ -852,7 +859,7 @@ public class MainActivity extends AppCompatActivity {
             //String으로 바꾸기
             String changedExpression = "";
             for(int i =0; i<arrTokenSplit.size(); i++){
-                changedExpression += arrTokenSplit.get(i)+" ";
+                changedExpression += arrTokenSplit.get(i);
             }
 
             //Log.d(TAG, "initListener: arrList "+ changedExpression); //200*8
@@ -896,7 +903,7 @@ public class MainActivity extends AppCompatActivity {
 
             String changedExpression = "";
             for(int i =0; i<arrTokenSplit.size(); i++){
-                changedExpression += arrTokenSplit.get(i)+" ";
+                changedExpression += arrTokenSplit.get(i);
             }
 
 
@@ -938,8 +945,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (bracket.equals("(")) {
 
-            //tvExpression.append(" ");
-            tvExpression.append(bracket);
+            if(hasEntered)
+                tvExpression.setText(bracket);
+            else
+                tvExpression.append(bracket);
 
             stackBracket.push(lastChar);
 

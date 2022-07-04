@@ -37,6 +37,7 @@ public class MyEval {
         //후위식으로 정리
         {
             for (int i = 0; i < arrAllToken.size(); i++) {
+
                 setClassification(arrAllToken, arrSplit, i, stackOp);
             }
 
@@ -77,6 +78,7 @@ public class MyEval {
             case "cos":
             case "tan":
             case "log":
+            case "abs":
             case "e":
             case "^":
             case "√":
@@ -96,7 +98,8 @@ public class MyEval {
         switch(arr.get(i)){
 
             case "-":
-                if(arr.get(i-1).equals("(")){ //음수 부호 처리
+                if(arr.get(i-1).equals("(") ){ //음수 부호 처리
+
                     arrSplit.add(arr.get(i)+arr.get(i+1));
                     arr.remove(i+1);
 
@@ -111,6 +114,7 @@ public class MyEval {
             case "cos":
             case "tan":
             case "log":
+            case "abs":
             case "^":
             case "√":
                 if(stackOp.isEmpty()){
@@ -142,10 +146,10 @@ public class MyEval {
 
                 break;
             case "π":
-                arrSplit.add("3.1415926536");
+                arrSplit.add(Double.toString(Math.PI));
                 break;
             case "e":
-                arrSplit.add("2.7182818285");
+                arrSplit.add(Double.toString(Math.E));
                 break;
             default:
                 arrSplit.add(arr.get(i));
@@ -174,6 +178,7 @@ public class MyEval {
             case "sin":
             case "cos":
             case "tan":
+            case "abs":
             case "√":
             //case "e":
             case "log":
@@ -255,6 +260,7 @@ public class MyEval {
     public static void sciCalculation(ArrayList<String> arrSplit, int i, Stack<String> stackCal){
 
         double ans =0.0;
+        double ans2 =0.0;
         String result = "";
 
         Log.d(TAG, "goCalculation: 공학계산 arrSplit " + arrSplit.toString());
@@ -274,22 +280,27 @@ public class MyEval {
                 stackCal.push(result);
                 break;
             case "sin":
-                ans = Math.sin(exp2);
+                ans = Math.sin(Math.toRadians(exp2));
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
             case "cos":
-                ans = Math.cos(exp2);
+                ans = Math.cos(Math.toRadians(exp2));
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
             case "tan":
-                ans = Math.tan(exp2);
+                ans = Math.tan(Math.toRadians(exp2));
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
             case "log":
                 ans = Math.log(exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
+            case "abs":
+                ans = Math.abs(exp2);
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
