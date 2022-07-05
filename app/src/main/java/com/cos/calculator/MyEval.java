@@ -31,7 +31,23 @@ public class MyEval {
         while(token.hasMoreTokens()){
             arrAllToken.add(token.nextToken());
         }
-        Log.d(TAG, "calculation: arrAllToken "+arrAllToken.toString());
+        Log.d(TAG, "calculation: arrAllToken111 "+arrAllToken.toString());
+
+
+        if(arrAllToken.contains("π") || arrAllToken.contains("e")){
+            for(int i = 0; i< arrAllToken.size(); i++){
+                switch (arrAllToken.get(i)){
+                    case "π":
+                        arrAllToken.set(i, Double.toString(Math.PI));
+                        break;
+                    case "e":
+                        arrAllToken.set(i, Double.toString(Math.E));
+                        break;
+                }
+            }
+
+            Log.d(TAG, "calculation: arrAllToken222 치환 "+arrAllToken.toString());
+        }
 
 
         //후위식으로 정리
@@ -54,7 +70,6 @@ public class MyEval {
             moveCal(arrSplit, i, stackCal);
 
         }
-
 
         return stackCal.get(0);
 
@@ -79,9 +94,9 @@ public class MyEval {
             case "tan":
             case "log":
             case "abs":
-            case "e":
             case "^":
             case "√":
+            case "ln":
                 return 4;
             default:
                 return -1;
@@ -117,6 +132,7 @@ public class MyEval {
             case "abs":
             case "^":
             case "√":
+            case "ln":
                 if(stackOp.isEmpty()){
                     stackOp.push(arr.get(i));
 
@@ -145,12 +161,12 @@ public class MyEval {
                     stackOp.pop();
 
                 break;
-            case "π":
+            /*case "π":
                 arrSplit.add(Double.toString(Math.PI));
                 break;
             case "e":
                 arrSplit.add(Double.toString(Math.E));
-                break;
+                break;*/
             default:
                 arrSplit.add(arr.get(i));
                 break;
@@ -180,8 +196,8 @@ public class MyEval {
             case "tan":
             case "abs":
             case "√":
-            //case "e":
             case "log":
+            case "ln":
                 sciCalculation(arrSplit,i,stackCal);
                 break;
             default:
@@ -274,11 +290,11 @@ public class MyEval {
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
-            case "e":
+            /*case "e":
                 ans = Math.exp(exp2);
                 result = fmt(ans);
                 stackCal.push(result);
-                break;
+                break;*/
             case "sin":
                 ans = Math.sin(Math.toRadians(exp2));
                 result = fmt(ans);
@@ -295,7 +311,7 @@ public class MyEval {
                 stackCal.push(result);
                 break;
             case "log":
-                ans = Math.log(exp2);
+                ans = Math.log10(exp2);
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
@@ -304,13 +320,15 @@ public class MyEval {
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
+            case "ln":
+                ans = Math.log(exp2);
+                result = fmt(ans);
+                stackCal.push(result);
+                break;
             default:
                 break;
 
         }
-
-
-
 
     }
 

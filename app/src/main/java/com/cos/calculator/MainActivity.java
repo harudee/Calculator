@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     //private Button btn[] = new Button[17];
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDot, btnPlus, btnMinus, btnMultiple, btnDivision;
     private Button btnModular, btnEnter, btnClear, btnLeft, btnRight;
-    private Button btnSin, btnTan, btnCos, btnRad, btnSqrt, btnIntegral, btnLog, btnDivisionX, btnExp, btnSquare, btnPow, btnAbs, btnPi, btnExpo;
+    private Button btnSin, btnTan, btnCos, btnRad, btnSqrt, btnLn, btnLog, btnDivisionX, btnExp, btnSquare, btnPow, btnAbs, btnPi, btnExpo;
 
     private Button btnA, btnB, btnC, btnD, btnE, btnF, btnHex, btnDec, btnOct, btnBin;
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int CALCULATOR_MODE_HEXADECIMAL = 2;
     private static final int CALCULATOR_MODE_OCTAL = 3;
 
-    private int nMode;
+    private int nMode = NORMAL_MODE;
     private static final int NORMAL_MODE = 0;
     private static final int SCIENCE_MODE = 1;
     private static final int PROGRAMMER_MODE = 2;
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         btnTan = findViewById(R.id.btn_tan);
         btnCos = findViewById(R.id.btn_cos);
         btnRad = findViewById(R.id.btn_rad);
-        btnIntegral = findViewById(R.id.btn_integral);
+        btnLn = findViewById(R.id.btn_ln);
         btnLog = findViewById(R.id.btn_log);
         btnDivisionX = findViewById(R.id.btn_divisionX);
         btnExp = findViewById(R.id.btn_exp);
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         btnCos.setOnClickListener(myOnClickListener);
         btnTan.setOnClickListener(myOnClickListener);
         btnRad.setOnClickListener(myOnClickListener);
-        btnIntegral.setOnClickListener(myOnClickListener);
+        btnLn.setOnClickListener(myOnClickListener);
         btnLog.setOnClickListener(myOnClickListener);
         btnDivisionX.setOnClickListener(myOnClickListener);
         btnExp.setOnClickListener(myOnClickListener);
@@ -381,6 +381,18 @@ public class MainActivity extends AppCompatActivity {
         tvExpression.setText(saveExpression);
         tvResult.setText(saveResult);
 
+        switch (saveMode){
+            case 2:
+                toolbarTitle.setText("프로그래머 계산기");
+                break;
+            case 1:
+                break;
+            case 0:
+            default:
+                toolbarTitle.setText("표준 계산기");
+                break;
+        }
+
         //Log.d(TAG, "onRestoreInstanceState: 지금 바뀜! "+saveMode);
 
     }
@@ -425,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
     class NavigationViewHelper implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-            Fragment selectedFragment = null; //이거 하면 버튼 하나하나 다시 입력해야함
+            Fragment selectedFragment = null; //fragment 를 바꾸면 버튼 재사용이 안되더라
 
             if(getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_0){//세로모드일때
                 toolbarTitle.setText(menuitem.getTitle() + " 계산기");
@@ -433,17 +445,24 @@ public class MainActivity extends AppCompatActivity {
 
             switch (menuitem.getItemId()) {
                 case R.id.nav_normal:
+                    //toolbarTitle.setText(menuitem.getTitle() + " 계산기");
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     setNormalMode();
                     break;
 
                 case R.id.nav_science:
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     setScienceMode();
                     break;
 
                 case R.id.nav_programmer:
+                    //toolbarTitle.setText(menuitem.getTitle() + " 계산기");
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     setProgrammerMode();
                     break;
             }
+
+
 
             //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -502,6 +521,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_log:
                 case R.id.btn_exp: // e의 n승
                 case R.id.btn_sqrt: // √ 제곱근
+                case R.id.btn_ln:
                     if(hasNumbered){
                         operatorButtonClicked("*");
                     }
@@ -554,7 +574,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.btn_rad:
-                case R.id.btn_integral:
                     break;
 
                     //normal
@@ -1078,22 +1097,20 @@ public class MainActivity extends AppCompatActivity {
     //radix 숫자 값 변경
     private void setNumbers() {
 
-        if (tvResult.getText().toString().isEmpty())
-            return;
+        String resultSentence = tvResult.getText().toString();
 
-        if (tvResult.getText().toString().contains("."))
+        //오류 return
+        if (resultSentence.isEmpty())
             return;
-
-        if (tvResult.getText().toString().contains("("))
+        if (resultSentence.contains("."))
             return;
-
-        if (tvResult.getText().toString().contains(")"))
+        if (resultSentence.contains("("))
             return;
-
-        if(tvResult.getText().toString().contains("π"))
+        if (resultSentence.contains(")"))
             return;
-
-        if(tvResult.getText().toString().contains("e"))
+        if(resultSentence.contains("π"))
+            return;
+        if(resultSentence.contains("e"))
             return;
 
 
@@ -1140,9 +1157,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (calculatorMode == CALCULATOR_MODE_HEXADECIMAL) {
             String hexNumber = (tvResult.getText().toString()).toUpperCase();
 
-            int intDecimal = Integer.parseInt(hexNumber, 16);
 
-            //Log.d(TAG, "setNumbers: intDecimal "+ intDecimal);//37
+            int intDecimal = Integer.parseInt(hexNumber, 16);
 
             String strDecimal = Integer.toString(intDecimal);
             String octalNumber = Integer.toOctalString(intDecimal);
@@ -1157,8 +1173,8 @@ public class MainActivity extends AppCompatActivity {
 
             String octalNumber = tvResult.getText().toString();
 
-            int intDecimal = Integer.parseInt(octalNumber, 8);
 
+            int intDecimal = Integer.parseInt(octalNumber, 8);
             String strDecimal = Integer.toString(intDecimal);
             String hexNumber = (Integer.toHexString(intDecimal)).toUpperCase();
             String binNumber = Integer.toBinaryString(intDecimal);
