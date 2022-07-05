@@ -33,7 +33,6 @@ public class MyEval {
         }
         Log.d(TAG, "calculation: arrAllToken111 "+arrAllToken.toString());
 
-
         if(arrAllToken.contains("π") || arrAllToken.contains("e")){
             for(int i = 0; i< arrAllToken.size(); i++){
                 switch (arrAllToken.get(i)){
@@ -209,7 +208,6 @@ public class MyEval {
     }
 
     public static String fmt(double d){// 소수점이하 포맷변경
-
 
         if(d == (long) d) {
             return String.format("%d", (long) d); //10진수

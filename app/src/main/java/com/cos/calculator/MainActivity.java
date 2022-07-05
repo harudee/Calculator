@@ -139,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationViewHelper());
         //getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new NormalFragment()).commit();
 
+        setValueString();
+
     }
 
     private void init() {
@@ -1094,6 +1096,29 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "setBinValue: 2진수 " + str); //10만 나옴 0010이 나와야..
     }*/
 
+
+    //2진수 8진수 공백 추가하기
+    private String setValueString(){
+        //4자리마다 공백추가 -> 2진수 4자리 안되면 0으로 채우기
+
+        int sentence = 2322;
+        int digit = 4;
+
+        if(digit == 4){
+            String changedValue = String.format("￦ %,d", sentence);
+
+            Log.d(TAG, "setValueString: 444씩 "+changedValue);
+
+        } else if (digit == 3){
+            String changedValue = String.format("%3d", sentence);
+
+            Log.d(TAG, "setValueString: 333씩 "+changedValue);
+        }
+
+        return null;
+
+    }
+
     //radix 숫자 값 변경
     private void setNumbers() {
 
@@ -1124,6 +1149,7 @@ public class MainActivity extends AppCompatActivity {
             String binNumber = Integer.toBinaryString(changeNumber);
             String octNumber = Integer.toOctalString(changeNumber);
             String hexNumber = (Integer.toHexString(changeNumber)).toUpperCase();
+
 
 //        Log.d(TAG, "binNumber " + binNumber);
 //        Log.d(TAG, "octNumber " + octNumber);
@@ -1157,6 +1183,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (calculatorMode == CALCULATOR_MODE_HEXADECIMAL) {
             String hexNumber = (tvResult.getText().toString()).toUpperCase();
 
+//            double doubleDeci = Double.parseDouble(hexNumber);
+//            long longDeci = Double.doubleToRawLongBits(doubleDeci);
+//
+//            String strDecimal = Long.toString(longDeci);
+//            String octalNumber = Long.toOctalString(longDeci);
+//            String binNumber = Long.toBinaryString(longDeci);
 
             int intDecimal = Integer.parseInt(hexNumber, 16);
 
