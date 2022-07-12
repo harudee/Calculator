@@ -86,6 +86,21 @@ public class PopupActivity extends AppCompatActivity {
             finish();
         });
 
+        btnHistoryClear.setOnClickListener(v -> {
+
+            new Thread(){
+                @Override
+                public void run() {
+
+                    deleteAll();
+
+                }
+            }.start();
+
+            finish();
+
+        });
+
 
     }
 
@@ -130,9 +145,18 @@ public class PopupActivity extends AppCompatActivity {
     private void loadAll(){
 
         HistoryDB historyDB = HistoryDB.getInstance(mContext);
-        historyList = historyDB.historyDAO().getAll();
 
+        historyList = historyDB.historyDAO().getAll();
         historyAdapter.setHistoryList(historyList);
+
+    }
+
+    private void deleteAll(){
+
+        HistoryDB historyDB = HistoryDB.getInstance(mContext);
+        historyDB.historyDAO().deleteAll();
+
+        //historyAdapter.notifyDataSetChanged();
 
     }
 

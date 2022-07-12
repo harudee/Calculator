@@ -507,6 +507,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setNormalMode(){ //표준 계산기
         nMode = NORMAL_MODE;
+
         deleteAll();
         tlMiddleLayout.setVisibility(View.GONE);
         setDecMode();
@@ -534,7 +535,6 @@ public class MainActivity extends AppCompatActivity {
         tlMiddleLayout.setVisibility(View.VISIBLE);
         btnDot.setEnabled(false);
         btnDot.setTextColor(getResources().getColorStateList(R.color.btn_pressed_grey));
-
 
         //btnDot.setTextColor();
         //selectedFragment = new ProgrammerFragment();
@@ -616,7 +616,12 @@ public class MainActivity extends AppCompatActivity {
                     if (hasDotted && hasNumbered)
                         return;
 
-                    if (isOperator || tvResult.getText().toString().isEmpty()) {
+                    if(hasEntered){
+
+                        tvExpression.setText("");
+                        tvResult.setText("0.");
+
+                    } else if (isOperator || tvResult.getText().toString().isEmpty()) {
                         //tvExpression.append(" ");
                         tvResult.setText("0.");
                     } else

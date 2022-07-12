@@ -21,15 +21,14 @@ public interface HistoryDAO {
     /*@Query("SELECT * FROM history_table WHERE result LIKE :result LIMIT 1")
     History findByResult(String result);*/
 
-    /*@Query("DELETE FROM history_table")
-    History deleteAll();*/
+    @Query("DELETE FROM history_table")
+    void deleteAll();
 
     @Insert
     void insertAll(History... histories);
 
     @Delete
     void delete(History history);
-
 
 }
 
