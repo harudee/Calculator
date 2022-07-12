@@ -1,5 +1,6 @@
 package com.cos.calculator;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -24,12 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.cos.calculator.dao.HistoryDAO;
@@ -50,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import java.util.StringJoiner;
 import java.util.StringTokenizer;
 import java.util.concurrent.BlockingDeque;
 
@@ -57,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity222";
     private MainActivity mContext = this;
+
+    //history
+    private HistoryDB historyDB = null;
+    private List<History> historyList;
+
 
     //undo, redo
     private Stack<String> undoStack = new Stack<>(); //실행취소
@@ -67,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private TableLayout tlMiddleLayout;
     private NavigationView navigationView;
     private ImageView menuIcon;
+
 
     //private EditText tvResult;
     private TextView tvExpression, printHexValue, printDecValue, printOctValue, printBinValue, tvResult;
@@ -139,8 +149,22 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationViewHelper());
         //getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new NormalFragment()).commit();
 
-        setValueString();
+        //setValueString();
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==1){
+            if(requestCode == RESULT_OK){
+
+                String result = data.getStringExtra("result");
+                Log.d(TAG, "onActivityResult: "+result);
+
+            }
+        }
     }
 
     private void init() {
@@ -288,6 +312,15 @@ public class MainActivity extends AppCompatActivity {
         btnNegative.setOnClickListener(v -> {
             onBracketClicked("(");
             tvExpression.append("-");
+        });
+
+        //history 팝업창 열기
+        btnRecode.setOnClickListener(v -> {
+
+            Intent intent = new Intent(mContext, PopupActivity.class);
+            intent.putExtra("data", "Test Popup");
+            startActivityForResult(intent, 1);
+
         });
 
 
@@ -790,12 +823,7 @@ public class MainActivity extends AppCompatActivity {
             arrTokenSplit.add(token.nextToken());
         }
 
-        //진법 계산
-//        String[] arr = calculatingExpression.split(" ");
-//        //Log.d(TAG, "initListener: arr " + Arrays.toString(arr)); //arr [C8, *, C8]
-//
-//        List<String> arrList = new ArrayList<>(Arrays.asList(arr));
-//
+
         if(calculatorMode == CALCULATOR_MODE_BINARY){
 
             for(int i =0; i<arrTokenSplit.size();i++){
@@ -942,6 +970,22 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        //Log.d(TAG, "startCalculation: 계산결과 "+ tvResult.getText().toString());
+
+        String lastResult = tvResult.getText().toString();
+
+        //계산기록 저장
+        new Thread(){
+
+            @Override
+            public void run() {
+
+                saveRecode(lastExpression, lastResult);
+                
+
+            }
+        }.start();
+
         isOperator = false;
         hasEntered = true;
 
@@ -1069,8 +1113,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void saveRecode(String msg) {
-        try {
+    private void saveRecode(String expression, String result) {
+        /*try {
             BufferedOutputStream bos =
                     new BufferedOutputStream(new FileOutputStream(new File(getFilesDir() + "/recode.txt"), true));
             bos.write(msg.getBytes());
@@ -1079,7 +1123,19 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        History history = new History();
+        history.expression = expression;
+        history.result = result;
+
+        HistoryDB historyDB = HistoryDB.getInstance(mContext);
+        historyDB.historyDAO().insertAll(history);
+
+        Log.d(TAG, "saveRecode: 저장됨");
+
+        /*setResult(Activity.RESULT_OK);
+        finish();*/
 
     }
 
@@ -1101,19 +1157,21 @@ public class MainActivity extends AppCompatActivity {
     private String setValueString(){
         //4자리마다 공백추가 -> 2진수 4자리 안되면 0으로 채우기
 
-        int sentence = 2322;
-        int digit = 4;
+        int sentence = 322;
+        /*int digit = 4;
 
         if(digit == 4){
-            String changedValue = String.format("￦ %,d", sentence);
+            String changedValue = String.format("￦ %04d", sentence);
 
             Log.d(TAG, "setValueString: 444씩 "+changedValue);
 
         } else if (digit == 3){
-            String changedValue = String.format("%3d", sentence);
+            String changedValue = String.format("%d %d", sentence);
 
             Log.d(TAG, "setValueString: 333씩 "+changedValue);
-        }
+        }*/
+
+
 
         return null;
 

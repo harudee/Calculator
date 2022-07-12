@@ -233,35 +233,42 @@ public class MyEval {
         switch (arrSplit.get(i)){
             case "+":
                 ans = exp1 + exp2;
+                //result = Double.toString(ans);
                 result = fmt(ans);
                 //result = String.format("%g", ans);
                 stackCal.push(result);
                 break;
             case "-":
                 ans = exp1 - exp2;
+
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "*":
                 ans = exp1 * exp2;
-                result = fmt(ans);
+                //result = Double.toString(ans);
                 //result = Double.toString(ans); //30.0
                 //result = String.format("%g", ans);
+                result = fmt(ans);
                 stackCal.push(result);
                 break;
             case "/":
-                ans = exp1 / exp2;
+               ans = exp1 / exp2;
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "%":
                 ans = exp1 % exp2;
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "^":
                 ans = Math.pow(exp1,exp2);
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
 
@@ -286,6 +293,7 @@ public class MyEval {
             case "√":
                 ans= Math.sqrt(exp2);
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             /*case "e":
@@ -296,31 +304,37 @@ public class MyEval {
             case "sin":
                 ans = Math.sin(Math.toRadians(exp2));
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "cos":
                 ans = Math.cos(Math.toRadians(exp2));
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "tan":
                 ans = Math.tan(Math.toRadians(exp2));
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "log":
                 ans = Math.log10(exp2);
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "abs":
                 ans = Math.abs(exp2);
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "ln":
                 ans = Math.log(exp2);
                 result = fmt(ans);
+                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             default:

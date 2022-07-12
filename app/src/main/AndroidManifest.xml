@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Calculator">
 
         <activity android:name=".PopupActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert"/>
+            android:theme="@style/Theme.AppCompat.Dialog"/>
 
         <activity android:name=".MainActivity">
 
