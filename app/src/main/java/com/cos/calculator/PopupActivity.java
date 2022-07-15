@@ -1,10 +1,14 @@
 package com.cos.calculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.DatabaseConfiguration;
+import androidx.room.InvalidationTracker;
 import androidx.room.Room;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cos.calculator.dao.HistoryDAO;
 import com.cos.calculator.model.History;
 
 import java.io.BufferedInputStream;
@@ -22,7 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class PopupActivity extends AppCompatActivity {
+public class PopupActivity extends AppCompatActivity implements initActivity {
 
     private static final String TAG = "PopupActivity";
     private PopupActivity mContext = this;
@@ -43,14 +48,8 @@ public class PopupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_popup);
 
         init();
-        initLr();
+        initListener();
         initData();
-
-//        builder = new AlertDialog.Builder(mContext);
-//        builder.setTitle("계산기록");
-//        builder.setMessage("여기");
-//
-//        mRecodeDialog = builder.create();
 
     }
 
@@ -64,14 +63,7 @@ public class PopupActivity extends AppCompatActivity {
     }
 
 
-    private void init(){
-
-        //btnBack = findViewById(R.id.btn_back);
-        //tvRecode = findViewById(R.id.tv_recode);
-
-//        tvExpression = findViewById(R.id.tv_expression);//계산식
-//        tvAnswer = findViewById(R.id.tv_answer);//결과
-//        llHistory = findViewById(R.id.ll_history);//뿌릴 곳
+    public void init(){
 
         btnClose = findViewById(R.id.btn_close);
         btnHistoryClear = findViewById(R.id.btn_history_clear);
@@ -80,7 +72,8 @@ public class PopupActivity extends AppCompatActivity {
 
     }
 
-    private void initLr(){
+    @Override
+    public void initListener() {
 
         btnClose.setOnClickListener(v -> {
             finish();
@@ -101,10 +94,15 @@ public class PopupActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    @Override
+    public void initSetting() {
 
     }
 
-    private void initData(){
+
+    public void initData(){
         //파일 읽기
         /*String str = null;
         try {

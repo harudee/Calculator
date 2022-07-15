@@ -1,23 +1,15 @@
 package com.cos.calculator;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.style.TabStopSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -31,33 +23,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
-import com.cos.calculator.dao.HistoryDAO;
 import com.cos.calculator.model.History;
-import com.cos.calculator.view.NormalFragment;
-import com.cos.calculator.view.ProgrammerFragment;
-import com.cos.calculator.view.ScienceFragment;
+import com.cos.calculator.operation.MyEval;
 import com.google.android.material.navigation.NavigationView;
 
-import org.mozilla.javascript.tools.jsc.Main;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
-import java.util.StringJoiner;
 import java.util.StringTokenizer;
-import java.util.concurrent.BlockingDeque;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements initActivity{
 
     private static final String TAG = "MainActivity222";
     private MainActivity mContext = this;
@@ -65,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     //history
     private HistoryDB historyDB = null;
     private List<History> historyList;
-
 
     //undo, redo
     private Stack<String> undoStack = new Stack<>(); //실행취소
@@ -119,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
 
+        setTheme(R.style.Theme_Calculator);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         init();
         initListener();
@@ -131,9 +106,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-//        AppDatabase database = Room.databaseBuilder(getApplicationContext(),
-//                AppDatabase.class,
-//                "historyDB").build()
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -147,10 +119,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.setNavigationItemSelectedListener(new NavigationViewHelper());
-        //getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new NormalFragment()).commit();
-
-        //setValueString();
-
     }
 
     @Override
@@ -167,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void init() {
+
+    public void init() {
 
         //Science
         btnSin = findViewById(R.id.btn_sin);
@@ -240,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initListener() {
+    public void initListener() {
         
         //Science
         btnSin.setOnClickListener(myOnClickListener);
@@ -314,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
             tvExpression.append("-");
         });
 
-        //history 팝업창 열기
+
         btnRecode.setOnClickListener(v -> {
 
             Intent intent = new Intent(mContext, PopupActivity.class);
@@ -352,16 +321,10 @@ public class MainActivity extends AppCompatActivity {
 
     }//initListener
 
-    private void initData() {
-
-//        AppDataBase db = Room.databaseBuilder(getApplicationContext(),
-//                AppDataBase.class, "history_table").build();
-//
-//        HistoryDAO historyDAO = db.historyDAO();
-//        List<History> histories = historyDAO.getAll();
+    @Override
+    public void initSetting() {
 
     }
-
 
     // Manifest에서 attribute 수정해서 화면 띄울때 사용함
     /*@Override

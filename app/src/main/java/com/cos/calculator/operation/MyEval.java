@@ -1,10 +1,11 @@
-package com.cos.calculator;
+package com.cos.calculator.operation;
 
 import android.util.Log;
 
-import java.lang.reflect.Array;
+import com.cos.calculator.operation.Operation;
+import com.cos.calculator.operation.Strategy;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -13,13 +14,18 @@ public class MyEval {
 
     private static final String TAG = "MyEval";
 
+    static Operation add = new Operation(new Operation.Add());
+    static Operation sub = new Operation(new Operation.Sub());
+    static Operation mul = new Operation(new Operation.Multiple());
+    static Operation modular = new Operation(new Operation.Modular());
+    static Operation div = new Operation(new Operation.Division());
+
     public static String calculation(String result){
 
         Log.d(TAG, "calculation : result "+result);
 
         StringTokenizer token = new StringTokenizer(result, "*/%+-()^√", true);
         //char[] operation = {'*', '/', '%', '+', '-', '(', ')'};
-
 
         List<String> arrAllToken = new ArrayList<>();
 
@@ -75,8 +81,9 @@ public class MyEval {
     }//calculation
 
 
-    static int opOrder(String op){//연산자 우선순위
-
+    //연산자 우선순위가 크면 먼저 계산식으로 이동
+    // ')'가 나오면 ( 까지 저장된 모든 연산자가 계산식으로 이동
+    static int opOrder(String op){
         switch (op){
             case "(":
                 return 0;
@@ -160,12 +167,6 @@ public class MyEval {
                     stackOp.pop();
 
                 break;
-            /*case "π":
-                arrSplit.add(Double.toString(Math.PI));
-                break;
-            case "e":
-                arrSplit.add(Double.toString(Math.E));
-                break;*/
             default:
                 arrSplit.add(arr.get(i));
                 break;
@@ -174,7 +175,7 @@ public class MyEval {
 
     }
 
-    //계산할 식을 옮김
+    //계산식으로 각각 이동
     public static void moveCal(ArrayList<String> arrSplit, int i,  Stack<String> stackCal){
 
         Log.d(TAG, "moveCal: arrSplit "+arrSplit.toString());
@@ -218,6 +219,7 @@ public class MyEval {
 
     }
 
+
     public static void goCalculation(ArrayList<String> arrSplit, int i, Stack<String> stackCal){
 
         double ans =0.0;
@@ -226,49 +228,39 @@ public class MyEval {
         Log.d(TAG, "goCalculation: 계산직전 arrSplit " + arrSplit.toString());
         Log.d(TAG, "goCalculation: 계산직전 stackCal "+stackCal.toString());
 
-
         Double exp2 = Double.parseDouble(stackCal.pop());
         Double exp1 = Double.parseDouble(stackCal.pop());
 
+
         switch (arrSplit.get(i)){
             case "+":
-                ans = exp1 + exp2;
-                //result = Double.toString(ans);
+                ans = add.executeStrategy(exp1, exp2);
                 result = fmt(ans);
-                //result = String.format("%g", ans);
                 stackCal.push(result);
                 break;
             case "-":
-                ans = exp1 - exp2;
-
+                ans = sub.executeStrategy(exp1, exp2);
                 result = fmt(ans);
-                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "*":
-                ans = exp1 * exp2;
-                //result = Double.toString(ans);
-                //result = Double.toString(ans); //30.0
-                //result = String.format("%g", ans);
+                ans = mul.executeStrategy(exp1, exp2);
                 result = fmt(ans);
                 stackCal.push(result);
                 break;
             case "/":
-               ans = exp1 / exp2;
+                ans = div.executeStrategy(exp1, exp2);
                 result = fmt(ans);
-                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "%":
-                ans = exp1 % exp2;
+                ans = modular.executeStrategy(exp1, exp2);
                 result = fmt(ans);
-                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
             case "^":
                 ans = Math.pow(exp1,exp2);
                 result = fmt(ans);
-                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
 
@@ -293,14 +285,8 @@ public class MyEval {
             case "√":
                 ans= Math.sqrt(exp2);
                 result = fmt(ans);
-                //result = Double.toString(ans);
                 stackCal.push(result);
                 break;
-            /*case "e":
-                ans = Math.exp(exp2);
-                result = fmt(ans);
-                stackCal.push(result);
-                break;*/
             case "sin":
                 ans = Math.sin(Math.toRadians(exp2));
                 result = fmt(ans);
